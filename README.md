@@ -109,6 +109,14 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - Unreal Engine 4 Ultimate Game Developer
 ---
 
+
+## Upcoming / Planned
+- Computer Graphics
+- Introduction to Databases
+- Deep Learning
+- Introduction to Algorithms
+---
+
 ## Support 
 If you find this useful, you can buy me a coffee. <br>
 
