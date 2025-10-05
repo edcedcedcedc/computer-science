@@ -41,3 +41,8 @@ Anyone who wants a COMPLETE game in their portfolio!
 
 03/10/25
     I will share a link of the project that we built at the end
+
+05/10/25
+    Introduction to unreal, general overview, actor class, position vectors
+    Collision
+    
