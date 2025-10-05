@@ -22,3 +22,35 @@ out/
 *.pom
 private/*
 *:Zone.Identifier
+
+# Unreal Engine
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vscode/
+.vs/
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.tmp
+*.log
+*.user
+*.tlog
+*.pdb
+*.ipdb
+*.iobj
+
+# Compiled data
+*.dll
+*.exe
+*.lib
+*.app
+*.dylib
+*.so
+
+# OS junk
+.DS_Store
+Thumbs.db
+
