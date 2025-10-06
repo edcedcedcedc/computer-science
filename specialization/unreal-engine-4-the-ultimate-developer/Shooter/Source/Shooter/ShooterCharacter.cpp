@@ -2,12 +2,18 @@
 
 
 #include "ShooterCharacter.h"
+#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	//Create the camera boom pulls in towards the player if there is a collision
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom->SetupAttachment(RootComponent); //Attach the camera boom to the root component of the character
+	CameraBoom->TargetArmLength = 300.0f; //The camera follows at this distance behind the character
+	CameraBoom->bUsePawnControlRotation = true; //Rotate the arm based on the controller
 
 }
 
@@ -15,13 +21,6 @@ AShooterCharacter::AShooterCharacter()
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("void AShooterCharacter::BeginPlay()"));
-
-	int myInt{ 42 };
-	UE_LOG(LogTemp, Warning, TEXT("My int is: %d"), myInt);
-
-	FString myString{ TEXT("This is a string") };
-	UE_LOG(LogTemp, Warning, TEXT("My string is: %s"), *myString);
 	
 	UE_LOG(LogTemp, Warning, TEXT("The name of this actor is: %s"), *GetName());
 }
