@@ -15,8 +15,17 @@ AShooterCharacter::AShooterCharacter()
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	UE_LOG(LogTemp, Warning, TEXT("void AShooterCharacter::BeginPlay()"));
+
+	int myInt{ 42 };
+	UE_LOG(LogTemp, Warning, TEXT("My int is: %d"), myInt);
+
+	FString myString{ TEXT("This is a string") };
+	UE_LOG(LogTemp, Warning, TEXT("My string is: %s"), *myString);
 	
+	UE_LOG(LogTemp, Warning, TEXT("The name of this actor is: %s"), *GetName());
 }
+	
 
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
