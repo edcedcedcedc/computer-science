@@ -1,0 +1,70 @@
+Problem 1: Storing passwords
+lab0 reading - https://61600-labs.csail.mit.edu/lab0.html
+
+NOTE:
+    I am using chatgpt as my TA, like office hours in US unis, gpt is my feedback, he hints explains, I think etc.
+    22/09/25
+        You can find more info in my googledocs https://docs.google.com/document/d/1pUK9NoM78XD8NCP2V_O2x0w1Oz9R2FfCtjFWNwVidJI/edit?tab=t.0
+        
+A) Typically, only the root user on a machine has access to the shadow file. 
+The shadow file only contains passwords hashes – not the passwords themselves. 
+In one sentence, explain why it is important to protect the hashed passwords ?
+
+response:
+Because an attack might crack the hash thru brute force as an example 
+
+B)
+Look online for information about the shadow file format. 
+Why does the format allow the password hashes for each user to be hashed with a different hash function?
+
+response:
+Because the password algorithms might be upgraded with stronger ones over time 
+
+
+readind the book 18.4.3 -> 
+
+
+C)
+response:
+The computational cost is greatly increased as the number of hash iterations increases
+
+
+D)
+response:
+I would set the d on medium count and the delay to exponential count but starting slow 
+to balance the actual delay from the has and the login delay
+
+
+E)
+response:
+The values of the variables might increase because in laptops the waiting time for login is naturally longer
+
+
+PROBLEM 2 - Cracking passwords 
+
+B - If a user chooses a uniformly random string of 20 letters (a-z) as their password, 
+and we hash the password with a standard cryptographic hash function with 256-bit output, 
+how many guesses on average will it take to recover their password?
+
+response:
+26^20 = 19,928,148,895,209,409,152,340,197,376 and /2
+
+
+
+D - How would the cost of the preimage-finding attack change in part (C) 
+if each hashed password were salted with a unique salt?
+
+response:
+If no salt and 1 million accounts (amortization)
+You find a candidate hash it and compare with 1 million accounts 
+cost 1 hash, is constant to accounts 
+
+If with salt and 1 million accounts  (without amortization)
+You would have to computer separately per account 
+cost is proportional to accounts 
+
+
+
+
+
+
