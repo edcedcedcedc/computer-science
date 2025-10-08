@@ -58,7 +58,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 **Topics covered:** `authentication` `transport security` `platform security` `software security`
 
 - [ ] Foundations of Computer Security (03.09.25 → planned 03.12.25)  
-  → [Proof](./core-cs/core-security/fundamentals-of-computer-security/) • [Projects](./core-cs/core-security/foundations-of-computer-security/labs) • [Notes](https://docs.google.com/document/d/1pUK9NoM78XD8NCP2V_O2x0w1Oz9R2FfCtjFWNwVidJI/edit?usp=sharing)  
+  → [Proof](./core-cs/core-security/foundations-of-computer-security/) • [Projects](./core-cs/core-security/foundations-of-computer-security/labs) • [Notes](https://docs.google.com/document/d/1pUK9NoM78XD8NCP2V_O2x0w1Oz9R2FfCtjFWNwVidJI/edit?usp=sharing)  
 
 #### CS Tools
 **Topics covered:** `shell scripting` `vim` `version control`
