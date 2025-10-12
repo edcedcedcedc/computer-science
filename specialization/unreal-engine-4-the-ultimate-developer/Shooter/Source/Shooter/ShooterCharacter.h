@@ -26,6 +26,8 @@ protected:
 	void TurnAtRate(float Rate);
 	//Called via input to look up/down at a given rate. Rate is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	void LookUpAtRate(float Rate);
+	//Called when the fire button is pressed
+	void FireWeapon();
 	
 
 public:	

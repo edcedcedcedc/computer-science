@@ -86,6 +86,11 @@ void AShooterCharacter::LookUpAtRate(float Rate)
 	//Rate acts more like a scalar, because its normalized
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
+
+void AShooterCharacter::FireWeapon()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Pew Pew"));
+}
 	
 
 // Called every frame
@@ -112,6 +117,9 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	//Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	//Bind fire event
+	PlayerInputComponent->BindAction("FireButton", IE_Pressed, this, &AShooterCharacter::FireWeapon);
 
 }
 
