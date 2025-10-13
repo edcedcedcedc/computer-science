@@ -1,43 +1,186 @@
 
-course link: udemy.com/course/unreal-engine-the-ultimate-game-developer-course/?srsltid=AfmBOooR93JZOtO80qTfJg7Jui_sqfVi1cI_2bkfCjYZov1HBzVzM59Q
+link to course: https://www.udemy.com/course/unreal-engine-the-ultimate-shooter-course/
 
 
+Topics covered:
 
-In this series, you will learn Unreal Engine C++ programming from the basics all the way up to packaging a complete video game. 
-You will learn all of the following and more:
-Object, Actor, Pawn and Character creation, and the differences between these classes
-Coding a complete character class, complete with animations and user input
-Finding a nearly endless selection of free assets and how to download and use them for your game
-Enemy movement and behavior
-Combat with melee weapons
-Picking up and equipping items
-Damage, Hit Points and Death
-HUD elements including Health and Stamina Bars as well as Icons
-How to create menus, including a Pause menu
-Saving and Loading game data even after turning off the computer or exiting the game
-Switching levels in game
-Floating platforms using interpolation
-Timers for delays in game logic
-Trigger volumes, pressure switches, and doors
-Bombs, explosives and hazards
-Logging and drawing spheres for debug purposes
-Using C++ concepts applied to game development 
-Knowledge of variables, functions, classes, inheritance, and object-oriented programming is needed to have the best experience.
-How to create a complete UE4 game from start to finish.
-Those with no experience in Unreal Engine will master Unreal.
-Combat, adventure game mechanics, platforms, game saving/loading and menu design.
-Those already experienced in game development will further expand their skills.
-Those who already develop in another engine such as Unity will master Unreal.
-Are there any course requirements or prerequisites?
-Basic understanding of C++ or a similar language (C#, Python, Java, etc.)
-No experience in Unreal Engine needed.
-Memory space on computer for Unreal Engine, Visual Studio or XCode, and game assets (meshes, animations, etc.)
-Who this course is for:
-Aspiring game developers.
-Those wanting to enter the games industry as a game programmer.
-Indie game developers who want to create their own games.
-Anyone who wants a COMPLETE game in their portfolio!
+Character creation and movement
 
+Input for PC and console controllers
+
+Extensive use of Animation Blueprints (and Anim Instances, their C++ parents)
+
+1D and 2D Blendspaces
+
+Strafing
+
+Turn-in-place
+
+Aim Offsets
+
+Inverse Kinematics
+
+Animation Curves
+
+Character lean when running
+
+Crouching (with dynamic capsule resizing)
+
+Turn hips while running
+
+Weapon fire with recoil animations
+
+Reloading
+
+Weapon blast and impact particles
+
+Weapon beam particles (smoke trails)
+
+Bullet shell eject particles
+
+Sound effects
+
+Blending animations per bone, by bool, and by enum - play one animation with one part of the body (running or crouching) while simultaneously playing another animation with another part of the body (reload, aim, or weapon fire)
+
+Attach and equip different weapons (pistols, submachine guns, assault rifles)
+
+Automatic and semi-automatic gunfire
+
+Move different gun parts (the clip/magazine, and pistol slide) during animations
+
+Camera zoom while aiming
+
+Dynamic crosshairs that spread in reaction to:
+
+Character speed
+
+Weapon fire
+
+Aiming
+
+Jumping
+
+Different crosshairs per weapon
+
+Widget components, showing:
+
+Item names
+
+Item types
+
+Ammo counts
+
+Item rarity
+
+HUD animations
+
+Full item inventory system
+
+Data tables, in Blueprints and C++
+
+Curves to control:
+
+Item movement during pickup
+
+Color and brightness pulse for material effects
+
+Material creation, including:
+
+Post-process materials
+
+Dynamic material instances
+
+Setting material properties from C++
+
+Driving material properties with curves
+
+Material functions
+
+Blending materials together
+
+Outline effects
+
+Glow/pulse effects
+
+Retargeting animations
+
+Retargeting whole Animation Blueprints
+
+Numerous gameplay algorithms
+
+Use of data structures, including:
+
+structs
+
+enums
+
+arrays
+
+maps
+
+and more
+
+Animation montages
+
+Anim Notifies for sounds, weapon trails, and custom notifies
+
+Sync markers for footsteps and sync groups
+
+The course comes with a huge amount of assets, including:
+
+Sounds
+
+Textures
+
+Particle effects
+
+Meshes
+
+Delegates
+
+Interfaces
+
+Dynamic footsteps that spawn different sounds and particle systems depending on the surface type
+
+Physical materials and surface types
+
+Niagra particle systems
+
+Line traces
+
+Enemy AI
+
+Behavior Trees and Blackboard Components
+
+Multiple enemy types with varying levels of Health, Damage, Size and Movement Speed
+
+Headshot damage, with:
+
+Higher damage for headshots
+
+Number widgets that pop up and animate with bullet hits
+
+Different colored numbers for headshots
+
+Character and enemy health bars
+
+Enemy patrol, agro, chase and attack player
+
+Death mechanics
+
+Stun mechanics
+
+Melee attacks with melee weapon trails
+
+Explosives that cause damage and death
+
+Level prototyping
+
+Creating full levels based on our prototypes using professional assets
+
+Light baking
+
+Post-process effects
 
 03/10/25
     I will share a link of the project that we built at the end
@@ -45,4 +188,11 @@ Anyone who wants a COMPLETE game in their portfolio!
 05/10/25
     Introduction to unreal, general overview, actor class, position vectors
     Collision
+
+13/10/25
+    I switched the courses but keep the same name for unification
+    Introduction, project setup
+    Animations
+        the anim instance, animation blueprint, run animation, trimming animations, rotate character to movement,
+        fire weapon function
     
