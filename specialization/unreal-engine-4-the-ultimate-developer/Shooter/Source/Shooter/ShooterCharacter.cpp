@@ -9,6 +9,7 @@
 #include "Sound/SoundCue.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "DrawDebugHelpers.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -114,13 +115,28 @@ void AShooterCharacter::FireWeapon()
 		const FVector End{ Start + RotationAxis * 50000.f };
 		GetWorld()->LineTraceSingleByChannel(FireHit, Start, End, ECollisionChannel::ECC_Visibility);
 
+		FVector BeamEndPoint{ End };
+
 		if(FireHit.bBlockingHit)
 		{
-			DrawDebugLine(GetWorld(), Start, FireHit.Location, FColor::Red, false, 2.f);
-			DrawDebugPoint(GetWorld(), FireHit.Location, 20.f, FColor::Red, false, 2.f);
+			//DrawDebugLine(GetWorld(), Start, FireHit.Location, FColor::Red, false, 2.f);
+			//DrawDebugPoint(GetWorld(), FireHit.Location, 20.f, FColor::Red, false, 2.f);
+			
+			BeamEndPoint = FireHit.Location;
+			
 			if (ImpactParticles)
 			{
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, FireHit.Location, FireHit.ImpactNormal.Rotation());
+			}
+
+			//Beam end point is where we hit
+			if (BeamParticles) {
+				UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BeamParticles, SocketTransform);
+
+				if(Beam)
+				{
+					Beam->SetVectorParameter(FName("Target"), BeamEndPoint);
+				}
 			}
 		}
 
