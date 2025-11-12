@@ -106,7 +106,59 @@ void AShooterCharacter::FireWeapon()
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SocketTransform);
 		}
+
+		//Get the viewport size
+		FVector2D ViewportSize;
+		if(GEngine && GEngine->GameViewport)
+		{
+			GEngine->GameViewport->GetViewportSize(ViewportSize);
+		}
+		//Get the screen location of the crosshair
+		FVector2D CrosshairLocation{ ViewportSize.X / 2.f, ViewportSize.Y / 2.f };
+		CrosshairLocation.Y -= 50.f; //Adjust for screen space
+
+		FVector CrosshairWorldPosition;
+		FVector CrosshairWorldDirection;
+		//Get the world position and direction of the crosshair
+		bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(
+			UGameplayStatics::GetPlayerController(this, 0),
+			CrosshairLocation,
+			CrosshairWorldPosition,
+			CrosshairWorldDirection
+		);
+		
+		if (bScreenToWorld) { //Was deprojection successful?
+		
+			FHitResult ScreenTraceHit;
+			const FVector Start{ CrosshairWorldPosition };
+			const FVector End{ Start + CrosshairWorldDirection * 50000.f };
+			//Set default beam end point to end of line trace end point 
+			FVector BeamEndPoint{ End };
+			//Trace from crosshair world location outward
+			GetWorld()->LineTraceSingleByChannel(ScreenTraceHit, Start, End, ECollisionChannel::ECC_Visibility); 
+			if (ScreenTraceHit.bBlockingHit) { //Was there a trace hit ?
+
+				//Beam end point is now the location of the trace hit
+				BeamEndPoint = ScreenTraceHit.Location;
+				if (ImpactParticles)
+				{
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, ScreenTraceHit.Location);
+				}
+
+				if (BeamParticles) {
+					UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BeamParticles, SocketTransform);
+
+					if (Beam)
+					{
+						Beam->SetVectorParameter(FName("Target"), BeamEndPoint);
+					}
+				}
+			}
+		}
+
 		//Trace from barrel to crosshair location
+/*
+
 		FHitResult FireHit;
 		const FVector Start{ SocketTransform.GetLocation() };
 		const FQuat Rotation{ SocketTransform.GetRotation() };
@@ -138,7 +190,7 @@ void AShooterCharacter::FireWeapon()
 				Beam->SetVectorParameter(FName("Target"), BeamEndPoint);
 			}
 		}
-
+		*/
 	}
 
 	//Play hip fire montage
