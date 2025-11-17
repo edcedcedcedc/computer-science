@@ -30,11 +30,12 @@ AShooterCharacter::AShooterCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); //Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; //Camera does not rotate relative to arm
 
-	//Don't rotate when the controller rotates. Let the controller only affect the camera
+	
 	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = true;
+	//Don't rotate when the controller rotates. Let the controller only affect the camera; make sure to check the blueprint default value or set it in the begin play function 
+	bUseControllerRotationYaw = true; 
 	bUseControllerRotationRoll = false;
-
+	
 
 	
 	//Configure character movement
@@ -50,6 +51,9 @@ void AShooterCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	UE_LOG(LogTemp, Warning, TEXT("The name of this actor is: %s"), *GetName());
+
+
+	
 }
 
 void AShooterCharacter::MoveForward(float Value)
@@ -140,18 +144,31 @@ void AShooterCharacter::FireWeapon()
 
 				//Beam end point is now the location of the trace hit
 				BeamEndPoint = ScreenTraceHit.Location;
-				if (ImpactParticles)
+			}
+
+			//Trace from gun barrel to beam end point
+			FHitResult WeaponTraceHit;
+			const FVector WeaponTraceStart{ SocketTransform.GetLocation() };
+			const FVector WeaponTraceEnd{ BeamEndPoint };
+			GetWorld()->LineTraceSingleByChannel(WeaponTraceHit, WeaponTraceStart, WeaponTraceEnd, ECollisionChannel::ECC_Visibility);
+			
+			if(WeaponTraceHit.bBlockingHit)
+			{
+				//Redefine beam endpoint to the new impact point
+				BeamEndPoint = WeaponTraceHit.Location;
+			}
+
+			if (ImpactParticles)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, BeamEndPoint);
+			}
+
+			if (BeamParticles) {
+				UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BeamParticles, SocketTransform);
+
+				if (Beam)
 				{
-					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, ScreenTraceHit.Location);
-				}
-
-				if (BeamParticles) {
-					UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BeamParticles, SocketTransform);
-
-					if (Beam)
-					{
-						Beam->SetVectorParameter(FName("Target"), BeamEndPoint);
-					}
+					Beam->SetVectorParameter(FName("Target"), BeamEndPoint);
 				}
 			}
 		}
