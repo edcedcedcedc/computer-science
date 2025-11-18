@@ -528,3 +528,14 @@ and only then take a test, which implies that I don't truly understand everythin
 - Introduction to Computer Systems: lab 2 (bomblab), phase 1 diffused  
 - Foundations of Computer Security: lab 2 warm-up (Merkle trees)  
 - Switched from Probability (Stat110) to Probability for CS (CS109), finished problem set 1  
+
+
+18/11/2025
+- I’m feeling lazy and don’t really want to do the labs for CSAPP, Intro to Probability, and Introduction to Computer Security. 
+I’ve only completed the first 2–3 labs for each course. For CSAPP I’ll probably only do the malloc lab. 
+Maybe I can plan final projects for these courses instead.
+- My main focus right now is programming the shooter game in the /Shooter branch using Unreal Engine and C++.
+- I planned to finish all the planned courses by the end of December.
+- I also try to do at least 15 minutes of LeetCode every day, even if it’s not reflected here.
+- You can always check the Google Docs for the current courses I’m taking - I keep those updated. 
+I’m still watching lectures and thinking about the material.
