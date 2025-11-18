@@ -32,13 +32,13 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - [x] Structure and Interpretation of Computer Programs (02.07.24 → 10.12.24)  
   → [Proof](./core-cs/core-programming/sicp/) • [Projects](./core-cs/core-programming/sicp/projects) • [Notes](https://docs.google.com/document/d/1ge1JjM2ER7VkYoT3uk8Wp_-HZ2bAJwh-QjD7YnkYW6o/edit?usp=sharing)  
 
-#### Core theory
+##### Core theory
 **Topics covered:** `stacks` `queues` `linked lists` `hash tables` `trees`
 
 - [x] Data Structures (10.12.24 → 08.06.25)  
   → [Proof](./core-cs/core-theory/data-structures/) • [Projects](./core-cs/core-theory/data-structures/projects) • [Notes](https://docs.google.com/document/d/1h--IlxzWrA8k8R8Ls-Ikoxhdb89BJmBbhq7kM195IwQ/edit?usp=sharing)  
 
-#### Core math
+##### Core math
 **Topics covered:** `discrete math` `O-notation` `discrete probability` `statistics`
 
 - [x] Calculus 1A (15.04.24 → 14.10.24) 
@@ -48,19 +48,19 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - [x] Math for CS (15.11.24 → 06.08.25) 
   → [Proof](./core-cs/core-math/math-for-cs/) • [Notes](https://docs.google.com/document/d/11hfZRsWbpXcznnR1YBaEDd_9QlX1nCK0m2taCPZZg7g/edit?usp=sharing)  
 
-#### Core systems
+##### Core systems
 **Topics covered:** `bits` `bytes` `memory` `C`
 
 - [ ] Introduction to Computer Systems (09.08.25 → planned 01.01.26)  
   → [Proof](./core-cs/core-systems/csapp/) • [Labs](./core-cs/core-systems/csapp/labs) • [Notes](https://docs.google.com/document/d/18r7r6Z1z2QoiD8wXbQ21lLw4oSjcbSKKjRthHwBEvoo/edit?usp=sharing)  
 
-#### Core security
+##### Core security
 **Topics covered:** `authentication` `transport security` `platform security` `software security`
 
 - [ ] Foundations of Computer Security (03.09.25 → planned 03.12.25)  
   → [Proof](./core-cs/core-security/foundations-of-computer-security/) • [Projects](./core-cs/core-security/foundations-of-computer-security/labs) • [Notes](https://docs.google.com/document/d/1pUK9NoM78XD8NCP2V_O2x0w1Oz9R2FfCtjFWNwVidJI/edit?usp=sharing)  
 
-#### CS Tools
+##### CS Tools
 **Topics covered:** `shell scripting` `vim` `version control`
 
 - [x] The Missing Semester (22.06.24 → 15.11.24)  
@@ -68,9 +68,9 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 
 
-### Advanced CS
+#### Advanced CS
 
-#### Advanced math
+##### Advanced math
 **Topics covered:** `vectors` `matrices` `linear independence` `dimensions`
 
 - [x] Linear Algebra (14.10.24 → 27.02.25)  
@@ -79,7 +79,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
   → [Proof](./advanced-cs/advanced-math/probability-for-cs/) • [Notes (archive)](https://docs.google.com/document/d/1xdIrMa2W9hERx3B4T_JcIlJTP8JhwLjJM8Cf6XFpNbk/edit?usp=sharing) • [Notes (new)](https://docs.google.com/document/d/1E_K2eB0Qf177yfnsHEAVWvyI8lY60rFPpEd3vEJJXzE/edit?usp=sharing)  
 
 
-### Electives
+#### Electives
 
 **Topics covered:** `vectors` `motion` `Newton's laws`
 
@@ -88,21 +88,21 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 
 
-### Specialization
+#### Specialization
 
 **Topics covered:** `unreal engine` `gameplay programming`
 
-- [ ] Unreal Engine 4 C++ Ultimate Game Developer Course (03.10.25 → planned 01.01.26)  
-  → [Proof](./specialization/unreal-engine-4-the-ultimate-developer) [Project](./specialization/unreal-engine-4-the-ultimate-developer)• [Notes](https://docs.google.com/document/d/1MIjYhqsG5pFdOIyyN-r5OyKqoTTkxKNC_dEubC0alJo/edit?usp=sharing)  
+- [ ] Unreal Engine 4 C++ Ultimate Game Developer Course (03.10.25 → planned 01.06.26)  
+  → [Project](https://github.com/edcedcedcedc/computer-science-specialization)• [Notes](https://docs.google.com/document/d/1MIjYhqsG5pFdOIyyN-r5OyKqoTTkxKNC_dEubC0alJo/edit?usp=sharing)  
 
 ---
 
-## Log
+#### Log
 *(See `random/archive/log`)*
 
 ---
 
-## Ongoing 
+#### Ongoing 
 - Introduction to Computer Systems - 2–3 lectures per week, labs every 2–2.5 weeks, reading 
 - Foundations of Computer Security - 2 lectures per week, labs every 1–2.5 weeks, reading 
 - Probability for CS - 3 lectures per week, homework 1–2 weeks, reading  
@@ -110,14 +110,14 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ---
 
 
-## Upcoming / Planned
+#### Upcoming / Planned
 - Computer Graphics
 - Introduction to Databases
 - Deep Learning
 - Introduction to Algorithms
 ---
 
-## Support 
+#### Support 
 If you find this useful, you can buy me a coffee. <br>
 
 [![Buy Me a Coffee](https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png)](https://www.buymeacoffee.com/androranogajec)
