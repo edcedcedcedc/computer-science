@@ -1,6 +1,6 @@
 ![ci workflow](https://github.com/edcedcedcedc/computer-science-curriculum-ossu/actions/workflows/main.yml/badge.svg)
 
-Open Education in Computer Science from [Open Source Society University](https://github.com/ossu/computer-science) following [CS2013 guidelines](https://github.com/ossu/computer-science/blob/master/CURRICULAR_GUIDELINES.md).
+Open Education in Computer Science with a specialization in Game Development using Unreal Engine and C++ from [Open Source Society University](https://github.com/ossu/computer-science) following [CS2013 guidelines](https://github.com/ossu/computer-science/blob/master/CURRICULAR_GUIDELINES.md).
 
 ---
 
