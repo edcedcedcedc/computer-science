@@ -92,7 +92,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 **Topics covered:** `unreal engine` `gameplay programming`
 
-- [ ] Unreal Engine 4 C++ Ultimate Game Developer Course (03.10.25 → planned 01.06.26)  
+- [ ] Real-Time Systems & Gameplay Programming (03.10.25 → planned 01.06.26)  
   → [Project](https://github.com/edcedcedcedc/computer-science-specialization)• [Notes](https://docs.google.com/document/d/1MIjYhqsG5pFdOIyyN-r5OyKqoTTkxKNC_dEubC0alJo/edit?usp=sharing)  
 
 ---
@@ -106,7 +106,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - Introduction to Computer Systems - 2–3 lectures per week, labs every 2–2.5 weeks, reading 
 - Foundations of Computer Security - 2 lectures per week, labs every 1–2.5 weeks, reading 
 - Probability for CS - 3 lectures per week, homework 1–2 weeks, reading  
-- Unreal Engine 4 Ultimate Game Developer
+- Real-Time Systems & Gameplay Programming
 ---
 
 
