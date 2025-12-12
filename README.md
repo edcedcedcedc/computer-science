@@ -76,8 +76,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - [x] Linear Algebra (14.10.24 → 27.02.25)  
   → [Proof](./advanced-cs/advanced-math/linear-algebra/) • [Projects](./advanced-cs/advanced-math/linear-algebra/spinningCube) • [Notes](https://docs.google.com/document/d/1ieGaWKd6_c_jAStE7_Xhg6oUc5kr_CYZ34NqOsLDX_E/edit?usp=sharing)  
 - [ ] Probability for CS (23.09.25 → planned 31.12.25)  
-  → [Proof](./advanced-cs/advanced-math/probability-for-cs/) • [Notes (archive)](https://docs.google.com/document/d/1xdIrMa2W9hERx3B4T_JcIlJTP8JhwLjJM8Cf6XFpNbk/edit?usp=sharing) • [Notes (new)](https://docs.google.com/document/d/1E_K2eB0Qf177yfnsHEAVWvyI8lY60rFPpEd3vEJJXzE/edit?usp=sharing)  
-
+  → [Proof](./advanced-cs/advanced-math/probability-for-cs/) • [Notes (archive)](https://docs.google.com/document/d/1xdIrMa2W9hERx3B4T_JcIlJTP8JhwLjJM8Cf6XFpNbk/edit?usp=sharing) • [Labs](./advanced-cs/advanced-math/probability-for-cs/labs) • [Notes (new)](https://docs.google.com/document/d/1E_K2eB0Qf177yfnsHEAVWvyI8lY60rFPpEd3vEJJXzE/edit?usp=sharing)
 
 #### Electives
 
@@ -93,7 +92,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 **Topics covered:** `unreal engine` `gameplay programming`
 
 - [ ] Real-Time Systems & Gameplay Programming (03.10.25 → planned 01.06.26)  
-  → [Project](https://github.com/edcedcedcedc/computer-science-specialization)• [Notes](https://docs.google.com/document/d/1MIjYhqsG5pFdOIyyN-r5OyKqoTTkxKNC_dEubC0alJo/edit?usp=sharing)  
+  → [Project](https://github.com/edcedcedcedc/computer-science-specialization) • [Notes](https://docs.google.com/document/d/1MIjYhqsG5pFdOIyyN-r5OyKqoTTkxKNC_dEubC0alJo/edit?usp=sharing)  
 
 ---
 
