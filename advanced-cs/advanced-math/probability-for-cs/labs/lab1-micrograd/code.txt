@@ -5,3 +5,9 @@ https://colab.research.google.com/drive/1J0TWu7JGJfPEDn5XlUknsLuFhHAz85CN?usp=sh
     section 1 part 1 done
     I still don't understand why do I stress so much when see this problems,
     It took me around 15 minutes to figure it out, even if it was obvious, I was lost, meh
+
+15/12/2025
+    section 1 part 1 redone
+    section 1 part 2 done 
+    My lord I confused analytical and numerical approaches in derivation...
+    This got me thinking that cs is a mix between analytical and numerical approaches in problem solving
