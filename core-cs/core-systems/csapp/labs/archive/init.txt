@@ -1,1 +1,5 @@
-I will try to switch cache lab for performance lab
+
+x/x/2025
+    I will try to switch cache lab for performance lab
+16/12/2025
+    I will try to do some cs61 psets instead of csapp labs, I find csapp labs boring, meh
