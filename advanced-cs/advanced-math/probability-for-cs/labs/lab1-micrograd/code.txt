@@ -15,3 +15,5 @@ https://colab.research.google.com/drive/1J0TWu7JGJfPEDn5XlUknsLuFhHAz85CN?usp=sh
 16/12/2025
     section 1 part 3 done  
     Symmetric derivative 
+
+    section 2 part 2 and 3 done
