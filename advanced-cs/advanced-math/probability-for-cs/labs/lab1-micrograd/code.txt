@@ -11,3 +11,7 @@ https://colab.research.google.com/drive/1J0TWu7JGJfPEDn5XlUknsLuFhHAz85CN?usp=sh
     section 1 part 2 done 
     My lord I confused analytical and numerical approaches in derivation...
     This got me thinking that cs is a mix between analytical and numerical approaches in problem solving
+
+16/12/2025
+    section 1 part 3 done  
+    Symmetric derivative 
