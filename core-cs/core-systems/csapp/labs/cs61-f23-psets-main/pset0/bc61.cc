@@ -1,10 +1,10 @@
 #include <cstdio> 
 
 int main() {
-    unsigned long count = 0;
+    unsigned long bytes = 0;
     while(fgetc(stdin) != EOF){
-        count++;
+        bytes++;
     }
-    fprintf(stdout, "%lu", count); 
+    fprintf(stdout, "%lu\n", bytes); 
     return 0;
 }
