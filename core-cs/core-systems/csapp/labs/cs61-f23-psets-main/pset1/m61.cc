@@ -18,7 +18,16 @@ struct m61_memory_buffer {
 };
 
 static m61_memory_buffer default_buffer;
-
+static m61_statistics default_stats = {
+    .nactive = 0,
+    .active_size = 0,
+    .ntotal = 0,
+    .total_size = 0,
+    .nfail = 0,
+    .fail_size = 0,
+    .heap_min = 0,
+    .heap_max = 0
+};
 
 m61_memory_buffer::m61_memory_buffer() {
     void* buf = mmap(nullptr,    // Place the buffer at a random address
@@ -42,15 +51,18 @@ m61_memory_buffer::~m61_memory_buffer() {
 ///    The memory is not initialized. If `sz == 0`, then m61_malloc may
 ///    return either `nullptr` or a pointer to a unique allocation.
 ///    The allocation request was made at source code location `file`:`line`.
-
 void* m61_malloc(size_t sz, const char* file, int line) {
     (void) file, (void) line;   // avoid uninitialized variable warnings
     // Your code here.
+    default_stats.ntotal++;
+    default_stats.nactive++;
+    default_stats.total_size += sz;
+    
+
     if (default_buffer.pos + sz > default_buffer.size) {
         // Not enough space left in default buffer for allocation
         return nullptr;
     }
-
     // Otherwise there is enough space; claim the next `sz` bytes
     void* ptr = &default_buffer.buffer[default_buffer.pos];
     default_buffer.pos += sz;
@@ -68,6 +80,8 @@ void m61_free(void* ptr, const char* file, int line) {
     // avoid uninitialized variable warnings
     (void) ptr, (void) file, (void) line;
     // Your code here. The handout code does nothing!
+    default_stats.nactive--;
+    //default_stats.active_size--;
 }
 
 
@@ -94,11 +108,10 @@ void* m61_calloc(size_t count, size_t sz, const char* file, int line) {
 m61_statistics m61_get_statistics() {
     // Your code here.
     // The handout code sets all statistics to enormous numbers.
-    m61_statistics stats;
-    memset(&stats, 255, sizeof(m61_statistics));
-    return stats;
+    //m61_statistics stats;
+    //memset(&stats, 0, sizeof(m61_statistics));
+    return default_stats;
 }
-
 
 /// m61_print_statistics()
 ///    Prints the current memory statistics.
