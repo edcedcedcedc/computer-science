@@ -61,6 +61,11 @@ void* m61_malloc(size_t sz, const char* file, int line) {
 
     if (default_buffer.pos + sz > default_buffer.size) {
         // Not enough space left in default buffer for allocation
+        default_stats.nfail++;
+        default_stats.fail_size += sz;
+        default_stats.nactive--;
+        default_stats.ntotal--;
+        default_stats.total_size -= sz;
         return nullptr;
     }
     // Otherwise there is enough space; claim the next `sz` bytes
