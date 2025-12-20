@@ -6,6 +6,7 @@
 #include <cinttypes>
 #include <cassert>
 #include <sys/mman.h>
+#include <iostream>
 
 
 struct m61_memory_buffer {
@@ -69,8 +70,11 @@ void* m61_malloc(size_t sz, const char* file, int line) {
         return nullptr;
     }
     // Otherwise there is enough space; claim the next `sz` bytes
-    void* ptr = &default_buffer.buffer[default_buffer.pos];
-    default_buffer.pos += sz;
+    size_t alignment = alignof(std::max_align_t);
+    size_t aligned_pos = (default_buffer.pos + alignment - 1) & ~(alignment - 1);
+    void* ptr = &default_buffer.buffer[aligned_pos];
+    default_buffer.pos = aligned_pos + sz;
+    
     return ptr;
 }
 
