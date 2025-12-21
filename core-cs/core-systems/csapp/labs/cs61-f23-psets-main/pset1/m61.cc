@@ -58,7 +58,11 @@ void* m61_malloc(size_t sz, const char* file, int line) {
     default_stats.ntotal++;
     default_stats.nactive++;
     default_stats.total_size += sz;
-    
+
+    if(sz == 0)
+    {
+        return nullptr;
+    }
 
     if (default_buffer.pos + sz > default_buffer.size) {
         // Not enough space left in default buffer for allocation
@@ -89,8 +93,10 @@ void m61_free(void* ptr, const char* file, int line) {
     // avoid uninitialized variable warnings
     (void) ptr, (void) file, (void) line;
     // Your code here. The handout code does nothing!
-    default_stats.nactive--;
-    //default_stats.active_size--;
+    if(!(ptr == nullptr))
+    {
+        default_stats.nactive--;
+    }
 }
 
 
