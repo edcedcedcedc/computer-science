@@ -55,16 +55,16 @@ m61_memory_buffer::~m61_memory_buffer() {
 void* m61_malloc(size_t sz, const char* file, int line) {
     (void) file, (void) line;   // avoid uninitialized variable warnings
     // Your code here.
-    default_stats.ntotal++;
-    default_stats.nactive++;
-    default_stats.total_size += sz;
-
-    if(sz == 0)
+     if(sz == 0)
     {
         return nullptr;
     }
 
-    if (default_buffer.pos + sz > default_buffer.size) {
+    default_stats.ntotal++;
+    default_stats.nactive++;
+    default_stats.total_size += sz;
+
+    if (default_buffer.pos + sz > default_buffer.size || sz >= SIZE_MAX) {
         // Not enough space left in default buffer for allocation
         default_stats.nfail++;
         default_stats.fail_size += sz;
@@ -78,7 +78,18 @@ void* m61_malloc(size_t sz, const char* file, int line) {
     size_t aligned_pos = (default_buffer.pos + alignment - 1) & ~(alignment - 1);
     void* ptr = &default_buffer.buffer[aligned_pos];
     default_buffer.pos = aligned_pos + sz;
-    
+
+    unsigned long long start = (unsigned long long)ptr;
+    unsigned long long end = (unsigned long long)ptr + sz - 1; //TODO 
+    if(default_stats.heap_min == 0 || start < default_stats.heap_min)
+    {
+        default_stats.heap_min = start;
+    }
+    if(end > default_stats.heap_max)
+    {
+        default_stats.heap_max = end;
+    }
+
     return ptr;
 }
 
