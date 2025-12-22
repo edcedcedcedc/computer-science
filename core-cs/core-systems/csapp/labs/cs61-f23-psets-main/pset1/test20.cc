@@ -9,10 +9,10 @@ int main() {
     std::default_random_engine randomness(std::random_device{}());
 
     void* success = m61_calloc(0x1000, 2);
-
+ 
     for (int i = 0; i != 100; ++i) {
         size_t a = uniform_int(size_t(0), size_t(0x2000000), randomness) * 16;
-        size_t b = size_t(-1) / a;
+        size_t b = size_t(-1) / a; //SIZE_MAX
         b += uniform_int(size_t(1), size_t(0x20000000) / a, randomness);
         void* p = m61_calloc(a, b);
         assert(p == nullptr);

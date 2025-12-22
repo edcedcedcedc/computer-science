@@ -7,7 +7,7 @@
 #include <cassert>
 #include <sys/mman.h>
 #include <iostream>
-
+#include <map>
 
 struct m61_memory_buffer {
     char* buffer;
@@ -29,6 +29,8 @@ static m61_statistics default_stats = {
     .heap_min = 0,
     .heap_max = 0
 };
+std::map<void*, size_t> freed_set;
+std::map<void*, size_t> active_sizes;
 
 m61_memory_buffer::m61_memory_buffer() {
     void* buf = mmap(nullptr,    // Place the buffer at a random address
@@ -53,42 +55,74 @@ m61_memory_buffer::~m61_memory_buffer() {
 ///    return either `nullptr` or a pointer to a unique allocation.
 ///    The allocation request was made at source code location `file`:`line`.
 void* m61_malloc(size_t sz, const char* file, int line) {
-    (void) file, (void) line;   // avoid uninitialized variable warnings
-    // Your code here.
-     if(sz == 0)
-    {
-        return nullptr;
-    }
+    (void) file; (void) line;
 
-    default_stats.ntotal++;
-    default_stats.nactive++;
-    default_stats.total_size += sz;
-
-    if (default_buffer.pos + sz > default_buffer.size || sz >= SIZE_MAX) {
-        // Not enough space left in default buffer for allocation
+    if (sz == 0 || sz >= SIZE_MAX) {
         default_stats.nfail++;
         default_stats.fail_size += sz;
-        default_stats.nactive--;
-        default_stats.ntotal--;
-        default_stats.total_size -= sz;
         return nullptr;
     }
-    // Otherwise there is enough space; claim the next `sz` bytes
+
+    // Try to reuse a freed block
+    // Its not aligning because it was already aligned 
+    // from when it was first allocated
+    // the original allocation took care of it 
+    for (auto it = freed_set.begin(); it != freed_set.end(); ++it) 
+    {
+        if (it->second >= sz) 
+        {   
+            //byte-wise arithmetic
+            char* ptr = static_cast<char*>(it->first);  
+            size_t block_size = it->second;
+
+            freed_set.erase(it);
+
+            // Split the block if there's leftover
+            if (block_size > sz) 
+            {
+                char* remaining_ptr = ptr + sz;
+                freed_set[remaining_ptr] = block_size - sz;
+            }
+
+            // Track ONLY what was allocated
+            active_sizes[ptr] = sz;
+
+            // Stats (use sz, not block_size)
+            default_stats.nactive++;
+            default_stats.active_size += sz;
+            default_stats.ntotal++;
+            default_stats.total_size += sz;
+
+            return ptr;
+        }
+    }
+
+    // Allocate from default_buffer
     size_t alignment = alignof(std::max_align_t);
     size_t aligned_pos = (default_buffer.pos + alignment - 1) & ~(alignment - 1);
+
+    if (aligned_pos + sz > default_buffer.size) 
+    {
+        // Not enough space
+        default_stats.nfail++;
+        default_stats.fail_size += sz;
+        return nullptr;
+    }
+
     void* ptr = &default_buffer.buffer[aligned_pos];
     default_buffer.pos = aligned_pos + sz;
 
+    // Update stats
+    active_sizes[ptr] = sz;
+    default_stats.nactive++;
+    default_stats.active_size += sz;
+    default_stats.ntotal++;
+    default_stats.total_size += sz;
+    // Update heap
     unsigned long long start = (unsigned long long)ptr;
-    unsigned long long end = (unsigned long long)ptr + sz - 1; //TODO 
-    if(default_stats.heap_min == 0 || start < default_stats.heap_min)
-    {
-        default_stats.heap_min = start;
-    }
-    if(end > default_stats.heap_max)
-    {
-        default_stats.heap_max = end;
-    }
+    unsigned long long end = start + sz - 1;
+    if (default_stats.heap_min == 0 || start < default_stats.heap_min) default_stats.heap_min = start;
+    if (end > default_stats.heap_max) default_stats.heap_max = end;
 
     return ptr;
 }
@@ -101,12 +135,18 @@ void* m61_malloc(size_t sz, const char* file, int line) {
 ///    `file`:`line`.
 
 void m61_free(void* ptr, const char* file, int line) {
-    // avoid uninitialized variable warnings
-    (void) ptr, (void) file, (void) line;
-    // Your code here. The handout code does nothing!
-    if(!(ptr == nullptr))
+    (void) file; (void) line; // suppress warnings
+    if (!ptr) return;
+
+    auto it = active_sizes.find(ptr);
+    if (it != active_sizes.end()) 
     {
+        size_t sz = it->second;
+        active_sizes.erase(it);
+        freed_set[ptr] = sz;
+
         default_stats.nactive--;
+        default_stats.active_size -= sz;
     }
 }
 
@@ -120,13 +160,18 @@ void m61_free(void* ptr, const char* file, int line) {
 
 void* m61_calloc(size_t count, size_t sz, const char* file, int line) {
     // Your code here (not needed for first tests).
+    if(count == 0 || sz >= SIZE_MAX / count)
+    {   
+        default_stats.nfail++;
+        default_stats.fail_size += sz;
+        return nullptr;
+    }
     void* ptr = m61_malloc(count * sz, file, line);
     if (ptr) {
         memset(ptr, 0, count * sz);
     }
     return ptr;
 }
-
 
 /// m61_get_statistics()
 ///    Return the current memory statistics.
