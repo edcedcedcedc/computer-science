@@ -6,200 +6,376 @@
 #include <cinttypes>
 #include <cassert>
 #include <sys/mman.h>
-#include <iostream>
 #include <map>
+#include <algorithm>
 
-struct m61_memory_buffer {
+// ============================================================================
+// Class 1: Memory Buffer Manager (manages the underlying memory)
+// ============================================================================
+class MemoryBuffer {
+private:
     char* buffer;
-    size_t pos = 0;
-    size_t size = 8 << 20; /* 8 MiB */
+    size_t pos;
+    const size_t size = 8 << 20;  // 8 MiB
 
-    m61_memory_buffer();
-    ~m61_memory_buffer();
-};
-
-static m61_memory_buffer default_buffer;
-static m61_statistics default_stats = {
-    .nactive = 0,
-    .active_size = 0,
-    .ntotal = 0,
-    .total_size = 0,
-    .nfail = 0,
-    .fail_size = 0,
-    .heap_min = 0,
-    .heap_max = 0
-};
-std::map<void*, size_t> freed_set;
-std::map<void*, size_t> active_sizes;
-
-m61_memory_buffer::m61_memory_buffer() {
-    void* buf = mmap(nullptr,    // Place the buffer at a random address
-        this->size,              // Buffer should be 8 MiB big
-        PROT_WRITE,              // We want to read and write the buffer
-        MAP_ANON | MAP_PRIVATE, -1, 0);
-                                 // We want memory freshly allocated by the OS
-    assert(buf != MAP_FAILED);
-    this->buffer = (char*) buf;
-}
-
-m61_memory_buffer::~m61_memory_buffer() {
-    munmap(this->buffer, this->size);
-}
-
-
-
-
-/// m61_malloc(sz, file, line)
-///    Returns a pointer to `sz` bytes of freshly-allocated dynamic memory.
-///    The memory is not initialized. If `sz == 0`, then m61_malloc may
-///    return either `nullptr` or a pointer to a unique allocation.
-///    The allocation request was made at source code location `file`:`line`.
-void* m61_malloc(size_t sz, const char* file, int line) {
-    (void) file; (void) line;
-
-    if (sz == 0 || sz >= SIZE_MAX) {
-        default_stats.nfail++;
-        default_stats.fail_size += sz;
-        return nullptr;
+public:
+    MemoryBuffer() : pos(0) {
+        void* buf = mmap(nullptr, size, PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+        assert(buf != MAP_FAILED);
+        buffer = static_cast<char*>(buf);
     }
 
-    // Try to reuse a freed block
-    // Its not aligning because it was already aligned 
-    // from when it was first allocated
-    // the original allocation took care of it 
-    for (auto it = freed_set.begin(); it != freed_set.end(); ++it) 
-    {
-        if (it->second >= sz) 
-        {   
-            //byte-wise arithmetic
-            char* ptr = static_cast<char*>(it->first);  
-            size_t block_size = it->second;
+    ~MemoryBuffer() {
+        munmap(buffer, size);
+    }
 
-            freed_set.erase(it);
+    // Allocate raw memory from buffer
+    void* allocate(size_t sz, size_t alignment) {
+        size_t aligned_pos = (pos + alignment - 1) & ~(alignment - 1);
+        if (aligned_pos + sz > size) {
+            return nullptr;
+        }
+        void* ptr = &buffer[aligned_pos];
+        pos = aligned_pos + sz;
+        return ptr;
+    }
 
-            // Split the block if there's leftover
-            if (block_size > sz) 
-            {
-                char* remaining_ptr = ptr + sz;
-                freed_set[remaining_ptr] = block_size - sz;
-            }
+    size_t get_size() const { return size; }
+    char* get_buffer() const { return buffer; }
+};
 
-            // Track ONLY what was allocated
-            active_sizes[ptr] = sz;
+// ============================================================================
+// Class 2: Statistics Manager (tracks all statistics)
+// ============================================================================
+class Statistics {
+private:
+    m61_statistics stats;
 
-            // Stats (use sz, not block_size)
-            default_stats.nactive++;
-            default_stats.active_size += sz;
-            default_stats.ntotal++;
-            default_stats.total_size += sz;
+public:
+    Statistics() {
+        reset();
+    }
 
-            return ptr;
+    void reset() {
+        stats = {0, 0, 0, 0, 0, 0, 0, 0};
+    }
+
+    void record_allocation(size_t requested_size, uintptr_t start, uintptr_t end) {
+        stats.nactive++;
+        stats.active_size += requested_size;
+        stats.ntotal++;
+        stats.total_size += requested_size;
+        update_heap_bounds(start, end);
+    }
+
+    void record_free(size_t requested_size) {
+        stats.nactive--;
+        stats.active_size -= requested_size;
+    }
+
+    void record_failure(size_t requested_size) {
+        stats.nfail++;
+        stats.fail_size += requested_size;
+    }
+
+    void update_heap_bounds(uintptr_t start, uintptr_t end) {
+        if (stats.heap_min == 0 || start < stats.heap_min) {
+            stats.heap_min = start;
+        }
+        if (end > stats.heap_max) {
+            stats.heap_max = end;
         }
     }
 
-    // Allocate from default_buffer
-    size_t alignment = alignof(std::max_align_t);
-    size_t aligned_pos = (default_buffer.pos + alignment - 1) & ~(alignment - 1);
+    const m61_statistics& get_statistics() const {
+        return stats;
+    }
+};
 
-    if (aligned_pos + sz > default_buffer.size) 
-    {
-        // Not enough space
-        default_stats.nfail++;
-        default_stats.fail_size += sz;
-        return nullptr;
+// ============================================================================
+// Class 3: Block Tracker (manages active and freed blocks)
+// ============================================================================
+class BlockTracker {
+private:
+    std::map<void*, size_t> active_blocks;  // address -> requested size
+    std::map<void*, size_t> freed_blocks;   // address -> aligned size
+
+public:
+    // Active blocks management
+    void add_active_block(void* ptr, size_t requested_size) {
+        active_blocks[ptr] = requested_size;
     }
 
-    void* ptr = &default_buffer.buffer[aligned_pos];
-    default_buffer.pos = aligned_pos + sz;
+    void remove_active_block(void* ptr) {
+        active_blocks.erase(ptr);
+    }
 
-    // Update stats
-    active_sizes[ptr] = sz;
-    default_stats.nactive++;
-    default_stats.active_size += sz;
-    default_stats.ntotal++;
-    default_stats.total_size += sz;
-    // Update heap
-    unsigned long long start = (unsigned long long)ptr;
-    unsigned long long end = start + sz - 1;
-    if (default_stats.heap_min == 0 || start < default_stats.heap_min) default_stats.heap_min = start;
-    if (end > default_stats.heap_max) default_stats.heap_max = end;
+    bool is_active(void* ptr) const {
+        return active_blocks.find(ptr) != active_blocks.end();
+    }
 
-    return ptr;
+    size_t get_requested_size(void* ptr) const {
+        auto it = active_blocks.find(ptr);
+        return (it != active_blocks.end()) ? it->second : 0;
+    }
+
+    // Freed blocks management
+    void add_freed_block(void* ptr, size_t aligned_size) {
+        // Try to coalesce with adjacent freed blocks
+        void* freed_ptr = ptr;
+        size_t freed_size = aligned_size;
+
+        // Coalesce with previous block
+        auto prev_it = freed_blocks.lower_bound(ptr);
+        if (prev_it != freed_blocks.begin()) {
+            --prev_it;
+            if (static_cast<char*>(prev_it->first) + prev_it->second == ptr) {
+                freed_ptr = prev_it->first;
+                freed_size = prev_it->second + aligned_size;
+                freed_blocks.erase(prev_it);
+            }
+        }
+
+        // Coalesce with next block
+        auto next_it = freed_blocks.upper_bound(ptr);
+        if (next_it != freed_blocks.end() && 
+            static_cast<char*>(ptr) + aligned_size == static_cast<char*>(next_it->first)) {
+            freed_size += next_it->second;
+            freed_blocks.erase(next_it);
+        }
+
+        freed_blocks[freed_ptr] = freed_size;
+    }
+
+    // Find best fit from freed blocks
+    void* find_best_fit(size_t aligned_sz, size_t& block_size) const {
+        void* best_ptr = nullptr;
+        size_t best_size = SIZE_MAX;
+
+        for (const auto& entry : freed_blocks) {
+            if (entry.second >= aligned_sz && entry.second < best_size) {
+                best_ptr = entry.first;
+                best_size = entry.second;
+            }
+        }
+
+        block_size = best_size;
+        return best_ptr;
+    }
+
+    void remove_freed_block(void* ptr) {
+        freed_blocks.erase(ptr);
+    }
+
+    // Split a freed block and return leftover
+    void split_freed_block(void* block_ptr, size_t block_size, size_t aligned_sz, 
+                          size_t alignment, void*& leftover_ptr, size_t& leftover_size) {
+        if (block_size > aligned_sz + alignment) {
+            leftover_ptr = static_cast<char*>(block_ptr) + aligned_sz;
+            leftover_size = block_size - aligned_sz;
+
+            // Try to coalesce leftover with next freed block
+            auto next_it = freed_blocks.upper_bound(block_ptr);
+            if (next_it != freed_blocks.end() && 
+                static_cast<char*>(block_ptr) + block_size == static_cast<char*>(next_it->first)) {
+                leftover_size += next_it->second;
+                freed_blocks.erase(next_it);
+            }
+        } else {
+            leftover_ptr = nullptr;
+            leftover_size = 0;
+        }
+    }
+
+    const std::map<void*, size_t>& get_active_blocks() const {
+        return active_blocks;
+    }
+};
+
+// ============================================================================
+// Class 4: Alignment Calculator (handles alignment calculations)
+// ============================================================================
+class AlignmentCalculator {
+public:
+    static size_t calculate_alignment() {
+        return alignof(std::max_align_t);
+    }
+
+    static size_t align_size(size_t size, size_t alignment) {
+        return (size + alignment - 1) & ~(alignment - 1);
+    }
+
+    static size_t align_position(size_t position, size_t alignment) {
+        return (position + alignment - 1) & ~(alignment - 1);
+    }
+};
+
+// ============================================================================
+// Class 5: Main Allocator (orchestrates all components)
+// ============================================================================
+class MemoryAllocator {
+private:
+    static MemoryBuffer buffer;
+    static Statistics stats_manager;
+    static BlockTracker block_tracker;
+
+public:
+    static void* malloc(size_t sz, const char* file, int line) {
+        (void)file; (void)line;
+
+        // Validate input
+        if (sz == 0 || sz >= SIZE_MAX) {
+            stats_manager.record_failure(sz);
+            return nullptr;
+        }
+
+        // Calculate alignment
+        size_t alignment = AlignmentCalculator::calculate_alignment();
+        size_t aligned_sz = AlignmentCalculator::align_size(sz, alignment);
+
+        // Try to reuse freed block
+        size_t best_size;
+        void* best_ptr = block_tracker.find_best_fit(aligned_sz, best_size);
+        
+        if (best_ptr) {
+            return allocate_from_freed(best_ptr, best_size, sz, aligned_sz, alignment);
+        }
+
+        // Allocate from buffer
+        return allocate_from_buffer(sz, aligned_sz, alignment);
+    }
+
+    static void free(void* ptr, const char* file, int line) {
+        (void)file; (void)line;
+
+        if (!ptr) return;
+
+        if (block_tracker.is_active(ptr)) {
+            size_t requested_size = block_tracker.get_requested_size(ptr);
+            
+            // Calculate aligned size for freed block
+            size_t alignment = AlignmentCalculator::calculate_alignment();
+            size_t aligned_sz = AlignmentCalculator::align_size(requested_size, alignment);
+            
+            // Move from active to freed
+            block_tracker.remove_active_block(ptr);
+            block_tracker.add_freed_block(ptr, aligned_sz);
+            
+            // Update statistics
+            stats_manager.record_free(requested_size);
+        }
+    }
+
+    static void* calloc(size_t count, size_t sz, const char* file, int line) {
+        if (count == 0 || sz >= SIZE_MAX / count) {
+            stats_manager.record_failure(sz);
+            return nullptr;
+        }
+
+        size_t total_size = count * sz;
+        void* ptr = malloc(total_size, file, line);
+        if (ptr) {
+            memset(ptr, 0, total_size);
+        }
+        return ptr;
+    }
+
+    static m61_statistics get_statistics() {
+        return stats_manager.get_statistics();
+    }
+
+    static void print_statistics() {
+        m61_statistics stats = stats_manager.get_statistics();
+        printf("alloc count: active %10llu   total %10llu   fail %10llu\n",
+               stats.nactive, stats.ntotal, stats.nfail);
+        printf("alloc size:  active %10llu   total %10llu   fail %10llu\n",
+               stats.active_size, stats.total_size, stats.fail_size);
+    }
+
+    static void print_leak_report() {
+        const auto& active_blocks = block_tracker.get_active_blocks();
+        for (const auto& entry : active_blocks) {
+            printf("LEAK: %p size %zu\n", entry.first, entry.second);
+        }
+    }
+
+private:
+    static void* allocate_from_freed(void* best_ptr, size_t best_size, 
+                                    size_t requested_size, size_t aligned_sz, 
+                                    size_t alignment) {
+        block_tracker.remove_freed_block(best_ptr);
+
+        // Split if there's leftover space
+        void* leftover_ptr;
+        size_t leftover_size;
+        block_tracker.split_freed_block(best_ptr, best_size, aligned_sz, 
+                                       alignment, leftover_ptr, leftover_size);
+        
+        if (leftover_ptr) {
+            block_tracker.add_freed_block(leftover_ptr, leftover_size);
+        }
+
+        // Track as active block
+        block_tracker.add_active_block(best_ptr, requested_size);
+        
+        // Update statistics
+        stats_manager.record_allocation(requested_size, 
+                                       reinterpret_cast<uintptr_t>(best_ptr),
+                                       reinterpret_cast<uintptr_t>(best_ptr) + aligned_sz - 1);
+
+        return best_ptr;
+    }
+
+    static void* allocate_from_buffer(size_t requested_size, size_t aligned_sz, 
+                                     size_t alignment) {
+        void* ptr = buffer.allocate(aligned_sz, alignment);
+        if (!ptr) {
+            stats_manager.record_failure(requested_size);
+            return nullptr;
+        }
+
+        // Track as active block
+        block_tracker.add_active_block(ptr, requested_size);
+        
+        // Update statistics and heap bounds
+        stats_manager.record_allocation(requested_size,
+                                       reinterpret_cast<uintptr_t>(ptr),
+                                       reinterpret_cast<uintptr_t>(ptr) + aligned_sz - 1);
+
+        return ptr;
+    }
+};
+
+// ============================================================================
+// Static instance initialization
+// ============================================================================
+MemoryBuffer MemoryAllocator::buffer;
+Statistics MemoryAllocator::stats_manager;
+BlockTracker MemoryAllocator::block_tracker;
+
+// ============================================================================
+// C interface functions
+// ============================================================================
+void* m61_malloc(size_t sz, const char* file, int line) {
+    return MemoryAllocator::malloc(sz, file, line);
 }
-
-
-/// m61_free(ptr, file, line)
-///    Frees the memory allocation pointed to by `ptr`. If `ptr == nullptr`,
-///    does nothing. Otherwise, `ptr` must point to a currently active
-///    allocation returned by `m61_malloc`. The free was called at location
-///    `file`:`line`.
 
 void m61_free(void* ptr, const char* file, int line) {
-    (void) file; (void) line; // suppress warnings
-    if (!ptr) return;
-
-    auto it = active_sizes.find(ptr);
-    if (it != active_sizes.end()) 
-    {
-        size_t sz = it->second;
-        active_sizes.erase(it);
-        freed_set[ptr] = sz;
-
-        default_stats.nactive--;
-        default_stats.active_size -= sz;
-    }
+    MemoryAllocator::free(ptr, file, line);
 }
-
-
-/// m61_calloc(count, sz, file, line)
-///    Returns a pointer a fresh dynamic memory allocation big enough to
-///    hold an array of `count` elements of `sz` bytes each. Returned
-///    memory is initialized to zero. The allocation request was at
-///    location `file`:`line`. Returns `nullptr` if out of memory; may
-///    also return `nullptr` if `count == 0` or `size == 0`.
 
 void* m61_calloc(size_t count, size_t sz, const char* file, int line) {
-    // Your code here (not needed for first tests).
-    if(count == 0 || sz >= SIZE_MAX / count)
-    {   
-        default_stats.nfail++;
-        default_stats.fail_size += sz;
-        return nullptr;
-    }
-    void* ptr = m61_malloc(count * sz, file, line);
-    if (ptr) {
-        memset(ptr, 0, count * sz);
-    }
-    return ptr;
+    return MemoryAllocator::calloc(count, sz, file, line);
 }
-
-/// m61_get_statistics()
-///    Return the current memory statistics.
 
 m61_statistics m61_get_statistics() {
-    // Your code here.
-    // The handout code sets all statistics to enormous numbers.
-    //m61_statistics stats;
-    //memset(&stats, 0, sizeof(m61_statistics));
-    return default_stats;
+    return MemoryAllocator::get_statistics();
 }
-
-/// m61_print_statistics()
-///    Prints the current memory statistics.
 
 void m61_print_statistics() {
-    m61_statistics stats = m61_get_statistics();
-    printf("alloc count: active %10llu   total %10llu   fail %10llu\n",
-           stats.nactive, stats.ntotal, stats.nfail);
-    printf("alloc size:  active %10llu   total %10llu   fail %10llu\n",
-           stats.active_size, stats.total_size, stats.fail_size);
+    MemoryAllocator::print_statistics();
 }
 
-
-/// m61_print_leak_report()
-///    Prints a report of all currently-active allocated blocks of dynamic
-///    memory.
-
 void m61_print_leak_report() {
-    // Your code here.
+    MemoryAllocator::print_leak_report();
 }

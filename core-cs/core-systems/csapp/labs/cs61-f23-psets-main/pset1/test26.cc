@@ -4,7 +4,8 @@
 #include <vector>
 #include <algorithm>
 // Check that small blocks of memory can be coalesced into larger pieces.
-
+//Before: [A][ptr][C]  (where [] are memory blocks)
+//After:  [A+ptr+C]     (if A and C are also freed)
 int main() {
     const size_t nmax = 7168;
     void* ptrs[nmax];
