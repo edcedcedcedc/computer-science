@@ -9,9 +9,26 @@
 #include <map>
 #include <algorithm>
 
-// ============================================================================
-// Class 1: Memory Buffer Manager (manages the underlying memory)
-// ============================================================================
+
+
+// Alignment Calculator (handles alignment calculations)
+class AlignmentCalculator {
+public:
+    static size_t max_align() {
+        return alignof(std::max_align_t);
+    }
+
+    static size_t align_size(size_t size) {
+        return (size + max_align() - 1) & ~(max_align() - 1);
+    }
+
+    static size_t align_position(size_t position) {
+        return (position + max_align() - 1) & ~(max_align() - 1);
+    }
+};
+
+
+// Memory Buffer Manager (manages the underlying memory)
 class MemoryBuffer {
 private:
     char* buffer;
@@ -30,8 +47,8 @@ public:
     }
 
     // Allocate raw memory from buffer
-    void* allocate(size_t sz, size_t alignment) {
-        size_t aligned_pos = (pos + alignment - 1) & ~(alignment - 1);
+    void* allocate(size_t sz) {
+        size_t aligned_pos = AlignmentCalculator::align_position(pos);
         if (aligned_pos + sz > size) {
             return nullptr;
         }
@@ -44,9 +61,8 @@ public:
     char* get_buffer() const { return buffer; }
 };
 
-// ============================================================================
-// Class 2: Statistics Manager (tracks all statistics)
-// ============================================================================
+
+// Statistics Manager (tracks all statistics)
 class Statistics {
 private:
     m61_statistics stats;
@@ -92,9 +108,8 @@ public:
     }
 };
 
-// ============================================================================
-// Class 3: Block Tracker (manages active and freed blocks)
-// ============================================================================
+
+// Block Tracker (manages active and freed blocks)
 class BlockTracker {
 private:
     std::map<void*, size_t> active_blocks;  // address -> requested size
@@ -121,30 +136,41 @@ public:
 
     // Freed blocks management
     void add_freed_block(void* ptr, size_t aligned_size) {
-        // Try to coalesce with adjacent freed blocks
-        void* freed_ptr = ptr;
-        size_t freed_size = aligned_size;
-
-        // Coalesce with previous block
-        auto prev_it = freed_blocks.lower_bound(ptr);
-        if (prev_it != freed_blocks.begin()) {
-            --prev_it;
-            if (static_cast<char*>(prev_it->first) + prev_it->second == ptr) {
-                freed_ptr = prev_it->first;
-                freed_size = prev_it->second + aligned_size;
-                freed_blocks.erase(prev_it);
+        // Start with our block as is
+        void* current_ptr = ptr;
+        size_t current_size = aligned_size;
+        
+        // Look for LEFT neighbor to merge with
+        // (A neighbor that ends exactly where we start)
+        auto it = freed_blocks.begin();
+        while (it != freed_blocks.end()) {
+            char* neighbor_end = (char*)it->first + it->second;
+            if (neighbor_end == (char*)ptr) {
+                // Found left neighbor! Merge it into ours
+                current_ptr = it->first;
+                current_size = it->second + aligned_size;
+                freed_blocks.erase(it);
+                break;
             }
+            ++it;
         }
-
-        // Coalesce with next block
-        auto next_it = freed_blocks.upper_bound(ptr);
-        if (next_it != freed_blocks.end() && 
-            static_cast<char*>(ptr) + aligned_size == static_cast<char*>(next_it->first)) {
-            freed_size += next_it->second;
-            freed_blocks.erase(next_it);
+        
+        // Look for RIGHT neighbor to merge with  
+        // (A neighbor that starts exactly where we end)
+        it = freed_blocks.begin();
+        char* our_end = (char*)current_ptr + current_size;
+        while (it != freed_blocks.end()) {
+            if ((char*)it->first == our_end) {
+                // Found right neighbor! Merge it into ours
+                current_size += it->second;
+                freed_blocks.erase(it);
+                break;
+            }
+            ++it;
         }
-
-        freed_blocks[freed_ptr] = freed_size;
+        
+        // Add the (possibly merged) block to freed blocks
+        freed_blocks[current_ptr] = current_size;
     }
 
     // Find best fit from freed blocks
@@ -169,8 +195,8 @@ public:
 
     // Split a freed block and return leftover
     void split_freed_block(void* block_ptr, size_t block_size, size_t aligned_sz, 
-                          size_t alignment, void*& leftover_ptr, size_t& leftover_size) {
-        if (block_size > aligned_sz + alignment) {
+                         void*& leftover_ptr, size_t& leftover_size) {
+        if (block_size > aligned_sz + AlignmentCalculator::max_align()) {
             leftover_ptr = static_cast<char*>(block_ptr) + aligned_sz;
             leftover_size = block_size - aligned_sz;
 
@@ -192,27 +218,10 @@ public:
     }
 };
 
-// ============================================================================
-// Class 4: Alignment Calculator (handles alignment calculations)
-// ============================================================================
-class AlignmentCalculator {
-public:
-    static size_t calculate_alignment() {
-        return alignof(std::max_align_t);
-    }
 
-    static size_t align_size(size_t size, size_t alignment) {
-        return (size + alignment - 1) & ~(alignment - 1);
-    }
 
-    static size_t align_position(size_t position, size_t alignment) {
-        return (position + alignment - 1) & ~(alignment - 1);
-    }
-};
 
-// ============================================================================
-// Class 5: Main Allocator (orchestrates all components)
-// ============================================================================
+// Allocator (orchestrates all components)
 class MemoryAllocator {
 private:
     static MemoryBuffer buffer;
@@ -230,19 +239,18 @@ public:
         }
 
         // Calculate alignment
-        size_t alignment = AlignmentCalculator::calculate_alignment();
-        size_t aligned_sz = AlignmentCalculator::align_size(sz, alignment);
+        size_t aligned_sz = AlignmentCalculator::align_size(sz);
 
         // Try to reuse freed block
         size_t best_size;
         void* best_ptr = block_tracker.find_best_fit(aligned_sz, best_size);
         
         if (best_ptr) {
-            return allocate_from_freed(best_ptr, best_size, sz, aligned_sz, alignment);
+            return allocate_from_freed(best_ptr, best_size, sz, aligned_sz);
         }
 
         // Allocate from buffer
-        return allocate_from_buffer(sz, aligned_sz, alignment);
+        return allocate_from_buffer(sz, aligned_sz);
     }
 
     static void free(void* ptr, const char* file, int line) {
@@ -254,8 +262,7 @@ public:
             size_t requested_size = block_tracker.get_requested_size(ptr);
             
             // Calculate aligned size for freed block
-            size_t alignment = AlignmentCalculator::calculate_alignment();
-            size_t aligned_sz = AlignmentCalculator::align_size(requested_size, alignment);
+            size_t aligned_sz = AlignmentCalculator::align_size(requested_size);
             
             // Move from active to freed
             block_tracker.remove_active_block(ptr);
@@ -301,15 +308,15 @@ public:
 
 private:
     static void* allocate_from_freed(void* best_ptr, size_t best_size, 
-                                    size_t requested_size, size_t aligned_sz, 
-                                    size_t alignment) {
+                                    size_t requested_size, size_t aligned_sz
+                                   ) {
         block_tracker.remove_freed_block(best_ptr);
 
         // Split if there's leftover space
         void* leftover_ptr;
         size_t leftover_size;
         block_tracker.split_freed_block(best_ptr, best_size, aligned_sz, 
-                                       alignment, leftover_ptr, leftover_size);
+                                        leftover_ptr, leftover_size);
         
         if (leftover_ptr) {
             block_tracker.add_freed_block(leftover_ptr, leftover_size);
@@ -326,9 +333,9 @@ private:
         return best_ptr;
     }
 
-    static void* allocate_from_buffer(size_t requested_size, size_t aligned_sz, 
-                                     size_t alignment) {
-        void* ptr = buffer.allocate(aligned_sz, alignment);
+    static void* allocate_from_buffer(size_t requested_size, size_t aligned_sz
+                                   ) {
+        void* ptr = buffer.allocate(aligned_sz);
         if (!ptr) {
             stats_manager.record_failure(requested_size);
             return nullptr;
@@ -346,16 +353,16 @@ private:
     }
 };
 
-// ============================================================================
+
 // Static instance initialization
-// ============================================================================
+
 MemoryBuffer MemoryAllocator::buffer;
 Statistics MemoryAllocator::stats_manager;
 BlockTracker MemoryAllocator::block_tracker;
 
-// ============================================================================
+
 // C interface functions
-// ============================================================================
+
 void* m61_malloc(size_t sz, const char* file, int line) {
     return MemoryAllocator::malloc(sz, file, line);
 }
