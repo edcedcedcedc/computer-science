@@ -9,8 +9,6 @@
 #include <map>
 #include <algorithm>
 
-
-
 // Alignment Calculator (handles alignment calculations)
 class AlignmentCalculator {
 public:
@@ -27,40 +25,26 @@ public:
     }
 };
 
-
 // Memory Buffer Manager (manages the underlying memory)
 class MemoryBuffer {
 private:
     char* buffer;
-    size_t pos;
-    const size_t size = 8 << 20;  // 8 MiB
+    size_t buffer_size;
 
 public:
-    MemoryBuffer() : pos(0) {
-        void* buf = mmap(nullptr, size, PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    MemoryBuffer() : buffer_size(8 << 20) {
+        void* buf = mmap(nullptr, buffer_size, PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
         assert(buf != MAP_FAILED);
         buffer = static_cast<char*>(buf);
     }
 
     ~MemoryBuffer() {
-        munmap(buffer, size);
+        munmap(buffer, buffer_size);
     }
 
-    // Allocate raw memory from buffer
-    void* allocate(size_t sz) {
-        size_t aligned_pos = AlignmentCalculator::align_position(pos);
-        if (aligned_pos + sz > size) {
-            return nullptr;
-        }
-        void* ptr = &buffer[aligned_pos];
-        pos = aligned_pos + sz;
-        return ptr;
-    }
-
-    size_t get_size() const { return size; }
+    size_t get_size() const { return buffer_size; }
     char* get_buffer() const { return buffer; }
 };
-
 
 // Statistics Manager (tracks all statistics)
 class Statistics {
@@ -108,7 +92,6 @@ public:
     }
 };
 
-
 // Block Tracker (manages active and freed blocks)
 class BlockTracker {
 private:
@@ -135,54 +118,86 @@ public:
     }
 
     // Freed blocks management
-    void add_freed_block(void* ptr, size_t aligned_size) {
-        // Start with our block as is
-        void* current_ptr = ptr;
-        size_t current_size = aligned_size;
+    void add_freed_block(void* ptr, size_t aligned_size, char* buffer_start, size_t* buffer_pos_ptr) {
+        // Simple approach: always try to merge with wilderness first
+        char* block_end = (char*)ptr + aligned_size;
+        char* wilderness_start = buffer_start + *buffer_pos_ptr;
         
-        // Look for LEFT neighbor to merge with
-        // (A neighbor that ends exactly where we start)
-        auto it = freed_blocks.begin();
-        while (it != freed_blocks.end()) {
-            char* neighbor_end = (char*)it->first + it->second;
-            if (neighbor_end == (char*)ptr) {
-                // Found left neighbor! Merge it into ours
-                current_ptr = it->first;
-                current_size = it->second + aligned_size;
-                freed_blocks.erase(it);
-                break;
+        if (block_end == wilderness_start) {
+            // Block is adjacent to wilderness - merge by moving wilderness back
+            *buffer_pos_ptr = (char*)ptr - buffer_start;
+            
+            // Now check if any freed blocks are now adjacent to the new wilderness
+            // We need to keep merging until no more merges are possible
+            bool merged;
+            do {
+                merged = false;
+                for (auto it = freed_blocks.begin(); it != freed_blocks.end(); ++it) {
+                    char* freed_block_end = (char*)it->first + it->second;
+                    if (freed_block_end == buffer_start + *buffer_pos_ptr) {
+                        // Found adjacent freed block - merge it too
+                        *buffer_pos_ptr = (char*)it->first - buffer_start;
+                        freed_blocks.erase(it);
+                        merged = true;
+                        break;
+                    }
+                }
+            } while (merged);
+        } else {
+            // Block is not adjacent to wilderness - add to freed blocks
+            // Use the existing merging logic
+            void* current_ptr = ptr;
+            size_t current_size = aligned_size;
+            
+            // Look for LEFT neighbor to merge with
+            auto it = freed_blocks.begin();
+            while (it != freed_blocks.end()) {
+                char* neighbor_end = (char*)it->first + it->second;
+                if (neighbor_end == (char*)ptr) {
+                    current_ptr = it->first;
+                    current_size = it->second + aligned_size;
+                    freed_blocks.erase(it);
+                    break;
+                }
+                ++it;
             }
-            ++it;
-        }
-        
-        // Look for RIGHT neighbor to merge with  
-        // (A neighbor that starts exactly where we end)
-        it = freed_blocks.begin();
-        char* our_end = (char*)current_ptr + current_size;
-        while (it != freed_blocks.end()) {
-            if ((char*)it->first == our_end) {
-                // Found right neighbor! Merge it into ours
-                current_size += it->second;
-                freed_blocks.erase(it);
-                break;
+            
+            // Look for RIGHT neighbor to merge with  
+            it = freed_blocks.begin();
+            char* our_end = (char*)current_ptr + current_size;
+            while (it != freed_blocks.end()) {
+                if ((char*)it->first == our_end) {
+                    current_size += it->second;
+                    freed_blocks.erase(it);
+                    break;
+                }
+                ++it;
             }
-            ++it;
+            
+            freed_blocks[current_ptr] = current_size;
         }
-        
-        // Add the (possibly merged) block to freed blocks
-        freed_blocks[current_ptr] = current_size;
     }
 
-    // Find best fit from freed blocks
-    void* find_best_fit(size_t aligned_sz, size_t& block_size) const {
+    // Find best fit from freed blocks or wilderness
+    void* find_best_fit(size_t aligned_sz, size_t& block_size, 
+                       char* buffer_start, size_t buffer_pos, size_t buffer_size) const {
         void* best_ptr = nullptr;
         size_t best_size = SIZE_MAX;
 
+        // Check freed blocks
         for (const auto& entry : freed_blocks) {
             if (entry.second >= aligned_sz && entry.second < best_size) {
                 best_ptr = entry.first;
                 best_size = entry.second;
             }
+        }
+        
+        // Also check wilderness (never-allocated space at end)
+        size_t wilderness_start = buffer_pos;
+        size_t wilderness_size = buffer_size - wilderness_start;
+        if (wilderness_size >= aligned_sz && wilderness_size < best_size) {
+            best_ptr = buffer_start + wilderness_start;
+            best_size = wilderness_size;
         }
 
         block_size = best_size;
@@ -218,15 +233,13 @@ public:
     }
 };
 
-
-
-
 // Allocator (orchestrates all components)
 class MemoryAllocator {
 private:
     static MemoryBuffer buffer;
     static Statistics stats_manager;
     static BlockTracker block_tracker;
+    static size_t buffer_pos;  // Track current allocation position
 
 public:
     static void* malloc(size_t sz, const char* file, int line) {
@@ -241,15 +254,36 @@ public:
         // Calculate alignment
         size_t aligned_sz = AlignmentCalculator::align_size(sz);
 
-        // Try to reuse freed block
+        // Try to reuse freed block or wilderness
         size_t best_size;
-        void* best_ptr = block_tracker.find_best_fit(aligned_sz, best_size);
+        void* best_ptr = block_tracker.find_best_fit(aligned_sz, best_size,
+                                                    buffer.get_buffer(),
+                                                    buffer_pos,
+                                                    buffer.get_size());
         
         if (best_ptr) {
-            return allocate_from_freed(best_ptr, best_size, sz, aligned_sz);
+            // Check if it's from wilderness
+            char* wilderness_start = buffer.get_buffer() + buffer_pos;
+            if (best_ptr == (void*)wilderness_start) {
+                // Allocate from wilderness
+                buffer_pos += aligned_sz;
+                
+                // Track as active block
+                block_tracker.add_active_block(best_ptr, sz);
+                
+                // Update statistics
+                stats_manager.record_allocation(sz,
+                    reinterpret_cast<uintptr_t>(best_ptr),
+                    reinterpret_cast<uintptr_t>(best_ptr) + aligned_sz - 1);
+                
+                return best_ptr;
+            } else {
+                // Allocate from freed block
+                return allocate_from_freed(best_ptr, best_size, sz, aligned_sz);
+            }
         }
 
-        // Allocate from buffer
+        // Allocate from buffer (wilderness)
         return allocate_from_buffer(sz, aligned_sz);
     }
 
@@ -266,7 +300,11 @@ public:
             
             // Move from active to freed
             block_tracker.remove_active_block(ptr);
-            block_tracker.add_freed_block(ptr, aligned_sz);
+
+            // Pass buffer info for wilderness merging
+            block_tracker.add_freed_block(ptr, aligned_sz, 
+                                         buffer.get_buffer(), 
+                                         &buffer_pos);
             
             // Update statistics
             stats_manager.record_free(requested_size);
@@ -308,8 +346,7 @@ public:
 
 private:
     static void* allocate_from_freed(void* best_ptr, size_t best_size, 
-                                    size_t requested_size, size_t aligned_sz
-                                   ) {
+                                    size_t requested_size, size_t aligned_sz) {
         block_tracker.remove_freed_block(best_ptr);
 
         // Split if there's leftover space
@@ -319,7 +356,8 @@ private:
                                         leftover_ptr, leftover_size);
         
         if (leftover_ptr) {
-            block_tracker.add_freed_block(leftover_ptr, leftover_size);
+            block_tracker.add_freed_block(leftover_ptr, leftover_size, 
+                                         buffer.get_buffer(), &buffer_pos);
         }
 
         // Track as active block
@@ -333,36 +371,33 @@ private:
         return best_ptr;
     }
 
-    static void* allocate_from_buffer(size_t requested_size, size_t aligned_sz
-                                   ) {
-        void* ptr = buffer.allocate(aligned_sz);
-        if (!ptr) {
+    static void* allocate_from_buffer(size_t requested_size, size_t aligned_sz) {
+        size_t aligned_pos = AlignmentCalculator::align_position(buffer_pos);
+        if (aligned_pos + aligned_sz > buffer.get_size()) {
             stats_manager.record_failure(requested_size);
             return nullptr;
         }
-
+        void* ptr = &buffer.get_buffer()[aligned_pos];
+        buffer_pos = aligned_pos + aligned_sz;
+        
         // Track as active block
         block_tracker.add_active_block(ptr, requested_size);
         
-        // Update statistics and heap bounds
+        // Update statistics
         stats_manager.record_allocation(requested_size,
                                        reinterpret_cast<uintptr_t>(ptr),
                                        reinterpret_cast<uintptr_t>(ptr) + aligned_sz - 1);
-
         return ptr;
     }
 };
 
-
 // Static instance initialization
-
 MemoryBuffer MemoryAllocator::buffer;
 Statistics MemoryAllocator::stats_manager;
 BlockTracker MemoryAllocator::block_tracker;
-
+size_t MemoryAllocator::buffer_pos = 0;
 
 // C interface functions
-
 void* m61_malloc(size_t sz, const char* file, int line) {
     return MemoryAllocator::malloc(sz, file, line);
 }
