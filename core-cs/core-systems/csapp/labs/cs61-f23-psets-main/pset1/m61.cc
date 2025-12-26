@@ -87,6 +87,18 @@ public:
         }
     }
 
+    bool is_in_heap(void* ptr) const {
+        uintptr_t addr = (uintptr_t)ptr;
+
+        if (stats.heap_min == 0 && stats.heap_max == 0) {
+            return false;
+        }
+        //heap_max is inclusive (the last byte of the heap)
+        return addr >= stats.heap_min && addr <= stats.heap_max;
+    }
+
+
+    
     const m61_statistics& get_statistics() const {
         return stats;
     }
@@ -110,6 +122,10 @@ public:
 
     bool is_active(void* ptr) const {
         return active_blocks.find(ptr) != active_blocks.end();
+    }
+
+    bool is_freed(void* ptr) const {
+        return freed_blocks.find(ptr) != freed_blocks.end();
     }
 
     size_t get_requested_size(void* ptr) const {
@@ -228,6 +244,20 @@ public:
         }
     }
 
+    bool is_within_active_block(void* ptr) const {
+        for (const auto& entry : active_blocks) {
+            void* block_start = entry.first;
+            size_t requested_size = entry.second;
+            size_t aligned_size = AlignmentCalculator::align_size(requested_size);
+            
+            if (ptr >= block_start && 
+                static_cast<char*>(ptr) < static_cast<char*>(block_start) + aligned_size) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     const std::map<void*, size_t>& get_active_blocks() const {
         return active_blocks;
     }
@@ -288,9 +318,14 @@ public:
     }
 
     static void free(void* ptr, const char* file, int line) {
-        (void)file; (void)line;
-
         if (!ptr) return;
+        
+        if (!stats_manager.is_in_heap(ptr)) {
+            // Updated: Added file and line to error message for test 42
+            fprintf(stderr, "MEMORY BUG: %s:%d: invalid free of pointer %p, not in heap\n", 
+                    file, line, ptr);
+            return;
+        }
 
         if (block_tracker.is_active(ptr)) {
             size_t requested_size = block_tracker.get_requested_size(ptr);
@@ -308,6 +343,16 @@ public:
             
             // Update statistics
             stats_manager.record_free(requested_size);
+        } else {
+            if (block_tracker.is_within_active_block(ptr)) {
+                // Updated: Added file and line to error message for test 42
+                fprintf(stderr, "MEMORY BUG: %s:%d: invalid free of pointer %p, not allocated\n", 
+                        file, line, ptr);
+            } else {
+                // Updated: Added file and line to error message for test 42
+                fprintf(stderr, "MEMORY BUG: %s:%d: invalid free of pointer %p, double free\n", 
+                        file, line, ptr);
+            }
         }
     }
 

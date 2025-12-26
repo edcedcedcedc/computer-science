@@ -5,7 +5,7 @@
 // Check invalid free of non-heap pointer.
 
 int main() {
-    m61_free((void*) 16);
+    m61_free((void*) 16); //pointer with address 16
     m61_print_statistics();
 }
 
