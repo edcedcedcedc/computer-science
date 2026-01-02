@@ -468,7 +468,6 @@ and finished linear algebra, this was a long run, moving forward.
 - I also had to do data structures and physics but I couldn't
 
 ### 20/03/2025
-🎉🎉🎉 I'll take a minute and clap for myself.
 - I formally closed all required Calculus courses, in total, from Algebra 1 till present moment it took me around 3 years, but I started from 0 and was lazy, I didn't even understand fractions, so as practice shows, you can do it, with consistency and patience. Right now I am sure that my current level of math is enough to swing in almost any cs/programming/se field. I wish myself good luck.
 
 ### 23/03/2025
@@ -480,7 +479,7 @@ and finished linear algebra, this was a long run, moving forward.
 ### 12/05/2025
 - I got a litte lazy, and I am moving in a relative slow pace if compared to what I used to be, I guess it's summer and had burnout of crazy coding preparations for gsoc-2025.
 
-- 🎉🎉🎉 I was accepted into Google Summer of Code 2025 for @Rocket.Chat
+- 🎉🎉🎉 I was accepted into Google Summer of Code 2025 for Rocket.Chat
 
 - Data Structes course is around 50% 22 lessons done out of 42, I also read the book and think on it, extra exercises maybe. Also I didn't do any project for this class yet, but I downloaded a bunch of them from other years of this class and I plan to do them at some point, but because there is another course in the way called, "software construction" and it's in Java also, I think I might not force myself to do all projects but at leasts half of this within this course.
 
@@ -539,3 +538,17 @@ Maybe I can plan final projects for these courses instead.
 - I also try to do at least 15 minutes of LeetCode every day, even if it’s not reflected here.
 - You can always check the Google Docs for the current courses I’m taking - I keep those updated. 
 I’m still watching lectures and thinking about the material.
+
+
+02/01/2026
+
+- I am finishing fall courses; probability for cs/foundations of security/introduction to computer systems;
+- Now take winter courser: ethics, technology and engineering/introduction to intellectual property/data privacy fundamentals;
+and need to finish the labs for introduction to computer systems
+- I am also working on a large winter-spring project that I plan to release, maintain, and generate income from. 
+It is a tech price aggregator and comparator. In the MVP phase, it includes: An aggregator engine that traverses the parse tree of a network node,
+A scheduler with a configuration file, Automatic database creation and updates, Data normalization, Tokenized context-based “superhero” search
+Segmented endpoints with partial data requests to prevent future scraping of my own data, A single-page application on the client side, optimized for mobile-first viewing
+…plus many more features.
+- I plan to reapply to the OSSU maintainers in the spring to get my access to the community Discord back.
+- Lastly, still going strong; I have to finish ossu.
