@@ -69,12 +69,8 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ##### Core Ethics
 **Topics covered:** `Social Context` `Analytical Tools` `Professional Ethics` `Intellectual Property and more`
 
-- [ ] Introduction to Intellectual Property (2.01.2026 → planned 2.02.2026)  
-  → [Proof](./core-cs/core-ethics/i-i-p) • [Notes](https://docs.google.com/document/d/1U5SBM_QUKgywRt_5Y5bJZGEKpwEVux3j7nO4DpA4l9w/edit?usp=sharing)  
-
-- [ ] Data Privacy Fundamentals (2.01.2026 → planned 2.02.2026)  
-  → [Proof](./core-cs/core-ethics/d-p-f) • [Notes](https://docs.google.com/document/d/1uoYTPENC_n1UlsdDBmSPzasXv2Dva6qokMs_lwiYiMI/edit?usp=sharing)  
-
+- [ ] Data Science Ethics (2.01.2026 → planned 2.02.2026)  
+  → [Proof](./core-cs/core-ethics/data-science-ethics) • [Notes](https://docs.google.com/document/d/19Fh72EpO4XWeqX3iKay_NK5gp8yjfIqa6Y72pBrybNA/edit?usp=sharing)  
 
 #### Advanced CS
 
@@ -83,7 +79,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 - [x] Linear Algebra (14.10.24 → 27.02.25)  
   → [Proof](./advanced-cs/advanced-math/linear-algebra/) • [Projects](./advanced-cs/advanced-math/linear-algebra/spinningCube) • [Notes](https://docs.google.com/document/d/1ieGaWKd6_c_jAStE7_Xhg6oUc5kr_CYZ34NqOsLDX_E/edit?usp=sharing)  
-- [ ] Probability for CS (23.09.25 → 31.12.25, planned 31.12.25)  
+- [x] Probability for CS (23.09.25 → 31.12.25, planned 31.12.25)  
   → [Proof](./advanced-cs/advanced-math/probability-for-cs/) • [Notes (archive)](https://docs.google.com/document/d/1xdIrMa2W9hERx3B4T_JcIlJTP8JhwLjJM8Cf6XFpNbk/edit?usp=sharing) • [Labs](./advanced-cs/advanced-math/probability-for-cs/labs) • [Notes (new)](https://docs.google.com/document/d/1E_K2eB0Qf177yfnsHEAVWvyI8lY60rFPpEd3vEJJXzE/edit?usp=sharing)
 
 #### Electives
@@ -112,9 +108,8 @@ Open Education in Computer Science from [Open Source Society University](https:/
 #### Ongoing 
 - Introduction to Computer Systems - 2–3 lectures per week, labs every 2–2.5 weeks, reading 
 - Foundations of Computer Security - 2 lectures per week, labs every 1–2.5 weeks, reading 
+- Data Science Ethics
 - Real-Time Systems & Gameplay Programming
-- Introduction to Intellectual Property
-- Data Privacy Fundamentals
 ---
 
 
