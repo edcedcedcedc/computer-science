@@ -69,15 +69,10 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ##### Core Ethics
 **Topics covered:** `Social Context` `Analytical Tools` `Professional Ethics` `Intellectual Property and more`
 
-- [] Ethics, Technology and Engineering (2.01.2026 → planned 2.02.2026)  
-  → [Proof](./core-cs/core-ethics/e-t-e) • [Notes](https://docs.google.com/document/d/1uKLLSY7_H9G8S75onev5aghMDVrMA1VpgqUFX_zgWvI/edit?usp=sharing)  
-
-
-- [] Introduction to Intellectual Property (2.01.2026 → planned 2.02.2026)  
+- [ ] Introduction to Intellectual Property (2.01.2026 → planned 2.02.2026)  
   → [Proof](./core-cs/core-ethics/i-i-p) • [Notes](https://docs.google.com/document/d/1U5SBM_QUKgywRt_5Y5bJZGEKpwEVux3j7nO4DpA4l9w/edit?usp=sharing)  
 
-
-- [] Data Privacy Fundamentals (2.01.2026 → planned 2.02.2026)  
+- [ ] Data Privacy Fundamentals (2.01.2026 → planned 2.02.2026)  
   → [Proof](./core-cs/core-ethics/d-p-f) • [Notes](https://docs.google.com/document/d/1uoYTPENC_n1UlsdDBmSPzasXv2Dva6qokMs_lwiYiMI/edit?usp=sharing)  
 
 
@@ -88,7 +83,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 - [x] Linear Algebra (14.10.24 → 27.02.25)  
   → [Proof](./advanced-cs/advanced-math/linear-algebra/) • [Projects](./advanced-cs/advanced-math/linear-algebra/spinningCube) • [Notes](https://docs.google.com/document/d/1ieGaWKd6_c_jAStE7_Xhg6oUc5kr_CYZ34NqOsLDX_E/edit?usp=sharing)  
-- [ ] Probability for CS (23.09.25 → planned 31.12.25)  
+- [ ] Probability for CS (23.09.25 → 31.12.25, planned 31.12.25)  
   → [Proof](./advanced-cs/advanced-math/probability-for-cs/) • [Notes (archive)](https://docs.google.com/document/d/1xdIrMa2W9hERx3B4T_JcIlJTP8JhwLjJM8Cf6XFpNbk/edit?usp=sharing) • [Labs](./advanced-cs/advanced-math/probability-for-cs/labs) • [Notes (new)](https://docs.google.com/document/d/1E_K2eB0Qf177yfnsHEAVWvyI8lY60rFPpEd3vEJJXzE/edit?usp=sharing)
 
 #### Electives
@@ -102,7 +97,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 #### Specialization
 
-**Topics covered:** `unreal engine` `gameplay programming`
+**Topics covered:** `real-time systems` `gameplay programming` `unreal engine`
 
 - [ ] Real-Time Systems & Gameplay Programming (03.10.25 → planned 01.06.26)  
   → [Project](https://github.com/edcedcedcedc/computer-science-specialization) • [Notes](https://docs.google.com/document/d/1MIjYhqsG5pFdOIyyN-r5OyKqoTTkxKNC_dEubC0alJo/edit?usp=sharing)  
@@ -117,10 +112,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 #### Ongoing 
 - Introduction to Computer Systems - 2–3 lectures per week, labs every 2–2.5 weeks, reading 
 - Foundations of Computer Security - 2 lectures per week, labs every 1–2.5 weeks, reading 
-- Probability for CS - 3 lectures per week, homework 1–2 weeks, reading  
 - Real-Time Systems & Gameplay Programming
-
-- Ethics, Technology and Engineering
 - Introduction to Intellectual Property
 - Data Privacy Fundamentals
 ---
