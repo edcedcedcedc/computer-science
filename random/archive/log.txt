@@ -542,13 +542,13 @@ I’m still watching lectures and thinking about the material.
 
 02/01/2026
 
-- I am finishing fall courses; probability for cs/foundations of security/introduction to computer systems;
-- Now take winter courser: ethics, technology and engineering/introduction to intellectual property/data privacy fundamentals;
-and need to finish the labs for introduction to computer systems
-- I am also working on a large winter-spring project that I plan to release, maintain, and generate income from. 
-It is a tech price aggregator and comparator. In the MVP phase, it includes: An aggregator engine that traverses the parse tree of a network node,
-A scheduler with a configuration file, Automatic database creation and updates, Data normalization, Tokenized context-based “superhero” search
-Segmented endpoints with partial data requests to prevent future scraping of my own data, A single-page application on the client side, optimized for mobile-first viewing
-…plus many more features.
-- I plan to reapply to the OSSU maintainers in the spring to get my access to the community Discord back.
-- Lastly, still going strong; I have to finish ossu.
+I am currently finishing my fall courses, which include Probability for Computer Science, Foundations of Security, 
+and Introduction to Computer Systems.
+
+For the winter term, I will be taking Ethics in Technology and Engineering, Introduction to Intellectual Property, 
+and Data Privacy Fundamentals. I also still need to complete the labs for Introduction to Computer Systems.
+
+At the same time, I am working on a large winter–spring project(web tech price aggregator and comparator) 
+that I plan to release, maintain, and monetize. 
+I also plan to reapply to the OSSU maintainers in the spring in order to regain access to the community Discord.
+Lastly, still going strong.
