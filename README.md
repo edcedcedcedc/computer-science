@@ -69,7 +69,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ##### Core Ethics
 **Topics covered:** `Social Context` `Analytical Tools` `Professional Ethics` `Intellectual Property and more`
 
-- [ ] Data Science Ethics (2.01.2026 → planned 2.02.2026)  
+- [x] Data Science Ethics (2.01.2026 → planned 2.02.2026 → actual 5.02.2026)  
   → [Proof](./core-cs/core-ethics/data-science-ethics) • [Notes](https://docs.google.com/document/d/19Fh72EpO4XWeqX3iKay_NK5gp8yjfIqa6Y72pBrybNA/edit?usp=sharing)  
 
 #### Advanced CS
