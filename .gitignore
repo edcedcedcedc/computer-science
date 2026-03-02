@@ -13,7 +13,7 @@ advanced-cs/advanced-math/linear-algebra/spinningCube/*
 !advanced-cs/advanced-math/linear-algebra/spinningCube/spinningCube.gif
 vcpkg_installed/
 CmakeUserPresets.json
-build/
+
 out/
 .xml
 *.iml
