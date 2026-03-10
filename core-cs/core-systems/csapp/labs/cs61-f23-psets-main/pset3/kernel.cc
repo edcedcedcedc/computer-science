@@ -62,17 +62,20 @@ void kernel_start(const char* command) {
 
     // (re-)initialize kernel page table
     for (uintptr_t addr = 0; addr < MEMSIZE_PHYSICAL; addr += PAGESIZE) {
-        int perm = PTE_P | PTE_W | PTE_U;
+        int perm = 0;
         if (addr == 0) {
-            // nullptr is inaccessible even to the kernel
-            perm = 0;
+            perm = 0; // nullptr inaccessible
+        } 
+        else if (addr == CONSOLE_ADDR || addr >= PROC_START_ADDR) {
+            perm = PTE_P | PTE_W | PTE_U; // allow user to access console
         }
-        // install identity mapping
-        int r = vmiter(kernel_pagetable, addr).try_map(addr, perm);
-        assert(r == 0); // mappings during kernel_start MUST NOT fail
-                        // (Note that later mappings might fail!!)
-    }
+        else {
+            perm = PTE_P | PTE_W; // kernel-only memory
+        }
 
+        int r = vmiter(kernel_pagetable, addr).try_map(addr, perm);
+        assert(r == 0);
+    }
     // set up process descriptors
     for (pid_t i = 0; i < PID_MAX; i++) {
         ptable[i].pid = i;
