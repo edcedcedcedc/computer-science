@@ -5,6 +5,17 @@
 
 extern uint8_t end[];
 
+/* 
+mem layout simplified 
+
+[text]
+[data]
+[bss]
+[end]  <-- This symbol is not a variable. It’s a marker inserted by the linker.
+*/
+
+
+
 // These global variables go on the data page.
 uint8_t* heap_top;
 uint8_t* stack_bottom;
