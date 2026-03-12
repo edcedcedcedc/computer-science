@@ -160,12 +160,27 @@ void kfree(void* kptr) {
 //    Load application program `program_name` as process number `pid`.
 //    This loads the application's code and data into memory, sets its
 //    %rip and %rsp, gives it a stack page, and marks it as runnable.
-
 void process_setup(pid_t pid, const char* program_name) {
+    
+
     init_process(&ptable[pid], 0);
 
-    // initialize process page table
-    ptable[pid].pagetable = kernel_pagetable;
+     // create new page table
+    x86_64_pagetable* pt = kalloc_pagetable();
+    assert(pt);
+
+      // copy kernel mappings
+    for (vmiter it(kernel_pagetable, 0);
+         it.va() < PROC_START_ADDR;
+         it += PAGESIZE) {
+
+        if (it.present()) {
+            int r = vmiter(pt, it.va()).try_map(it.pa(), it.perm());
+            assert(r == 0);
+        }
+    }
+
+    ptable[pid].pagetable = pt;
 
     // obtain reference to program image
     // (The program image models the process executable.)
@@ -176,33 +191,54 @@ void process_setup(pid_t pid, const char* program_name) {
         for (uintptr_t a = round_down(seg.va(), PAGESIZE);
              a < seg.va() + seg.size();
              a += PAGESIZE) {
-            // `a` is the process virtual address for the next code or data page
-            // (The handout code requires that the corresponding physical
-            // address is currently free.)
-            assert(physpages[a / PAGESIZE].refcount == 0);
-            ++physpages[a / PAGESIZE].refcount;
+            
+            void* pa = kalloc(PAGESIZE);
+            assert(pa);
+
+            int perm = PTE_P | PTE_U;
+            if (seg.writable()) {
+                perm |= PTE_W;
+            }
+
+            int r = vmiter(pt, a).try_map((uintptr_t) pa, perm);
+            assert(r == 0);
         }
     }
 
-    // copy instructions and data from program image into process memory
     for (auto seg = pgm.begin(); seg != pgm.end(); ++seg) {
-        memset((void*) seg.va(), 0, seg.size());
-        memcpy((void*) seg.va(), seg.data(), seg.data_size());
+        for (uintptr_t a = round_down(seg.va(), PAGESIZE);
+             a < seg.va() + seg.size();
+             a += PAGESIZE) {
+
+            vmiter it(pt, a);
+            memset(it.kptr(), 0, PAGESIZE);
+
+            uintptr_t offset = a - seg.va();
+            if (offset < seg.data_size()) {
+                size_t n = seg.data_size() - offset;
+                if (n > PAGESIZE) {
+                    n = PAGESIZE;
+                }
+                memcpy(it.kptr(), seg.data() + offset, n);
+            }
+        }
     }
 
-    // mark entry point
+     // entry point
     ptable[pid].regs.reg_rip = pgm.entry();
 
-    // allocate and map stack segment
-    // Compute process virtual address for stack page
+    // stack
     uintptr_t stack_addr = PROC_START_ADDR + PROC_SIZE * pid - PAGESIZE;
-    // The handout code requires that the corresponding physical address
-    // is currently free.
-    assert(physpages[stack_addr / PAGESIZE].refcount == 0);
-    ++physpages[stack_addr / PAGESIZE].refcount;
+
+    void* pa = kalloc(PAGESIZE);
+    assert(pa);
+
+    int r = vmiter(pt, stack_addr).try_map((uintptr_t) pa,
+                                           PTE_P | PTE_W | PTE_U);
+    assert(r == 0);
+
     ptable[pid].regs.reg_rsp = stack_addr + PAGESIZE;
 
-    // mark process as runnable
     ptable[pid].state = P_RUNNABLE;
 }
 
@@ -352,11 +388,23 @@ uintptr_t syscall(regstate* regs) {
 //    Handles the SYSCALL_PAGE_ALLOC system call. This function
 //    should implement the specification for `sys_page_alloc`
 //    in `u-lib.hh` (but in the handout code, it does not).
-
 int syscall_page_alloc(uintptr_t addr) {
-    assert(physpages[addr / PAGESIZE].refcount == 0);
-    ++physpages[addr / PAGESIZE].refcount;
-    memset((void*) addr, 0, PAGESIZE);
+    if (addr % PAGESIZE != 0 || addr < PROC_START_ADDR) {
+        return -1;
+    }
+
+    void* pa = kalloc(PAGESIZE);
+    if (!pa) {
+        return -1;
+    }
+
+    int r = vmiter(current->pagetable, addr)
+        .try_map((uintptr_t) pa, PTE_P | PTE_W | PTE_U);
+
+    assert(r == 0);
+
+    memset(pa, 0, PAGESIZE);
+
     return 0;
 }
 

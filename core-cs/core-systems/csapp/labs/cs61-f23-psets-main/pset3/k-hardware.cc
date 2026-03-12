@@ -283,8 +283,8 @@ void init_timer(int rate) {
 
 
 // kalloc_pagetable
-//    Allocate and return a new, empty page table.
 
+// Allocate and return a new, empty page table.
 x86_64_pagetable* kalloc_pagetable() {
     x86_64_pagetable* pt = reinterpret_cast<x86_64_pagetable*>(kalloc(PAGESIZE));
     if (pt) {
