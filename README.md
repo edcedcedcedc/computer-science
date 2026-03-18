@@ -7,11 +7,11 @@ Open Education in Computer Science from [Open Source Society University](https:/
 #### Prerequisites
 **Topics covered:** `high school geometry` `college algebra` `trigonometry` `precalculus`
 
-- [x] Algebra 1 (10.02.23 → 10.02.23) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1BJkhLWKtQVTutCbBOL5Am8IlfLq9bDqoBrA2aGlQ7eo/edit?usp=sharing)  
-- [x] Geometry (26.10.23 → 26.10.23) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1n7f1E6zxKXha6v5mLx7cQehJuKmo-on3UmyP_uOSCYI/edit?usp=sharing)  
-- [x] Algebra 2 (15.01.24 → 15.01.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1ma1xHGy0dGXNuQbXPrLDidT_F8d6hQ4QrPBRRmm-hyA/edit?usp=sharing)  
-- [x] Trigonometry (04.02.24 → 04.02.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1n7f1E6zxKXha6v5mLx7cQehJuKmo-on3UmyP_uOSCYI/edit?usp=sharing)  
-- [x] Precalculus (21.02.24 → 08.04.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1PSfIDMT3UEdDhIJkCUgGjDmI9NO2-VB8JhcVCIdnaJ8/edit?usp=sharing)  
+- [x] Algebra 1 (2022 → 10.02.23) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1BJkhLWKtQVTutCbBOL5Am8IlfLq9bDqoBrA2aGlQ7eo/edit?usp=sharing)  
+- [x] Geometry (2023 → 26.10.23) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1n7f1E6zxKXha6v5mLx7cQehJuKmo-on3UmyP_uOSCYI/edit?usp=sharing)  
+- [x] Algebra 2 (2024 → 15.01.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1ma1xHGy0dGXNuQbXPrLDidT_F8d6hQ4QrPBRRmm-hyA/edit?usp=sharing)  
+- [x] Trigonometry (2024 → 04.02.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1n7f1E6zxKXha6v5mLx7cQehJuKmo-on3UmyP_uOSCYI/edit?usp=sharing)  
+- [x] Precalculus (2024 → 08.04.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1PSfIDMT3UEdDhIJkCUgGjDmI9NO2-VB8JhcVCIdnaJ8/edit?usp=sharing)  
 
 #### Intro CS
 
