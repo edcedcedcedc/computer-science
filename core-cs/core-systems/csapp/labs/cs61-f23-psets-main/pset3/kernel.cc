@@ -229,7 +229,7 @@ void process_setup(pid_t pid, const char* program_name) {
     ptable[pid].regs.reg_rip = pgm.entry();
 
     // stack
-    uintptr_t stack_addr = PROC_START_ADDR + PROC_SIZE * pid - PAGESIZE;
+    uintptr_t stack_addr = MEMSIZE_VIRTUAL - PAGESIZE;
 
     void* pa = kalloc(PAGESIZE);
     assert(pa);
