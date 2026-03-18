@@ -57,7 +57,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ##### Core security
 **Topics covered:** `authentication` `transport security` `platform security` `software security`
 
-- [ ] Foundations of Computer Security (03.09.25 → planned 03.12.25)  
+- [x] Foundations of Computer Security (03.09.25 → planned 03.12.25)  
   → [Proof](./core-cs/core-security/foundations-of-computer-security/) • [Projects](./core-cs/core-security/foundations-of-computer-security/labs) • [Notes](https://docs.google.com/document/d/1pUK9NoM78XD8NCP2V_O2x0w1Oz9R2FfCtjFWNwVidJI/edit?usp=sharing)  
 
 ##### CS Tools
@@ -71,6 +71,9 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 - [x] Data Science Ethics (2.01.2026 → planned 2.02.2026 → actual 5.02.2026)  
   → [Proof](./core-cs/core-ethics/data-science-ethics) • [Notes](https://docs.google.com/document/d/19Fh72EpO4XWeqX3iKay_NK5gp8yjfIqa6Y72pBrybNA/edit?usp=sharing)  
+
+- [ ] Intellectual Property Law and Policy (18.03.2026 → planned 18.04.2026 →)  
+  → [Proof](./core-cs/core-ethics/intellectual-property) • [Notes](https://docs.google.com/document/d/1Gv1VAYLuhyGvDYERad8as1H5feQDLuGvEK3WhBDjWM8/edit?usp=sharing) 
 
 #### Advanced CS
 
@@ -106,9 +109,8 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ---
 
 #### Ongoing 
-- Introduction to Computer Systems - 2–3 lectures per week, labs every 2–2.5 weeks, reading 
-- Foundations of Computer Security - 2 lectures per week, labs every 1–2.5 weeks, reading 
-- Data Science Ethics
+- Introduction to Computer Systems - (only some labs left)
+- Intellectual Property Law and Policy
 - Real-Time Systems & Gameplay Programming
 ---
 
