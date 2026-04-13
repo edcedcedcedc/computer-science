@@ -43,6 +43,7 @@ uintptr_t syscall(regstate* regs);
 void memshow();
 
 
+
 // kernel_start(command)
 //    Initialize the hardware and processes and start running. The `command`
 //    string is an optional string passed from the boot loader.
@@ -322,7 +323,7 @@ void exception(regstate* regs) {
 
 
 int syscall_page_alloc(uintptr_t addr);
-
+int syscall_fork();
 
 // syscall(regs)
 //    Handle a system call initiated by a `syscall` instruction.
@@ -374,6 +375,9 @@ uintptr_t syscall(regstate* regs) {
 
     case SYSCALL_PAGE_ALLOC:
         return syscall_page_alloc(current->regs.reg_rdi);
+    
+    case SYSCALL_FORK:
+        return syscall_fork();
 
     default:
         proc_panic(current, "Unhandled system call %ld (pid=%d, rip=%p)!\n",
@@ -383,6 +387,84 @@ uintptr_t syscall(regstate* regs) {
 
     panic("Should not get here!\n");
 }
+
+
+int syscall_fork() {
+    // 1. find free process slot
+    pid_t child = -1;
+    for (pid_t i = 1; i < PID_MAX; i++) {
+        if (ptable[i].state == P_FREE) {
+            child = i;
+            break;
+        }
+    }
+    if (child < 0) return -1;
+
+    proc* parent = current;
+    proc* child_proc = &ptable[child];
+
+    // 2. create new page table
+    x86_64_pagetable* pt = kalloc_pagetable();
+    if (!pt) return -1;
+
+    // 3. copy kernel mappings
+    for (vmiter it(kernel_pagetable, 0);
+         it.va() < PROC_START_ADDR;
+         it += PAGESIZE) {
+
+        if (it.present()) {
+            int r = vmiter(pt, it.va())
+                        .try_map(it.pa(), it.perm());
+            if (r != 0) return -1;
+        }
+    }
+
+    // 4. initialize child process explicitly (NO struct copy)
+    child_proc->pid = child;
+    child_proc->pagetable = pt;
+    child_proc->state = P_RUNNABLE;
+
+    // 5. copy / share user memory
+    for (vmiter it(parent->pagetable, PROC_START_ADDR);
+         it.va() < MEMSIZE_VIRTUAL;
+         it += PAGESIZE) {
+
+        if (!it.present()) {
+            continue;
+        }
+
+        if (it.perm() & PTE_W) {
+            // writable → COPY
+            void* new_pa = kalloc(PAGESIZE);
+            if (!new_pa) return -1;
+
+            memcpy(new_pa, it.kptr(), PAGESIZE);
+
+            int r = vmiter(pt, it.va()).try_map(
+                (uintptr_t)new_pa,
+                PTE_P | PTE_W | PTE_U
+            );
+            if (r != 0) return -1;
+
+        } else {
+            // read-only → SHARE
+            int r = vmiter(pt, it.va()).try_map(
+                it.pa(),
+                it.perm()
+            );
+            if (r != 0) return -1;
+        }
+    }
+
+    // 6. fix registers (fork semantics)
+    child_proc->regs = parent->regs;
+    child_proc->regs.reg_rax = 0;     // child returns 0
+    parent->regs.reg_rax = child;     // parent returns child pid
+
+    return child;
+}
+
+
 
 
 // syscall_page_alloc(addr)
