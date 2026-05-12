@@ -153,11 +153,65 @@ void* kalloc(size_t sz) {
 //    If `kptr == nullptr` does nothing.
 
 void kfree(void* kptr) {
-    (void) kptr;
-    assert(false /* your code here */);
+    if(!kptr){
+        return;
+    }
+    uintptr_t pa = (uintptr_t) kptr;
+    assert(pa % PAGESIZE == 0);
+
+    size_t pageno = pa / PAGESIZE;
+
+    assert(pageno < NPAGES);
+    assert(physpages[pageno].refcount > 0);
+    
+    --physpages[pageno].refcount;
+}
+
+// Helper: free everything in a partially-built child page table
+void free_child_pagetable(x86_64_pagetable* pt) {
+    // free all user data pages (handles both copied and shared)
+    for (vmiter it(pt, PROC_START_ADDR); it.va() < MEMSIZE_VIRTUAL; it += PAGESIZE) {
+        if (it.present() && allocatable_physical_address(it.pa())) {
+            kfree((void*) it.pa());
+        }
+    }
+    // free page table nodes
+    for (ptiter it(pt); it.va() < MEMSIZE_VIRTUAL; it.next()) {
+        kfree(it.kptr());
+    }
+    // free L4 root
+    kfree(pt);
 }
 
 
+
+[[noreturn]] void syscall_exit();
+
+[[noreturn]] void syscall_exit() {
+    proc* p = current;
+
+    // 1. Free user-mapped physical pages
+    for (vmiter it(p->pagetable, PROC_START_ADDR);
+        it.va() < MEMSIZE_VIRTUAL;
+        it += PAGESIZE) {
+        if (it.present() && (it.perm() & PTE_U)
+            && allocatable_physical_address(it.pa())) {  // ← ADD THIS
+            kfree((void*) it.pa());
+        }
+    }
+    // 2. Free the page table intermediate pages (L1/L2/L3 nodes),
+    //    NOT the physical data pages (already freed above)
+    for (ptiter it(p->pagetable); it.va() < MEMSIZE_VIRTUAL; it.next()) {
+        kfree((void*) it.kptr());   // <-- use it.kptr(), not it.pa()
+    }
+
+    // 3. Free the top-level L4 page table
+    kfree((void*) p->pagetable);
+    p->pagetable = nullptr;
+    p->state = P_FREE;
+    schedule();
+    __builtin_unreachable();
+}
 // process_setup(pid, program_name)
 //    Load application program `program_name` as process number `pid`.
 //    This loads the application's code and data into memory, sets its
@@ -361,6 +415,10 @@ uintptr_t syscall(regstate* regs) {
 
     // Actually handle the exception.
     switch (regs->reg_rax) {
+    
+    case SYSCALL_EXIT:
+        syscall_exit();
+        __builtin_unreachable();
 
     case SYSCALL_PANIC:
         user_panic(current);
@@ -372,10 +430,11 @@ uintptr_t syscall(regstate* regs) {
     case SYSCALL_YIELD:
         current->regs.reg_rax = 0;
         schedule();             // does not return
+        __builtin_unreachable();
 
     case SYSCALL_PAGE_ALLOC:
         return syscall_page_alloc(current->regs.reg_rdi);
-    
+     
     case SYSCALL_FORK:
         return syscall_fork();
 
@@ -411,59 +470,89 @@ int syscall_fork() {
     for (vmiter it(kernel_pagetable, 0);
          it.va() < PROC_START_ADDR;
          it += PAGESIZE) {
-
         if (it.present()) {
-            int r = vmiter(pt, it.va())
-                        .try_map(it.pa(), it.perm());
-            if (r != 0) return -1;
+            int r = vmiter(pt, it.va()).try_map(it.pa(), it.perm());
+            if (r != 0) {
+                kfree(pt);
+                return -1;
+            }
         }
     }
 
-    // 4. initialize child process explicitly (NO struct copy)
-    child_proc->pid = child;
-    child_proc->pagetable = pt;
-    child_proc->state = P_RUNNABLE;
-
-    // 5. copy / share user memory
+    // 4. copy / share user memory
     for (vmiter it(parent->pagetable, PROC_START_ADDR);
          it.va() < MEMSIZE_VIRTUAL;
          it += PAGESIZE) {
 
-        if (!it.present()) {
-            continue;
-        }
+        if (!it.present()) continue;
 
         if (it.perm() & PTE_W) {
-            // writable → COPY
             void* new_pa = kalloc(PAGESIZE);
-            if (!new_pa) return -1;
-
+            if (!new_pa) {
+                // clean up everything allocated so far for child
+                for (vmiter jt(pt, PROC_START_ADDR);
+                     jt.va() < it.va();   // only what we've mapped so far
+                     jt += PAGESIZE) {
+                    if (jt.present()) kfree((void*) jt.pa());
+                }
+                for (ptiter jt(pt); jt.va() < MEMSIZE_VIRTUAL; jt.next()) {
+                    kfree(jt.kptr());
+                }
+                kfree(pt);
+                return -1;
+            }
             memcpy(new_pa, it.kptr(), PAGESIZE);
-
             int r = vmiter(pt, it.va()).try_map(
-                (uintptr_t)new_pa,
-                PTE_P | PTE_W | PTE_U
-            );
-            if (r != 0) return -1;
-
+                (uintptr_t) new_pa, it.perm());
+            if (r != 0) {
+                kfree(new_pa);
+                   // clean up everything allocated so far for child
+                for (vmiter jt(pt, PROC_START_ADDR);
+                     jt.va() < it.va();   // only what we've mapped so far
+                     jt += PAGESIZE) {
+                    if (jt.present()) kfree((void*) jt.pa());
+                }
+                for (ptiter jt(pt); jt.va() < MEMSIZE_VIRTUAL; jt.next()) {
+                    kfree(jt.kptr());
+                }
+                kfree(pt);
+                return -1;
+            }
         } else {
-            // read-only → SHARE
-            int r = vmiter(pt, it.va()).try_map(
-                it.pa(),
-                it.perm()
-            );
-            if (r != 0) return -1;
+            // read-only: share, bump refcount
+            ++physpages[it.pa() / PAGESIZE].refcount;
+            int r = vmiter(pt, it.va()).try_map(it.pa(), it.perm());
+            if (r != 0) {
+                --physpages[it.pa() / PAGESIZE].refcount;
+                   // clean up everything allocated so far for child
+                for (vmiter jt(pt, PROC_START_ADDR);
+                     jt.va() < it.va();   // only what we've mapped so far
+                     jt += PAGESIZE) {
+                    if (jt.present()) kfree((void*) jt.pa());
+                }
+                for (ptiter jt(pt); jt.va() < MEMSIZE_VIRTUAL; jt.next()) {
+                    kfree(jt.kptr());
+                }
+                kfree(pt);
+                return -1;
+            }
         }
     }
 
-    // 6. fix registers (fork semantics)
+    // 5. copy registers
     child_proc->regs = parent->regs;
-    child_proc->regs.reg_rax = 0;     // child returns 0
-    parent->regs.reg_rax = child;     // parent returns child pid
+    child_proc->regs.reg_rax = 0;
+    parent->regs.reg_rax = child;
+
+    // 6. set pid and pagetable
+    child_proc->pid = child;
+    child_proc->pagetable = pt;
+
+    // 7. mark runnable LAST — only once fully initialized
+    child_proc->state = P_RUNNABLE;
 
     return child;
 }
-
 
 
 
@@ -484,7 +573,10 @@ int syscall_page_alloc(uintptr_t addr) {
     int r = vmiter(current->pagetable, addr)
         .try_map((uintptr_t) pa, PTE_P | PTE_W | PTE_U);
 
-    assert(r == 0);
+    if (r < 0) {
+        kfree(pa);      // free the page we just allocated
+        return -1;      // tell the process allocation failed
+    }
 
     memset(pa, 0, PAGESIZE);
 
@@ -498,19 +590,27 @@ int syscall_page_alloc(uintptr_t addr) {
 
 void schedule() {
     pid_t pid = current->pid;
+    // log_printf("Schedule: searching from pid %d\n", pid);
+
     for (unsigned spins = 1; true; ++spins) {
         pid = (pid + 1) % PID_MAX;
+        
+        // Don't try to run pid 0
+        if (pid == 0) continue;
+
         if (ptable[pid].state == P_RUNNABLE) {
+            // log_printf("Schedule: switching to pid %d\n", pid);
             run(&ptable[pid]);
         }
+        
+        if (spins > PID_MAX * 2) {
+            // We've looped the whole table and found nothing
+            log_printf("Schedule: No runnable processes! Spinning...\n");
+        }
 
-        // If Control-C was typed, exit the virtual machine.
         check_keyboard();
-
-        // If spinning forever, show the memviewer.
         if (spins % (1 << 12) == 0) {
             memshow();
-            log_printf("%u\n", spins);
         }
     }
 }
