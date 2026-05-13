@@ -189,27 +189,14 @@ void free_child_pagetable(x86_64_pagetable* pt) {
 
 [[noreturn]] void syscall_exit() {
     proc* p = current;
+    
+    free_child_pagetable(p->pagetable);
 
-    // 1. Free user-mapped physical pages
-    for (vmiter it(p->pagetable, PROC_START_ADDR);
-        it.va() < MEMSIZE_VIRTUAL;
-        it += PAGESIZE) {
-        if (it.present() && (it.perm() & PTE_U)
-            && allocatable_physical_address(it.pa())) {  // ← ADD THIS
-            kfree((void*) it.pa());
-        }
-    }
-    // 2. Free the page table intermediate pages (L1/L2/L3 nodes),
-    //    NOT the physical data pages (already freed above)
-    for (ptiter it(p->pagetable); it.va() < MEMSIZE_VIRTUAL; it.next()) {
-        kfree((void*) it.kptr());   // <-- use it.kptr(), not it.pa()
-    }
-
-    // 3. Free the top-level L4 page table
-    kfree((void*) p->pagetable);
     p->pagetable = nullptr;
     p->state = P_FREE;
+
     schedule();
+    
     __builtin_unreachable();
 }
 // process_setup(pid, program_name)
@@ -452,10 +439,7 @@ int syscall_fork() {
     // 1. find free process slot
     pid_t child = -1;
     for (pid_t i = 1; i < PID_MAX; i++) {
-        if (ptable[i].state == P_FREE) {
-            child = i;
-            break;
-        }
+        if (ptable[i].state == P_FREE) { child = i; break; }
     }
     if (child < 0) return -1;
 
@@ -466,94 +450,51 @@ int syscall_fork() {
     x86_64_pagetable* pt = kalloc_pagetable();
     if (!pt) return -1;
 
-    // 3. copy kernel mappings
-    for (vmiter it(kernel_pagetable, 0);
-         it.va() < PROC_START_ADDR;
-         it += PAGESIZE) {
+    // copy kernel mappings — on failure, free PT nodes + root
+    for (vmiter it(kernel_pagetable, 0); it.va() < PROC_START_ADDR; it += PAGESIZE) {
         if (it.present()) {
             int r = vmiter(pt, it.va()).try_map(it.pa(), it.perm());
             if (r != 0) {
+                for (ptiter jt(pt); jt.va() < MEMSIZE_VIRTUAL; jt.next()) {
+                    kfree(jt.kptr());
+                }
                 kfree(pt);
                 return -1;
             }
         }
     }
 
-    // 4. copy / share user memory
+    // copy/share user memory — free_child_pagetable handles everything
     for (vmiter it(parent->pagetable, PROC_START_ADDR);
-         it.va() < MEMSIZE_VIRTUAL;
-         it += PAGESIZE) {
+         it.va() < MEMSIZE_VIRTUAL; it += PAGESIZE) {
 
         if (!it.present()) continue;
 
         if (it.perm() & PTE_W) {
             void* new_pa = kalloc(PAGESIZE);
-            if (!new_pa) {
-                // clean up everything allocated so far for child
-                for (vmiter jt(pt, PROC_START_ADDR);
-                     jt.va() < it.va();   // only what we've mapped so far
-                     jt += PAGESIZE) {
-                    if (jt.present()) kfree((void*) jt.pa());
-                }
-                for (ptiter jt(pt); jt.va() < MEMSIZE_VIRTUAL; jt.next()) {
-                    kfree(jt.kptr());
-                }
-                kfree(pt);
-                return -1;
-            }
+            if (!new_pa) { free_child_pagetable(pt); return -1; }
             memcpy(new_pa, it.kptr(), PAGESIZE);
-            int r = vmiter(pt, it.va()).try_map(
-                (uintptr_t) new_pa, it.perm());
-            if (r != 0) {
-                kfree(new_pa);
-                   // clean up everything allocated so far for child
-                for (vmiter jt(pt, PROC_START_ADDR);
-                     jt.va() < it.va();   // only what we've mapped so far
-                     jt += PAGESIZE) {
-                    if (jt.present()) kfree((void*) jt.pa());
-                }
-                for (ptiter jt(pt); jt.va() < MEMSIZE_VIRTUAL; jt.next()) {
-                    kfree(jt.kptr());
-                }
-                kfree(pt);
-                return -1;
-            }
+            int r = vmiter(pt, it.va()).try_map((uintptr_t) new_pa, it.perm());
+            if (r != 0) { kfree(new_pa); free_child_pagetable(pt); return -1; }
         } else {
-            // read-only: share, bump refcount
             ++physpages[it.pa() / PAGESIZE].refcount;
             int r = vmiter(pt, it.va()).try_map(it.pa(), it.perm());
             if (r != 0) {
                 --physpages[it.pa() / PAGESIZE].refcount;
-                   // clean up everything allocated so far for child
-                for (vmiter jt(pt, PROC_START_ADDR);
-                     jt.va() < it.va();   // only what we've mapped so far
-                     jt += PAGESIZE) {
-                    if (jt.present()) kfree((void*) jt.pa());
-                }
-                for (ptiter jt(pt); jt.va() < MEMSIZE_VIRTUAL; jt.next()) {
-                    kfree(jt.kptr());
-                }
-                kfree(pt);
+                free_child_pagetable(pt);
                 return -1;
             }
         }
     }
 
-    // 5. copy registers
     child_proc->regs = parent->regs;
     child_proc->regs.reg_rax = 0;
     parent->regs.reg_rax = child;
-
-    // 6. set pid and pagetable
     child_proc->pid = child;
     child_proc->pagetable = pt;
-
-    // 7. mark runnable LAST — only once fully initialized
     child_proc->state = P_RUNNABLE;
-
     return child;
 }
-
 
 
 // syscall_page_alloc(addr)
