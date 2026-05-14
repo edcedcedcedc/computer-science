@@ -3,6 +3,29 @@
 #
 #   Assembly code defining kernel exception handlers
 #   (for interrupts, traps, and faults).
+#This file implements:
+#if some of you plan this lab this file needs to be understood, they write this in Kernel section 
+#readings part, every OS has a tiny or not tiny assembly entry point, c++ or c cannot run without it
+#How the CPU enters the kernel (interrupts/syscalls) and returns back to user programs safely
+#[ Applications ]
+#[ System calls (C/C++) ]
+#[ Kernel logic (C/C++) ]
+#[ Low-level entry/exit (assembly) ]  ← THIS FILE TYPE
+#[ Hardware (CPU) ]
+#It handles 3 things:
+#
+#1. Boot entry
+#
+#→ start kernel
+#
+#2. Exceptions / interrupts
+#
+#→ errors, page faults, etc.
+#
+#3. syscalls
+#
+#→ user asks kernel for service
+#
 
 // import constants from kernel.hh and x86-64.h
 #include "obj/k-asm.h"

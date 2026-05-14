@@ -72,7 +72,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - [x] Data Science Ethics (2.01.2026 → planned 2.02.2026 → actual 5.02.2026)  
   → [Proof](./core-cs/core-ethics/data-science-ethics) • [Notes](https://docs.google.com/document/d/19Fh72EpO4XWeqX3iKay_NK5gp8yjfIqa6Y72pBrybNA/edit?usp=sharing)  
 
-- [ ] Intellectual Property Law and Policy (18.03.2026 → planned 18.04.2026 →)  
+- [x] Intellectual Property Law and Policy (18.03.2026 → 15.05.2026, planned 18.04.2026 )  
   → [Proof](./core-cs/core-ethics/intellectual-property-law-policy) • [Notes](https://docs.google.com/document/d/1Gv1VAYLuhyGvDYERad8as1H5feQDLuGvEK3WhBDjWM8/edit?usp=sharing) 
 
 #### Advanced CS
