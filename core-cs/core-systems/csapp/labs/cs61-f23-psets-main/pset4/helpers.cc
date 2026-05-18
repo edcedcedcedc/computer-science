@@ -13,7 +13,6 @@
 
 // fd_open_check(filename, mode)
 //    Like `io61_open_check`, but returns a file descriptor.
-
 int fd_open_check(const char* filename, int mode) {
     int fd;
     if (filename) {
@@ -33,7 +32,6 @@ int fd_open_check(const char* filename, int mode) {
 
 // stdio_open_check(filename, mode)
 //    Like `io61_open_check`, but returns a stdio file.
-
 FILE* stdio_open_check(const char* filename, int mode) {
     int fd = fd_open_check(filename, mode);
     if (filename) {
@@ -48,7 +46,6 @@ FILE* stdio_open_check(const char* filename, int mode) {
 
 // monotonic_timestamp()
 //    Returns the current monotonic timestamp.
-
 double monotonic_timestamp() {
     timespec t;
     int r = clock_gettime(CLOCK_MONOTONIC, &t);
@@ -58,7 +55,6 @@ double monotonic_timestamp() {
 
 
 // io61_args functions
-
 io61_args::io61_args(const char* opts_, size_t block_size_)
     : block_size(block_size_), opts(opts_) {
 }

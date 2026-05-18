@@ -68,17 +68,13 @@ int io61_readc(io61_file* f) {
 //    if end-of-file or error is encountered before all `sz` bytes are read.
 //    This is called a “short read.”
 ssize_t io61_read(io61_file* f, unsigned char* buf, size_t sz) {
-    size_t nread = 0;
-    while (nread != sz) {
-        int ch = io61_readc(f);
-        if (ch == EOF) {
-            break;
-        }
-        buf[nread] = ch;
-        ++nread;
-    }
-    if (nread != 0 || sz == 0 || errno == 0) {
+    ssize_t nread = read(f->fd, buf, sz);
+   
+    if (nread > 0) {
         return nread;
+    } else if (nread == 0) {
+        errno = 0; 
+        return 0;
     } else {
         return -1;
     }
@@ -182,6 +178,7 @@ int io61_fileno(io61_file* f) {
 // io61_filesize(f)
 //    Returns the size of `f` in bytes. Returns -1 if `f` does not have a
 //    well-defined size (for instance, if it is a pipe).
+
 off_t io61_filesize(io61_file* f) {
     struct stat s;
     int r = fstat(f->fd, &s);
