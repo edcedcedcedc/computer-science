@@ -8,9 +8,17 @@
 //    YOUR CODE HERE!
 
 
-// io61_file
-//    Data structure for io61 file wrappers. Add your own stuff.
 
+/*
+io61_file
+Data structure for io61 file wrappers. Add your own stuff.
+
+FD	meaning
+0	stdin
+1	stdout
+2	stderr
+3	your opened file (blockcat61.cc)
+*/
 struct io61_file {
     int fd = -1;     // file descriptor
     int mode;        // open mode (O_RDONLY or O_WRONLY)
@@ -102,18 +110,24 @@ int io61_writec(io61_file* f, int c) {
 //    number of characters written, or -1 if no characters were written
 //    before the error occurred.
 ssize_t io61_write(io61_file* f, const unsigned char* buf, size_t sz) {
-    size_t nwritten = 0;
-    while (nwritten != sz) {
-        if (io61_writec(f, buf[nwritten]) == -1) {
+    size_t w = 0;
+    ssize_t nw = 0;
+    while (w < sz) {
+        nw = write(f->fd, buf + w, sz - w);
+        if(nw > 0)
+        {
+             w += nw;
+        }
+        else if(nw == 0)
+        {
             break;
         }
-        ++nwritten;
+        else
+        {
+            return -1;
+        }
     }
-    if (nwritten != 0 || sz == 0) {
-        return nwritten;
-    } else {
-        return -1;
-    }
+    return w;
 }
 
 

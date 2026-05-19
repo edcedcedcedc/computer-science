@@ -10,6 +10,12 @@
 #include <fcntl.h>
 #include <sched.h>
 
+
+
+
+
+
+
 struct io61_file;
 
 io61_file* io61_fdopen(int fd, int mode);
