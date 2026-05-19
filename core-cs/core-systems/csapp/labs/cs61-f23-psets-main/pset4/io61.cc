@@ -25,6 +25,72 @@ struct io61_file {
 };
 
 
+/* 
+fd - file descriptor 
+bufsize - static(shared memory) computer at compile time buffer size 4KiB
+cbuf - actual buffer 
+tag - tag 
+pos_tag - position tag 
+end_tag - end tag
+
+Cache invariants:
+
+tag <= pos_tag <= end_tag
+end_tag - tag <= bufsize
+
+Derived quantities:
+end_tag - tag      = number of valid bytes in cache
+pos_tag - tag      = current index in cache
+end_tag - pos_tag  = unread bytes remaining
+
+Special states:
+tag == pos_tag == end_tag   => cache is empty
+end_tag - tag == bufsize    => cache is full
+
+Membership:
+tag <= off < end_tag        => file offset `off` is cached
+cbuf[off - tag]             => maps file offset to buffer index
+
+*/
+struct io61_fcache {
+    int fd;
+    static constexpr off_t bufsize = 4096;
+    unsigned char cbuf[bufsize];
+    
+    off_t tag;
+    off_t pos_tag;
+    off_t end_tag;
+   
+    off_t cache_size(){
+        return end_tag - tag;
+    }
+    bool is_cache_empty(){
+        return tag == end_tag;
+    }
+    bool is_cache_full(){
+        return end_tag - tag == bufsize;
+    }
+
+    void check_cache_invariants(){
+        assert(tag <= pos_tag);
+        assert(pos_tag <= end_tag);
+        assert(end_tag - tag <= bufsize);
+    }
+    void check_write_invariant(){
+        assert(pos_tag == end_tag);
+    }
+    // The desired data is guaranteed to fit within this cache slot.
+    void check_cache_slot_invariant(size_t sz){
+        assert(sz <= bufsize && pos_tag + sz <= tag + bufsize);
+    }
+
+    void reset_cache(){
+        tag = pos_tag = end_tag;
+    }
+};
+
+
+
 // io61_fdopen(fd, mode)
 //    Returns a new io61_file for file descriptor `fd`. `mode` is either
 //    O_RDONLY for a read-only file or O_WRONLY for a write-only file.
@@ -95,9 +161,11 @@ ssize_t io61_read(io61_file* f, unsigned char* buf, size_t sz) {
 int io61_writec(io61_file* f, int c) {
     unsigned char ch = c;
     ssize_t nw = write(f->fd, &ch, 1);
-    if (nw == 1) {
+    if (nw == 1) 
+    {
         return 0;
-    } else {
+    } else 
+    {
         return -1;
     }
 }
@@ -112,7 +180,8 @@ int io61_writec(io61_file* f, int c) {
 ssize_t io61_write(io61_file* f, const unsigned char* buf, size_t sz) {
     size_t w = 0;
     ssize_t nw = 0;
-    while (w < sz) {
+    while (w < sz) 
+    {
         nw = write(f->fd, buf + w, sz - w);
         if(nw > 0)
         {
