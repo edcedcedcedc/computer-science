@@ -64,6 +64,19 @@ struct io61_fcache {
     off_t cache_size(){
         return end_tag - tag;
     }
+
+    off_t cache_bytes_processed(){
+        return pos_tag - tag;
+    }
+
+    off_t cache_bytes_remained(){
+        return end_tag - pos_tag;
+    }
+
+    void cache_reset(){
+        tag = pos_tag = end_tag;
+    }
+
     bool is_cache_empty(){
         return tag == end_tag;
     }
@@ -82,10 +95,6 @@ struct io61_fcache {
     // The desired data is guaranteed to fit within this cache slot.
     void check_cache_slot_invariant(size_t sz){
         assert(sz <= bufsize && pos_tag + sz <= tag + bufsize);
-    }
-
-    void reset_cache(){
-        tag = pos_tag = end_tag;
     }
 };
 
