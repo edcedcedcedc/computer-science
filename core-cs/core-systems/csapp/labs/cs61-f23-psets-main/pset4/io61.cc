@@ -188,11 +188,12 @@ io61_file* io61_fdopen(int fd, int mode) {
 // io61_close(f)
 //    Closes the io61_file `f` and releases all its resources.
 int io61_close(io61_file* f) {
-    io61_flush(f);
-    int r = close(f->fd);
+    int r = io61_flush(f);
+    int r2 = close(f->fd);
     delete f->cache;
     delete f;
-    return r;
+    if(r < 0) return r;
+    return r2;
 }
 
 
@@ -351,10 +352,22 @@ int io61_flush(io61_file* f) {
     {
         return 0;
     }
-    ssize_t nw = write(f->fd, c->cbuf, nbytes);
-    if(nw != (ssize_t)nbytes)
+    unsigned char* p = c->cbuf;
+    off_t pos = c->tag;
+    while(nbytes > 0)
     {
-        return -1;
+        ssize_t nw = write(f->fd, c->cbuf, nbytes);
+        if(nw < 0)
+        {
+            if(errno == EINTR)
+            {
+                continue;
+            }
+            return -1;
+        }
+        nbytes -=nw;
+        p+=nw;
+        pos+=nw;
     }
     c->tag = c->pos_tag = c->end_tag;
     return 0;
