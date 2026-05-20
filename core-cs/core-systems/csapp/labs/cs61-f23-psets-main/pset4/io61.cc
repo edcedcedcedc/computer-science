@@ -25,32 +25,92 @@ struct io61_file {
 };
 
 
-/* 
-fd - file descriptor 
-bufsize - static(shared memory) computer at compile time buffer size 4KiB
-cbuf - actual buffer 
-tag - tag 
-pos_tag - position tag 
-end_tag - end tag
 
-Cache invariants:
+/*
+io61_fcache
+-----------
+Single-slot file cache for buffered I/O.
 
-tag <= pos_tag <= end_tag
-end_tag - tag <= bufsize
+Fields:
+- fd       : File descriptor associated with this cache.
+- bufsize  : Fixed cache capacity (4096 bytes = 4 KiB).
+- cbuf     : Memory buffer that stores cached file data.
+- tag      : File offset of the first valid byte in the cache.
+- pos_tag  : Current logical file position; the next byte to read or write.
+- end_tag  : File offset one past the last valid byte in the cache.
 
-Derived quantities:
-end_tag - tag      = number of valid bytes in cache
-pos_tag - tag      = current index in cache
-end_tag - pos_tag  = unread bytes remaining
+Cache Layout:
+- The cache represents the half-open interval [tag, end_tag).
+- Valid bytes are stored in:
+      cbuf[0 .. end_tag - tag - 1]
+- The current position within the cache is:
+      cbuf[pos_tag - tag]
 
-Special states:
-tag == pos_tag == end_tag   => cache is empty
-end_tag - tag == bufsize    => cache is full
+Core Invariants:
+- tag <= pos_tag <= end_tag
+- end_tag - tag <= bufsize
 
-Membership:
-tag <= off < end_tag        => file offset `off` is cached
-cbuf[off - tag]             => maps file offset to buffer index
+Derived Quantities:
+- end_tag - tag
+    = number of valid bytes currently stored in the cache
+    = cache_size()
 
+- pos_tag - tag
+    = number of bytes already processed
+    = current buffer index
+    = cache_bytes_processed()
+
+- end_tag - pos_tag
+    = number of unread bytes remaining in a read cache
+    = cache_bytes_remaining()
+
+Special States:
+- tag == pos_tag == end_tag
+    => cache is empty (contains no valid data)
+
+- end_tag - tag == bufsize
+    => cache is full (all buffer slots contain valid data)
+
+Membership Rule:
+- tag <= off < end_tag
+    => file offset `off` is currently cached
+
+Buffer Mapping Rule:
+- cbuf[off - tag]
+    => buffer location corresponding to file offset `off`
+
+Cache Operations:
+- cache_reset()
+    Empties the cache while preserving the current logical file position.
+    After reset:
+        tag = pos_tag = end_tag
+
+- cache_fill()
+    Reads up to `bufsize` bytes from the file descriptor into `cbuf`,
+    starting at the current kernel file position (which should equal `tag`).
+    On success:
+        end_tag = tag + bytes_read
+
+Read Cache Interpretation:
+- [tag, pos_tag)
+    = bytes already consumed
+
+- [pos_tag, end_tag)
+    = bytes available to read without another system call
+
+- [end_tag, tag + bufsize)
+    = unused buffer space
+
+Write Cache Invariant:
+- pos_tag == end_tag
+    (used when buffering writes)
+
+Slot-Fit Condition:
+- sz <= bufsize
+- pos_tag + sz <= tag + bufsize
+
+This guarantees that `sz` bytes starting at `pos_tag`
+fit entirely within the current cache slot.
 */
 struct io61_fcache {
     int fd;
@@ -69,12 +129,20 @@ struct io61_fcache {
         return pos_tag - tag;
     }
 
-    off_t cache_bytes_remained(){
+    off_t cache_bytes_remaining(){
         return end_tag - pos_tag;
     }
 
     void cache_reset(){
         tag = pos_tag = end_tag;
+    }
+
+    void cache_fill(){
+      ssize_t nfill = read(fd, cbuf, bufsize);
+      if(nfill >= 0)
+      {
+        end_tag = tag + nfill;
+      }
     }
 
     bool is_cache_empty(){
@@ -98,7 +166,12 @@ struct io61_fcache {
     }
 };
 
-
+void io61_fill(io61_fcache* f){
+    f->check_cache_invariants();
+    f->cache_reset();
+    f->cache_fill();
+    f->check_cache_invariants();
+}
 
 // io61_fdopen(fd, mode)
 //    Returns a new io61_file for file descriptor `fd`. `mode` is either
