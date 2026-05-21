@@ -555,7 +555,36 @@ Lastly, still going strong.
 
 
 13/05/2026
-Going strong
 My PC broke had to take a pause, its still broken, I use a laptop
 Csapp almost done, a few labs left 
 Introduction to IP almost done around 2 modules left
+
+
+21/05/2026
+Introduction to Intellectual property done;
+Computer Systems, reading done, a lot of notes done, labs that I have done are data lab, assembly lab, malloc lab, weensy os lab, cache lab, 
+I have left shell lab and flockchain lab...this labs for Computer Systems at Harvard are hard, and they use the same textbook CSAPP, but I have
+a feeling that you have to code many years and be extra smart and have a lot of TA's under your belt to be able to ace this labs, I do what I can
+I am motivated but kind of lazy, I hope to finish this two labs in 9 days from today, I dont plan to do them fully, just around 50-80% that's going 
+to be enough for me, and I will close this course and mark it done;
+
+If I finish Computer Systems, I will be able to move forward and close the 1/2 part of the 3rd year at OSSU, I will take Introduction to Databases, Introduction to Networking, 
+Introduction to Algorithms(and Design??) and Software Architecture this will close the other 1/2 part of 3rd year at OSSU, this courses are going to be very hard as well,
+especially the labs(as you already might know), I plan to finish the courses by the end of the summer or 1/3 or the fall, around my birthday, this ones will be closing 
+the core cs part at OSSU, and after this, in the 4th year, I will have to finish my Real Time Systems course where we write Shooter game, that is going to be 
+my final project for the specialization at OSSU, I plan to extend it and make it a Multiplyer Indie Shooter and post it on Steam, and maybe make so revenue out of it, not sure?...
+and then, I need to find a job, but before that I have to take 1-3 Advanced CS classes, so this is the end of it, its a long run, I hope its worth it, and it will help me in my job,
+whatever I do, systems programming , web programming , game developement, some other c++ backend development for games or any other extra performance api...
+
+By the way this is the text(not formatted) about OSSU in my CV, I think its decent, looks nice, and feels professional
+
+Education	   Open Source Society University							               2023 - 2027 
+
+Open Education in Computer Science. Curriculum aligned with Association for 
+Computing Machinery / IEEE Computer Society Computer Science Curricula 2013 guidelines. 
+Public repository includes source code, detailed notes, and proof of progress. 
+
+Covering core areas of computer science, including mathematics, programming, software engineering, 
+computer systems, security, algorithms, networking, databases, distributed systems, and professional ethics, 
+with coursework in calculus, discrete mathematics, linear algebra, probability, structure and interpretation 
+of computer programs, data structures, algorithms, computer systems, operating systems, and computer networking. 
