@@ -6,7 +6,7 @@
 
 // io61.cc
 //    YOUR CODE HERE!
-
+// I did phase 1-4 if anyone in the future you can always continue and finish 5,6
 
 
 /*
