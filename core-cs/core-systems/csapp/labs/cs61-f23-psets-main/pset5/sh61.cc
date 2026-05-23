@@ -67,9 +67,32 @@ command::~command() {
 void command::run() {
     assert(this->pid == -1);
     assert(this->args.size() > 0);
-    // Your code here!
 
-    fprintf(stderr, "command::run not done yet\n");
+    pid_t p = fork();
+    if(p == 0)
+    {
+        std::vector<char*>exec_argv;
+        for(unsigned long int i = 0;i < this->args.size();++i)
+        {
+           exec_argv.push_back(const_cast<char*>(this->args[i].c_str()));
+        }
+        exec_argv.push_back(nullptr);
+
+        if(execvp(exec_argv[0], exec_argv.data()) == -1)
+            {
+                perror("execvp failed");
+                _exit(1);
+            }  
+    }
+    else if(p > 0)
+    {
+         this->pid = p;  
+    }
+    else 
+    {   
+        perror("fork failed");
+        _exit(1);
+    }
 }
 
 
@@ -99,7 +122,12 @@ void command::run() {
 
 void run_list(command* c) {
     c->run();
-    fprintf(stderr, "command::run not done yet\n");
+    int status;
+    pid_t w = waitpid(c->pid, &status, 0);
+    if(w == -1)
+    {
+        perror("waitpid failure");
+    }
 }
 
 
