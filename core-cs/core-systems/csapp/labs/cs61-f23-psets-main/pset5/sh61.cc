@@ -16,7 +16,7 @@
 struct command {
     std::vector<std::string> args;
     pid_t pid = -1;      // process ID running this command, -1 if none
-
+    command* next = nullptr;
     command();
     ~command();
 
@@ -121,12 +121,20 @@ void command::run() {
 //       This may require adding another call to `fork()`!
 
 void run_list(command* c) {
-    c->run();
-    int status;
-    pid_t w = waitpid(c->pid, &status, 0);
-    if(w == -1)
+    
+    while(c != nullptr)
     {
-        perror("waitpid failure");
+        if(c->args.size() > 0)
+        {
+            c->run();
+            int status;
+            pid_t w = waitpid(c->pid, &status, 0);
+            if(w == -1)
+            {
+                perror("waitpid failure");
+            }
+        }
+        c = c->next;
     }
 }
 
@@ -138,19 +146,30 @@ void run_list(command* c) {
 
 command* parse_line(const char* s) {
     shell_parser parser(s);
+    command* first = nullptr;
     // Your code here!
 
     // Build the command
     // The handout code treats every token as a normal command word.
     // You'll add code to handle operators.
-    command* c = nullptr;
+    command* current = nullptr;
     for (shell_token_iterator it = parser.begin(); it != parser.end(); ++it) {
-        if (!c) {
-            c = new command;
+        if(it.type() == TYPE_NORMAL)
+        {
+            if (!current) 
+            {
+            current = new command; 
+            first = current;
+            }
+        current->args.push_back(it.str());
         }
-        c->args.push_back(it.str());
+        else if(it.type() == TYPE_SEQUENCE)
+        {
+            current->next = new command;
+            current = current->next;
+        }
     }
-    return c;
+    return first;
 }
 
 
