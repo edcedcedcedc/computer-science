@@ -115,53 +115,161 @@ void command::run() {
 //    PART 2: Introduce a loop to run a list of commands, waiting for each
 //       to finish before going on to the next.
 //    PART 3: Change the loop to handle conditional chains.
-//    PART 4: Change the loop to handle pipelines. Start all processes in
-//       the pipeline in parallel. The status of a pipeline is the status of
-//       its LAST command.
+//    PART 4: 
+//            The key insight with step 4 is that with TYPE_PIPE you fork in parallel
+//                  Sequential (; && ||):    Fork → wait → fork → wait
+//                  Pipeline (|):            Fork → fork → fork → wait (only last)
+//                   1. Detect pipeline (count commands with | between them)
+//                   2. Create N-1 pipes
+//                   3. For each command in pipeline:
+//                       fork()
+//                       if child: connect stdin/stdout to correct pipe ends, then exec
+//                       if parent: store last PID, continue
+//                   4. Close all pipes in parent
+//                   5. Wait for last PID
+//                   6. Move to next command after pipeline
 //    PART 5: Change the loop to handle background conditional chains.
 //       This may require adding another call to `fork()`!
-
 void run_list(command* c) 
 {
     int prev_status = 0;
     int prev_separator = TYPE_SEQUENCE;
-    
+
     while(c != nullptr)
     {
-        if(c->args.size() > 0)
+        int pipe_count = 1;
+        command* temp = c;
+        while(temp->separator == TYPE_PIPE)
         {
-            int should_run = 0; 
-            
-            if(prev_separator == TYPE_SEQUENCE)
-            {
-               should_run = 1;
-            }
-            else if(prev_separator == TYPE_AND && prev_status == 0)
-            {
-             should_run = 1;
-            }
-            else if(prev_separator == TYPE_OR && prev_status != 0)
-            {
-               should_run = 1;
-            }
+            pipe_count++;
+            temp = temp->next;
+        }
 
-            if(should_run)
+        if(pipe_count >= 2)
+        {
+            std::vector<int> pipes(2 * (pipe_count - 1));
+            
+            for(int i = 0; i < pipe_count - 1; i++)
             {
-                c->run();
-                int status;
-                waitpid(c->pid, &status, 0);         
-                if(WIFEXITED(status))
+                int pipefd[2];
+                if(pipe(pipefd) == -1)
                 {
-                    prev_status = WEXITSTATUS(status);
+                    perror("pipe failed");
+                    for(int j = 0; j < i; j++)
+                    {
+                        close(pipes[j]);
+                    }
+                    _exit(1);
+                }
+                pipes[2*i] = pipefd[0];
+                pipes[2*i+1] = pipefd[1];
+            }
+            
+            pid_t last_pid = 0;
+            command* curr = c;
+            for(int i = 0; i < pipe_count; ++i)
+            {
+                pid_t pid = fork();
+                if(pid == 0)
+                {
+                    if(i > 0)
+                    {
+                        dup2(pipes[2*(i-1)], STDIN_FILENO);
+                    }
+                    if(i < pipe_count - 1)
+                    {
+                        dup2(pipes[2*i+1], STDOUT_FILENO);
+                    }
+                    for(size_t j = 0; j < pipes.size(); j++)
+                    {
+                        close(pipes[j]);
+                    }
+                    std::vector<char*> exec_argv;
+                    for(unsigned long int k = 0; k < curr->args.size(); k++)
+                    {
+                        exec_argv.push_back(const_cast<char*>(curr->args[k].c_str()));
+                    }
+                    exec_argv.push_back(nullptr);
+                    execvp(exec_argv[0], exec_argv.data());
+                    perror("execvp failed");
+                    _exit(1);
+                }
+                else if(pid > 0)
+                {
+                    if(i == pipe_count - 1)
+                    {
+                        last_pid = pid;
+                    }
+                    curr = curr->next;
                 }
                 else
                 {
-                    prev_status = 1;
+                    perror("fork failed");
+                    for(size_t j = 0; j < pipes.size(); j++)
+                    {
+                        close(pipes[j]);
+                    }
+                    _exit(1);
                 }
             }
-            prev_separator = c->separator;
-        }      
-        c = c->next;
+            
+            for(size_t i = 0; i < pipes.size(); i++)
+            {
+                close(pipes[i]);
+            }
+            
+            int status;
+            waitpid(last_pid, &status, 0);
+            
+            if(WIFEXITED(status))
+            {
+                prev_status = WEXITSTATUS(status);
+            }
+            else
+            {
+                prev_status = 1;
+            }
+            prev_separator = temp->separator;
+            
+            c = temp->next;
+        }
+        else
+        {
+            if(c->args.size() > 0)
+            {
+                int should_run = 0;
+                
+                if(prev_separator == TYPE_SEQUENCE)
+                {
+                    should_run = 1;
+                }
+                else if(prev_separator == TYPE_AND && prev_status == 0)
+                {
+                    should_run = 1;
+                }
+                else if(prev_separator == TYPE_OR && prev_status != 0)
+                {
+                    should_run = 1;
+                }
+                
+                if(should_run)
+                {
+                    c->run();
+                    int status;
+                    waitpid(c->pid, &status, 0);
+                    if(WIFEXITED(status))
+                    {
+                        prev_status = WEXITSTATUS(status);
+                    }
+                    else
+                    {
+                        prev_status = 1;
+                    }
+                }
+                prev_separator = c->separator;
+            }
+            c = c->next;
+        }
     }
 }
 
@@ -188,8 +296,13 @@ command* parse_line(const char* s) {
             current = new command; 
             first = current;
             }
-        current->separator = TYPE_NORMAL;
         current->args.push_back(it.str());
+        }
+        else if(it.type() == TYPE_PIPE)
+        {
+            current->separator = TYPE_PIPE;
+            current->next = new command;
+            current = current->next;
         }
         else if(it.type() == TYPE_AND)
         {
