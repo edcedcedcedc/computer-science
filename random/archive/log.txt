@@ -588,3 +588,17 @@ Covering core areas of computer science, including mathematics, programming, sof
 computer systems, security, algorithms, networking, databases, distributed systems, and professional ethics, 
 with coursework in calculus, discrete mathematics, linear algebra, probability, structure and interpretation 
 of computer programs, data structures, algorithms, computer systems, operating systems, and computer networking. 
+
+
+25/05/2026
+
+I want to take a moment to look back and express my genuine joy: Computer Systems: A Programmer's Perspective did an 
+incredible job as the foundation textbook for my computer systems class. After roughly 30 lectures, reading almost the entire textbook, 
+and completing seven labs(not yet all), I can say that I now see computer systems through the eyes of a programmer, I honestly didn’t expect it.
+I may not be the best programmer, but I now have a solid, rounded understanding of the systems fundamentals. For me, today, 
+a computer system from a programmer's perspective looks like this:
+Data -> Assembly -> Physical and virtual memory -> Kernel -> I/O, files and Cache -> Shell -> GUI
+
+Real computer science/programming insight from long time, the first two years where just top to down programming, data structures, security, 
+shell intro, math, formal logic mostly, and some electives like physics, the third year i.e. the current is where things kind of glued together 
+and I can see it a whole, of course I have a lot of other classes to take but this is a big win to me, I am proud, don't regret of pushing this forward. 
