@@ -17,6 +17,7 @@ struct command {
     std::vector<std::string> args;
     pid_t pid = -1;      // process ID running this command, -1 if none
     command* next = nullptr;
+    int separator = 2;
     command();
     ~command();
 
@@ -120,20 +121,46 @@ void command::run() {
 //    PART 5: Change the loop to handle background conditional chains.
 //       This may require adding another call to `fork()`!
 
-void run_list(command* c) {
+void run_list(command* c) 
+{
+    int prev_status = 0;
+    int prev_separator = TYPE_SEQUENCE;
     
     while(c != nullptr)
     {
         if(c->args.size() > 0)
         {
-            c->run();
-            int status;
-            pid_t w = waitpid(c->pid, &status, 0);
-            if(w == -1)
+            int should_run = 0; 
+            
+            if(prev_separator == TYPE_SEQUENCE)
             {
-                perror("waitpid failure");
+               should_run = 1;
             }
-        }
+            else if(prev_separator == TYPE_AND && prev_status == 0)
+            {
+             should_run = 1;
+            }
+            else if(prev_separator == TYPE_OR && prev_status != 0)
+            {
+               should_run = 1;
+            }
+
+            if(should_run)
+            {
+                c->run();
+                int status;
+                waitpid(c->pid, &status, 0);         
+                if(WIFEXITED(status))
+                {
+                    prev_status = WEXITSTATUS(status);
+                }
+                else
+                {
+                    prev_status = 1;
+                }
+            }
+            prev_separator = c->separator;
+        }      
         c = c->next;
     }
 }
@@ -161,10 +188,24 @@ command* parse_line(const char* s) {
             current = new command; 
             first = current;
             }
+        current->separator = TYPE_NORMAL;
         current->args.push_back(it.str());
+        }
+        else if(it.type() == TYPE_AND)
+        {
+            current->separator = TYPE_AND;
+            current->next = new command;
+            current = current->next;    
+        }
+        else if(it.type() == TYPE_OR)
+        {
+            current->separator = TYPE_OR;
+            current->next = new command;
+            current = current->next;
         }
         else if(it.type() == TYPE_SEQUENCE)
         {
+            current->separator = TYPE_SEQUENCE;
             current->next = new command;
             current = current->next;
         }
