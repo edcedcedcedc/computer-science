@@ -40,6 +40,14 @@ command::~command() {
 }
 
 
+
+
+void reap_zombies() {
+    int status;
+    while (waitpid(-1, &status, WNOHANG) > 0) {
+    }
+}
+
 // COMMAND EXECUTION
 
 // command::run()
@@ -373,6 +381,7 @@ int main(int argc, char* argv[]) {
     while (!feof(command_file)) {
         // Print the prompt at the beginning of the line
         if (needprompt && !quiet) {
+            reap_zombies();
             printf("sh61[%d]$ ", getpid());
             fflush(stdout);
             needprompt = false;
@@ -397,6 +406,7 @@ int main(int argc, char* argv[]) {
         if (bufpos == BUFSIZ - 1 || (bufpos > 0 && buf[bufpos - 1] == '\n')) {
             if (command* c = parse_line(buf)) {
                 run_list(c);
+                reap_zombies();
                 delete c;
             }
             bufpos = 0;
