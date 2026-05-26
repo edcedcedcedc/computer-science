@@ -237,8 +237,15 @@ void run_list(command* c)
         {
             if(c->args.size() > 0)
             {
+               if(c->separator == TYPE_BACKGROUND)
+               {
+                c->run();
+                prev_separator = TYPE_SEQUENCE;
+               }
+               else
+               {
                 int should_run = 0;
-                
+
                 if(prev_separator == TYPE_SEQUENCE)
                 {
                     should_run = 1;
@@ -267,6 +274,7 @@ void run_list(command* c)
                     }
                 }
                 prev_separator = c->separator;
+               }
             }
             c = c->next;
         }
@@ -297,6 +305,12 @@ command* parse_line(const char* s) {
             first = current;
             }
         current->args.push_back(it.str());
+        }
+        else if(it.type() == TYPE_BACKGROUND)
+        {
+            current->separator = TYPE_BACKGROUND;
+            current->next = new command;
+            current = current->next;
         }
         else if(it.type() == TYPE_PIPE)
         {
