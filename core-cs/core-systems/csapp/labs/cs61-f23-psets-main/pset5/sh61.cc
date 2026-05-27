@@ -18,6 +18,12 @@ struct command {
     pid_t pid = -1;      // process ID running this command, -1 if none
     command* next = nullptr;
     int separator = 2;
+    
+    // redirections 
+    std::string input_file;
+    std::string output_file;
+    std::string error_file;
+
     command();
     ~command();
 
@@ -37,6 +43,7 @@ command::command() {
 //    This destructor function is called to delete a command.
 
 command::~command() {
+    delete next;
 }
 
 
@@ -79,7 +86,46 @@ void command::run() {
 
     pid_t p = fork();
     if(p == 0)
-    {
+    {   
+        //redirection handling for single commands
+        if(!output_file.empty())
+        {
+            int fd = open(output_file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+            if(fd < 0)
+            {
+                perror(output_file.c_str());
+                _exit(1);
+            }
+            dup2(fd, STDOUT_FILENO);
+            close(fd);
+        }
+        if(!input_file.empty())
+        {
+            int fd = open(input_file.c_str(), O_RDONLY);
+
+            if(fd < 0)
+            {
+                perror(input_file.c_str());
+                _exit(1);
+            }
+            dup2(fd, STDIN_FILENO);
+            close(fd);
+        }
+        if(!error_file.empty())
+        {
+            int fd = open(error_file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+            if(fd < 0)
+            {
+                perror(error_file.c_str());
+                _exit(1);
+            }
+            dup2(fd, STDERR_FILENO);
+            close(fd);
+        }
+        
+
         std::vector<char*>exec_argv;
         for(unsigned long int i = 0;i < this->args.size();++i)
         {
@@ -180,27 +226,72 @@ void run_list(command* c)
                 pid_t pid = fork();
                 if(pid == 0)
                 {
-                    if(i > 0)
-                    {
-                        dup2(pipes[2*(i-1)], STDIN_FILENO);
+        
+                int in_fd  = (i > 0) ? pipes[2*(i-1)] : -1;
+                int out_fd = (i < pipe_count-1) ? pipes[2*i+1] : -1;
+
+                // Close all pipe fds except the ones we might use
+                for (size_t j = 0; j < pipes.size(); ++j) {
+                    if ((in_fd != -1 && pipes[j] == in_fd) ||
+                        (out_fd != -1 && pipes[j] == out_fd))
+                        continue;
+                    close(pipes[j]);
+                }
+
+               //handle pipe connection, chain commands
+                if (in_fd != -1 && curr->input_file.empty()) {
+                    dup2(in_fd, STDIN_FILENO);
+                    close(in_fd);
+                } else if (in_fd != -1) {
+                    close(in_fd);
+                }
+
+      
+                if (out_fd != -1 && curr->output_file.empty()) {
+                    dup2(out_fd, STDOUT_FILENO);
+                    close(out_fd);
+                } else if (out_fd != -1) {
+                    close(out_fd);
+                }
+
+                //handle actual redirection, override the pipe
+                if (!curr->input_file.empty()) {
+                    int fd = open(curr->input_file.c_str(), O_RDONLY);
+                    if (fd < 0) {
+                        perror(curr->input_file.c_str());
+                        _exit(1);
                     }
-                    if(i < pipe_count - 1)
-                    {
-                        dup2(pipes[2*i+1], STDOUT_FILENO);
+                    dup2(fd, STDIN_FILENO);
+                    close(fd);
+                }
+                if (!curr->output_file.empty()) {
+                    int fd = open(curr->output_file.c_str(),
+                                O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                    if (fd < 0) {
+                        perror(curr->output_file.c_str());
+                        _exit(1);
                     }
-                    for(size_t j = 0; j < pipes.size(); j++)
-                    {
-                        close(pipes[j]);
+                    dup2(fd, STDOUT_FILENO);
+                    close(fd);
+                }
+                if (!curr->error_file.empty()) {
+                    int fd = open(curr->error_file.c_str(),
+                                O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                    if (fd < 0) {
+                        perror(curr->error_file.c_str());
+                        _exit(1);
                     }
-                    std::vector<char*> exec_argv;
-                    for(unsigned long int k = 0; k < curr->args.size(); k++)
-                    {
-                        exec_argv.push_back(const_cast<char*>(curr->args[k].c_str()));
-                    }
-                    exec_argv.push_back(nullptr);
-                    execvp(exec_argv[0], exec_argv.data());
-                    perror("execvp failed");
-                    _exit(1);
+                    dup2(fd, STDERR_FILENO);
+                    close(fd);
+                }
+
+                std::vector<char*> exec_argv;
+                for (size_t k = 0; k < curr->args.size(); ++k)
+                    exec_argv.push_back(const_cast<char*>(curr->args[k].c_str()));
+                exec_argv.push_back(nullptr);
+                execvp(exec_argv[0], exec_argv.data());
+                perror("execvp failed");
+                _exit(1);
                 }
                 else if(pid > 0)
                 {
@@ -225,10 +316,8 @@ void run_list(command* c)
             {
                 close(pipes[i]);
             }
-            
             int status;
             waitpid(last_pid, &status, 0);
-            
             if(WIFEXITED(status))
             {
                 prev_status = WEXITSTATUS(status);
@@ -238,7 +327,6 @@ void run_list(command* c)
                 prev_status = 1;
             }
             prev_separator = temp->separator;
-            
             c = temp->next;
         }
         else
@@ -343,6 +431,22 @@ command* parse_line(const char* s) {
             current->separator = TYPE_SEQUENCE;
             current->next = new command;
             current = current->next;
+        }
+        else if(it.type() == TYPE_REDIRECT_OP)
+        {
+            std::string op = it.str();
+            ++it;
+            std::string filename = it.str();
+            if (op == ">") 
+            {
+                current->output_file = filename;
+            } else if (op == "<") 
+            {
+                current->input_file = filename;
+            } else if (op == "2>") 
+            {
+                current->error_file = filename;
+            }            
         }
     }
     return first;
