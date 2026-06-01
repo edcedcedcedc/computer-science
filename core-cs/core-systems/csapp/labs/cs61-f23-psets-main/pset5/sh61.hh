@@ -8,6 +8,18 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+/* 
+
+This pset was very useful to complement and finish my understanding of computer systems, 
+I won't do part 8 the CD command it uses chdir() a syscall controlled by kernel and then
+cd is a shell command that uses chdir() under the hood, a file systems if generally speaking 
+is a tree, I know this from around 1st year at OSSU when we took intro to programming
+
+Andro Ranogajec 
+01/06/2026
+
+*/
+
 #define TYPE_NORMAL        0   // normal command word
 #define TYPE_REDIRECT_OP   1   // redirection operator (>, <, 2>)
 

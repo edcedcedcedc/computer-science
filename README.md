@@ -51,7 +51,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ##### Core systems
 **Topics covered:** `bits` `bytes` `memory` `C`
 
-- [ ] Introduction to Computer Systems (09.08.25 → planned 01.01.26)  
+- [x] Introduction to Computer Systems (09.08.25 → planned 01.01.26)  
   → [Proof](./core-cs/core-systems/csapp/) • [Labs](./core-cs/core-systems/csapp/labs) • [Notes](https://docs.google.com/document/d/18r7r6Z1z2QoiD8wXbQ21lLw4oSjcbSKKjRthHwBEvoo/edit?usp=sharing)  
 
 ##### Core security
@@ -109,14 +109,11 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ---
 
 #### Ongoing 
-- Introduction to Computer Systems - (only some labs left)
-- Intellectual Property Law and Policy
 - Real-Time Systems & Gameplay Programming
+
 ---
-
-
 #### Upcoming / Planned
-- Computer Graphics
+- Computer Networking
 - Introduction to Databases
 - Software Architecture
 - Introduction to Algorithms
