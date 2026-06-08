@@ -54,3 +54,11 @@ Saved/
 .DS_Store
 Thumbs.db
 
+
+venv/
+.venv/
+env/
+ENV/
+*/venv/
+**/venv/
+
