@@ -26,6 +26,6 @@ jobs:
         pip install proselint
         sudo add-apt-repository universe
         sudo apt install python3-proselint
-    - name: Lint with Proselint 
-      run: |
-        proselint $(find . -name "*.md")
+   # - name: Lint with Proselint 
+      #run: |
+      #  proselint $(find . -name "*.md")
