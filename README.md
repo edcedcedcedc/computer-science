@@ -30,6 +30,9 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - [x] Structure and Interpretation of Computer Programs (02.07.24 → 10.12.24)  
   → [Proof](./core-cs/core-programming/sicp/) • [Projects](./core-cs/core-programming/sicp/projects) • [Notes](https://docs.google.com/document/d/1ge1JjM2ER7VkYoT3uk8Wp_-HZ2bAJwh-QjD7YnkYW6o/edit?usp=sharing)  
 
+- [ ] Software Architecture (09.06.26 → planned 09.07.26)  
+  → [Proof](./core-cs/core-programming/software-architecture/) • [Projects](./core-cs/core-programming/software-architecture) • [Notes](https://docs.google.com/document/d/1fBGRrv1rUnkQJDQZsLyyT2GLfy_EGw4vsrVbKrR8D4s/edit?usp=sharing)  
+
 ##### Core theory
 **Topics covered:** `stacks` `queues` `linked lists` `hash tables` `trees`
 
@@ -52,6 +55,17 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - [x] Introduction to Computer Systems (09.08.25 → planned 01.01.26)  
   → [Proof](./core-cs/core-systems/csapp/) • [Labs](./core-cs/core-systems/csapp/labs) • [Notes](https://docs.google.com/document/d/18r7r6Z1z2QoiD8wXbQ21lLw4oSjcbSKKjRthHwBEvoo/edit?usp=sharing)  
 
+- [ ] Computer Networking (09.06.25 → planned 25.08.26)  
+  → [Proof](./core-cs/core-systems/computer-networking/) • [Labs](./core-cs/core-systems/computer-networking/labs) • [Notes](https://docs.google.com/document/d/1xB9z3DY5bvSy7TjP6tRXHW1jWGMR69uKhE6MP88szHw/edit?usp=sharing)  
+
+##### Core applications
+**Topics covered:** `relational` `databases` `transaction` `processing` `data modeling` `neural networks` `supervised learning` `unsupervised learning` `OpenGL` `ray tracing and more`
+
+- [ ] Introduction to Databases (09.06.26 → planned 4.08.26)  
+  → [Proof](./core-cs/core-applications/introduction-to-databases) • [Labs](./core-cs/core-applications/introduction-to-databases/labs) • [Notes](https://docs.google.com/document/d/1fNXV4UBgeDe5hSM-gm4LizqwURkcD3Vpmz-ICCcXmGY/edit?usp=sharing)  
+
+
+
 ##### Core security
 **Topics covered:** `authentication` `transport security` `platform security` `software security`
 
@@ -61,7 +75,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ##### CS Tools
 **Topics covered:** `shell scripting` `vim` `version control`
 
-- [x] The Missing Semester (22.06.24 → 15.11.24)  
+- [x] The Missing Semester of Your CS Education (22.06.24 → 15.11.24)  
   → [Proof](./core-cs/core-tools/mit-missing) • [Notes](https://docs.google.com/document/d/1jrVr1e5MFEhYxtQ7pT5dFxz6ExrojlgzKy-8xUpES0c/edit?usp=sharing)  
 
 ##### Core Ethics
@@ -108,13 +122,15 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 #### Ongoing 
 - Real-Time Systems & Gameplay Programming
-
----
-#### Upcoming / Planned
 - Computer Networking
 - Introduction to Databases
 - Software Architecture
+
+---
+#### Upcoming / Planned
+- Computer Graphics 
 - Introduction to Algorithms
+- Data Privacy Fundamentals
 ---
 
 #### Support 
