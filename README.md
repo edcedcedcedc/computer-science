@@ -55,7 +55,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - [x] Introduction to Computer Systems (09.08.25 → planned 01.01.26)  
   → [Proof](./core-cs/core-systems/csapp/) • [Labs](./core-cs/core-systems/csapp/labs) • [Notes](https://docs.google.com/document/d/18r7r6Z1z2QoiD8wXbQ21lLw4oSjcbSKKjRthHwBEvoo/edit?usp=sharing)  
 
-- [ ] Computer Networking (09.06.25 → planned 25.08.26)  
+- [ ] Computer Networking (09.06.26 → planned 25.08.26)  
   → [Proof](./core-cs/core-systems/computer-networking/) • [Labs](./core-cs/core-systems/computer-networking/labs) • [Notes](https://docs.google.com/document/d/1xB9z3DY5bvSy7TjP6tRXHW1jWGMR69uKhE6MP88szHw/edit?usp=sharing)  
 
 ##### Core applications
