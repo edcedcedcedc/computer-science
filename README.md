@@ -30,8 +30,6 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - [x] Structure and Interpretation of Computer Programs (02.07.24 → 10.12.24)  
   → [Proof](./core-cs/core-programming/sicp/) • [Projects](./core-cs/core-programming/sicp/projects) • [Notes](https://docs.google.com/document/d/1ge1JjM2ER7VkYoT3uk8Wp_-HZ2bAJwh-QjD7YnkYW6o/edit?usp=sharing)  
 
-- [ ] Software Architecture (09.06.26 → planned 09.07.26)  
-  → [Proof](./core-cs/core-programming/software-architecture/) • [Projects](./core-cs/core-programming/software-architecture) • [Notes](https://docs.google.com/document/d/1fBGRrv1rUnkQJDQZsLyyT2GLfy_EGw4vsrVbKrR8D4s/edit?usp=sharing)  
 
 ##### Core theory
 **Topics covered:** `stacks` `queues` `linked lists` `hash tables` `trees`
@@ -52,16 +50,16 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ##### Core systems
 **Topics covered:** `bits` `bytes` `memory` `C`
 
-- [x] Introduction to Computer Systems (09.08.25 → planned 01.01.26)  
+- [x] Introduction to Computer Systems (09.08.25 →  01.01.26)  
   → [Proof](./core-cs/core-systems/csapp/) • [Labs](./core-cs/core-systems/csapp/labs) • [Notes](https://docs.google.com/document/d/18r7r6Z1z2QoiD8wXbQ21lLw4oSjcbSKKjRthHwBEvoo/edit?usp=sharing)  
 
-- [ ] Computer Networking (09.06.26 → planned 25.08.26)  
+- [ ] Computer Networking (09.06.26 →  25.08.26)  
   → [Proof](./core-cs/core-systems/computer-networking/) • [Labs](./core-cs/core-systems/computer-networking/labs) • [Notes](https://docs.google.com/document/d/1xB9z3DY5bvSy7TjP6tRXHW1jWGMR69uKhE6MP88szHw/edit?usp=sharing)  
 
 ##### Core applications
 **Topics covered:** `relational` `databases` `transaction` `processing` `data modeling` `neural networks` `supervised learning` `unsupervised learning` `OpenGL` `ray tracing and more`
 
-- [ ] Introduction to Databases (09.06.26 → planned 4.08.26)  
+- [ ] Introduction to Databases (09.06.26 →  4.08.26)  
   → [Proof](./core-cs/core-applications/introduction-to-databases) • [Labs](./core-cs/core-applications/introduction-to-databases/labs) • [Notes](https://docs.google.com/document/d/1fNXV4UBgeDe5hSM-gm4LizqwURkcD3Vpmz-ICCcXmGY/edit?usp=sharing)  
 
 
@@ -69,7 +67,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ##### Core security
 **Topics covered:** `authentication` `transport security` `platform security` `software security`
 
-- [x] Foundations of Computer Security (03.09.25 → planned 03.12.25)  
+- [x] Foundations of Computer Security (03.09.25 →  03.12.25)  
   → [Proof](./core-cs/core-security/foundations-of-computer-security/) • [Projects](./core-cs/core-security/foundations-of-computer-security/labs) • [Notes](https://docs.google.com/document/d/1pUK9NoM78XD8NCP2V_O2x0w1Oz9R2FfCtjFWNwVidJI/edit?usp=sharing)  
 
 ##### CS Tools
@@ -81,10 +79,10 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ##### Core Ethics
 **Topics covered:** `Social Context` `Analytical Tools` `Professional Ethics` `Intellectual Property and more`
 
-- [x] Data Science Ethics (2.01.2026 → planned 2.02.2026 → actual 5.02.2026)  
+- [x] Data Science Ethics (2.01.2026 →  2.02.2026 → actual 5.02.2026)  
   → [Proof](./core-cs/core-ethics/data-science-ethics) • [Notes](https://docs.google.com/document/d/19Fh72EpO4XWeqX3iKay_NK5gp8yjfIqa6Y72pBrybNA/edit?usp=sharing)  
 
-- [x] Intellectual Property Law and Policy (18.03.2026 → 15.05.2026, planned 18.04.2026 )  
+- [x] Intellectual Property Law and Policy (18.03.2026 → 15.05.2026,  18.04.2026 )  
   → [Proof](./core-cs/core-ethics/intellectual-property-law-policy) • [Notes](https://docs.google.com/document/d/1Gv1VAYLuhyGvDYERad8as1H5feQDLuGvEK3WhBDjWM8/edit?usp=sharing) 
 
 #### Advanced CS
@@ -94,8 +92,16 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 - [x] Linear Algebra (14.10.24 → 27.02.25)  
   → [Proof](./advanced-cs/advanced-math/linear-algebra/) • [Projects](./advanced-cs/advanced-math/linear-algebra/spinningCube) • [Notes](https://docs.google.com/document/d/1ieGaWKd6_c_jAStE7_Xhg6oUc5kr_CYZ34NqOsLDX_E/edit?usp=sharing)  
-- [x] Probability for CS (23.09.25 → 31.12.25, planned 31.12.25)  
+- [x] Probability for CS (23.09.25 → 31.12.25,  31.12.25)  
   → [Proof](./advanced-cs/advanced-math/probability-for-cs/) • [Notes (archive)](https://docs.google.com/document/d/1xdIrMa2W9hERx3B4T_JcIlJTP8JhwLjJM8Cf6XFpNbk/edit?usp=sharing) • [Labs](./advanced-cs/advanced-math/probability-for-cs/labs) • [Notes (new)](https://docs.google.com/document/d/1E_K2eB0Qf177yfnsHEAVWvyI8lY60rFPpEd3vEJJXzE/edit?usp=sharing)
+
+
+##### Advanced systems
+**Topics covered:** `types of scaling` `distributed computing` 
+
+- [x] System Design (10.06.26-30.08.26)  
+  → [Proof](./advanced-cs/advanced-systems/system-design/) <!-- • [Projects](./advanced-cs/advanced-math/linear-algebra/spinningCube) --> • [Notes](https://docs.google.com/document/d/1fBGRrv1rUnkQJDQZsLyyT2GLfy_EGw4vsrVbKrR8D4s/edit?usp=sharing)  
+
 
 #### Electives
 
@@ -110,7 +116,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 **Topics covered:** `real-time systems` `gameplay programming` `unreal engine`
 
-- [ ] Real-Time Systems & Gameplay Programming (03.10.25 → planned 01.06.26)  
+- [ ] Real-Time Systems & Gameplay Programming (03.10.25 →  01.06.26)  
   → [Project](https://github.com/edcedcedcedc/computer-science-specialization) • [Notes](https://docs.google.com/document/d/1MIjYhqsG5pFdOIyyN-r5OyKqoTTkxKNC_dEubC0alJo/edit?usp=sharing)  
 
 ---
@@ -124,10 +130,10 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - Real-Time Systems & Gameplay Programming
 - Computer Networking
 - Introduction to Databases
-- Software Architecture
+- System Design
 
 ---
-#### Upcoming / Planned
+#### Upcoming 
 - Computer Graphics 
 - Introduction to Algorithms
 - Data Privacy Fundamentals
