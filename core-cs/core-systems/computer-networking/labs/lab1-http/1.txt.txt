@@ -1,0 +1,16 @@
+1) 
+NTP - network time protocol
+TCP - transport control protocol 
+TLS - transport layer security (works over TCP) 
+DNS - domain name system
+
+
+2)
+0.12ms
+
+3)
+gaia's internet address 128.119.245.12 and my internet address 192.168.1.61 
+
+4)edg/149.0.0.0
+
+5)

@@ -1,6 +1,7 @@
 **/__pycache__/
 **/.pytest_cache/
 *.pdf
+!/core-cs/core-systems/computer-networking/labs/**/*.pdf
 *.pptx
 *.private
 .vscode
