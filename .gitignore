@@ -2,6 +2,8 @@
 **/.pytest_cache/
 *.pdf
 !/core-cs/core-systems/computer-networking/labs/**/*.pdf
+!/advanced-cs/advanced-systems/system-design/**/*.pdf
+!/core-cs/core-applications/introduction-to-databases/**/*.pdf
 *.pptx
 *.private
 .vscode
