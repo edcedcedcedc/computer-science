@@ -1,4 +1,12 @@
 Course - https://www.youtube.com/playlist?list=PLWl7jvxH18r0u5VRZsOjhghNXc_Ec4dZz
 Textbook - Fundamentals of Software Architecture
 
-I am taking this because I don't have the money to pay on coursera for software architecture, this is free and modern, worth to take it as a rough substitution 
+I am taking this because I don't have the money to pay on coursera for software architecture, this is free and modern, worth to take it as a rough substitution
+
+
+
+
+26/06/2026 - 
+https://stevetarzia.com/teaching/310/projects/sample_arch.html
+I am planning some labs don't know what to do yet, but in the end I'll decide what could work best for me, the original labs arent available fully, 
+I might copy paste that into chatgpt and generate some easier labs; I am now going with a rate of 2 lectures per week 
