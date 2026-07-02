@@ -1,0 +1,8 @@
+1) 
+103.21.124.133 
+2)
+iitb.ac.in      nameserver = dns3.iitb.ac.in
+iitb.ac.in      nameserver = dns1.iitb.ac.in
+iitb.ac.in      nameserver = dns2.iitb.ac.in
+3)Non-authoritative
+4)103.21.127.129,103.21.126.129, 103.21.125.129
