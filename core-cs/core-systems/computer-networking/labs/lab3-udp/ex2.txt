@@ -1,0 +1,7 @@
+source port - 14 e9
+destination port - 14 e9
+length - 00 42
+checksum - a2 29
+
+ooohh, its 2 bytes each, I completely forgot for example 14(1 byte) e9(another byte)
+I have done this before in computer systems class

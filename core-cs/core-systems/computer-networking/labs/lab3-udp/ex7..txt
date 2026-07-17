@@ -1,0 +1,9 @@
+7.1) first packet number is 55
+7.2) source port 63163
+7.3) destination port 53
+7.4) second packet number is 56
+7.5) source port 53
+7.6) destination port 63163
+
+Describe the relation between two ports -> I can conclude the ports interchange 53 <-> 63163, which shows the communication
+between udp port and end system port 
