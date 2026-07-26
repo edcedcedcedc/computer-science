@@ -602,3 +602,10 @@ Data -> Assembly -> Physical and virtual memory -> Kernel -> I/O, files and Cach
 Real computer science/programming insight from long time, the first two years where just top to down programming, data structures, security, 
 shell intro, math, formal logic mostly, and some electives like physics, the third year i.e. the current is where things kind of glued together 
 and I can see it a whole, of course I have a lot of other classes to take but this is a big win to me, I am proud, don't regret of pushing this forward. 
+
+
+26/07/2026
+
+My System Design course is in progress I am around half the lectures done,
+but I am doing no labs, and thats not a problem because its mostly theory and modeling,
+you can read more here https://docs.google.com/document/d/1fBGRrv1rUnkQJDQZsLyyT2GLfy_EGw4vsrVbKrR8D4s/edit?tab=t.0#heading=h.g4gj6g8iydep
