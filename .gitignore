@@ -63,6 +63,8 @@ Thumbs.db
 
 
 core-cs/core-applications/introduction-to-databases/bustub_private
+core-cs/core-applications/introduction-to-databases/bustub/**/*.properties
+core-cs/core-applications/introduction-to-databases/bustub/**/*.lock
 computer-science.code-workspace
 venv/
 .venv/
