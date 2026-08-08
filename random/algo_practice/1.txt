@@ -1,0 +1,138 @@
+Here is the complete, comprehensive roadmap covering **all essential LeetCode algorithmic patterns**.
+
+## 🟢 Level 1: Foundations (Arrays, Hash Maps, Strings)
+
+### Pattern 1: Frequency Counters & Hash Maps
+
+* **Core Logic:** Use $O(1)$ lookups in a Hash Map (`dict`) or Set (`set`) to avoid $O(n^2)$ nested loops when searching or counting frequencies.
+* **Key Python Tools:** `dict`, `set`, `collections.Counter`, `collections.defaultdict`
+
+1. **[Contains Duplicate — LC #217](https://leetcode.com/problems/contains-duplicate/)** *(Warm-up)*
+2. **[Valid Anagram — LC #242](https://leetcode.com/problems/valid-anagram/)** *(Core)*
+3. **[Two Sum — LC #1](https://leetcode.com/problems/two-sum/)** *(Mastery)*
+
+### Pattern 2: Two Pointers
+
+* **Core Logic:** Place one index at the start (`0`) and one at the end (`len - 1`) of a sorted array/string, moving them inward based on comparison logic to achieve $O(n)$ time.
+* **Key Python Tools:** `left = 0`, `right = len(arr) - 1`, `while left < right:`
+
+1. **[Valid Palindrome — LC #125](https://leetcode.com/problems/valid-palindrome/)** *(Warm-up)*
+2. **[Reverse String — LC #344](https://leetcode.com/problems/reverse-string/)** *(Core)*
+3. **[3Sum — LC #15](https://leetcode.com/problems/3sum/)** *(Mastery)*
+
+### Pattern 3: Sliding Window (Fixed & Dynamic)
+
+* **Core Logic:** Maintain a continuous subarray range `[start, end]`. Expand `end` to absorb elements, and shrink `start` when constraint conditions are violated.
+* **Key Python Tools:** Sliding range indices, tracking variables for rolling sums or counts.
+
+1. **[Best Time to Buy and Sell Stock — LC #121](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)** *(Warm-up)*
+2. **[Maximum Average Subarray I — LC #643](https://leetcode.com/problems/maximum-average-subarray-i/)** *(Core)*
+3. **[Longest Substring Without Repeating Characters — LC #3](https://leetcode.com/problems/longest-substring-without-repeating-characters/)** *(Mastery)*
+
+### Pattern 4: Fast & Slow Pointers (Floyd's Cycle Detection)
+
+* **Core Logic:** Advance two pointers through linear sequences or linked lists at different speeds (`slow = 1 step`, `fast = 2 steps`) to detect cycles or find midpoints.
+* **Key Python Tools:** `slow = slow.next`, `fast = fast.next.next`
+
+1. **[Linked List Cycle — LC #141](https://leetcode.com/problems/linked-list-cycle/)** *(Warm-up)*
+2. **[Middle of the Linked List — LC #876](https://leetcode.com/problems/middle-of-the-linked-list/)** *(Core)*
+3. **[Happy Number — LC #202](https://leetcode.com/problems/happy-number/)** *(Mastery)*
+
+---
+
+## 🟡 Level 2: Intermediate Data Structures & Searches
+
+### Pattern 5: Prefix Sum
+
+* **Core Logic:** Pre-calculate running cumulative sums into an array (`prefix[i] = nums[0] + ... + nums[i]`) so any subarray sum between indices $i$ and $j$ can be computed in $O(1)$ time via `prefix[j] - prefix[i-1]`.
+* **Key Python Tools:** `itertools.accumulate()`, manual prefix list generation.
+
+1. **[Find Pivot Index — LC #724](https://leetcode.com/problems/find-pivot-index/)** *(Warm-up)*
+2. **[Range Sum Query - Immutable — LC #303](https://leetcode.com/problems/range-sum-query-immutable/)** *(Core)*
+3. **[Subarray Sum Equals K — LC #560](https://leetcode.com/problems/subarray-sum-equals-k/)** *(Mastery)*
+
+### Pattern 6: Monotonic Stack
+
+* **Core Logic:** Use a LIFO stack to maintain elements in strictly increasing or decreasing order. Ideal for finding the "next greater" or "next smaller" element in $O(n)$ time.
+* **Key Python Tools:** `stack = []`, `stack.append()`, `stack.pop()`
+
+1. **[Valid Parentheses — LC #20](https://leetcode.com/problems/valid-parentheses/)** *(Warm-up - Standard Stack)*
+2. **[Daily Temperatures — LC #739](https://leetcode.com/problems/daily-temperatures/)** *(Core)*
+3. **[Next Greater Element I — LC #496](https://leetcode.com/problems/next-greater-element-i/)** *(Mastery)*
+
+### Pattern 7: Binary Search & Modified Binary Search
+
+* **Core Logic:** Divide a sorted search space in half repeatedly to achieve $O(\log n)$ search time.
+* **Key Python Tools:** `low`, `high`, `mid = (low + high) // 2`, `bisect` module
+
+1. **[Binary Search — LC #704](https://leetcode.com/problems/binary-search/)** *(Warm-up)*
+2. **[First Bad Version — LC #278](https://leetcode.com/problems/first-bad-version/)** *(Core)*
+3. **[Search in Rotated Sorted Array — LC #33](https://leetcode.com/problems/search-in-rotated-sorted-array/)** *(Mastery)*
+
+### Pattern 8: Top-K Elements (Heaps / Priority Queues)
+
+* **Core Logic:** Use a Min-Heap or Max-Heap to track the $K$ largest or $K$ smallest elements in $O(n \log k)$ time instead of fully sorting the dataset ($O(n \log n)$).
+* **Key Python Tools:** `import heapq`, `heapq.heappush()`, `heapq.heappop()`, `heapq.nlargest()`
+
+1. **[Kth Largest Element in a Stream — LC #703](https://leetcode.com/problems/kth-largest-element-in-a-stream/)** *(Warm-up)*
+2. **[Kth Largest Element in an Array — LC #215](https://leetcode.com/problems/kth-largest-element-in-an-array/)** *(Core)*
+3. **[Top K Frequent Elements — LC #347](https://leetcode.com/problems/top-k-frequent-elements/)** *(Mastery)*
+
+---
+
+## 🔴 Level 3: Trees, Graphs, and Advanced Recursion
+
+### Pattern 9: Tree Depth-First Search (DFS)
+
+* **Core Logic:** Traverse a tree recursively down to its leaf nodes before backtracking. Used for paths, depths, and hierarchical validation.
+* **Key Python Tools:** Recursion or explicit stack; preorder (`node, left, right`), inorder (`left, node, right`), postorder (`left, right, node`).
+
+1. **[Maximum Depth of Binary Tree — LC #104](https://leetcode.com/problems/maximum-depth-of-binary-tree/)** *(Warm-up)*
+2. **[Same Tree — LC #100](https://leetcode.com/problems/same-tree/)** *(Core)*
+3. **[Path Sum — LC #112](https://leetcode.com/problems/path-sum/)** *(Mastery)*
+
+### Pattern 10: Breadth-First Search (BFS) / Level-Order
+
+* **Core Logic:** Explore nodes level-by-level outward using a Queue. Best for finding the **shortest path** in unweighted graphs or trees.
+* **Key Python Tools:** `from collections import deque`, `queue.popleft()`, `queue.append()`
+
+1. **[Binary Tree Level Order Traversal — LC #102](https://leetcode.com/problems/binary-tree-level-order-traversal/)** *(Warm-up)*
+2. **[Flood Fill — LC #733](https://leetcode.com/problems/flood-fill/)** *(Core)*
+3. **[Rotting Oranges — LC #994](https://leetcode.com/problems/rotting-oranges/)** *(Mastery)*
+
+### Pattern 11: Matrix Traversal (Grid DFS/BFS)
+
+* **Core Logic:** Treat 2D arrays/grids as implicit graphs where each cell $(r, c)$ connects to up to 4 neighbors: $(r+1,c), (r-1,c), (r,c+1), (r,c-1)$.
+* **Key Python Tools:** Boundary checks `0 <= r < rows`, tracking visited cells (`visited = set()`).
+
+1. **[Island Perimeter — LC #463](https://leetcode.com/problems/island-perimeter/)** *(Warm-up)*
+2. **[Number of Islands — LC #200](https://leetcode.com/problems/number-of-islands/)** *(Core)*
+3. **[Max Area of Island — LC #695](https://leetcode.com/problems/max-area-of-island/)** *(Mastery)*
+
+### Pattern 12: Backtracking
+
+* **Core Logic:** Build solutions incrementally using recursion. When a path reaches an invalid state or complete solution, "backtrack" by undoing the last decision.
+* **Key Python Tools:** Recursive functions with state restoration (`path.append(x)`, `dfs()`, `path.pop()`).
+
+1. **[Subsets — LC #78](https://leetcode.com/problems/subsets/)** *(Warm-up)*
+2. **[Combinations — LC #77](https://leetcode.com/problems/combinations/)** *(Core)*
+3. **[Permutations — LC #46](https://leetcode.com/problems/permutations/)** *(Mastery)*
+
+### Pattern 13: Dynamic Programming 1D (Memoization & Tabulation)
+
+* **Core Logic:** Solve complex problems by breaking them into overlapping subproblems. Store subproblem results in a array (`dp table`) or dictionary to eliminate redundant exponential recursive calls.
+* **Key Python Tools:** `@functools.cache` for Memoization (Top-down), or `dp = [0] * (n + 1)` for Tabulation (Bottom-up).
+
+1. **[Climbing Stairs — LC #70](https://leetcode.com/problems/climbing-stairs/)** *(Warm-up)*
+2. **[Min Cost Climbing Stairs — LC #746](https://leetcode.com/problems/min-cost-climbing-stairs/)** *(Core)*
+3. **[House Robber — LC #198](https://leetcode.com/problems/house-robber/)** *(Mastery)*
+
+### Pattern 14: Intervals (Overlap & Merge)
+
+* **Core Logic:** Sort array intervals by start time `[start, end]`, then iterate sequentially to detect overlaps or merge contiguous boundaries.
+* **Key Python Tools:** `intervals.sort(key=lambda x: x[0])`
+
+1. **[Meeting Rooms — LC #252](https://leetcode.com/problems/meeting-rooms/)** *(Warm-up)*
+2. **[Merge Intervals — LC #56](https://leetcode.com/problems/merge-intervals/)** *(Core)*
+3. **[Insert Interval — LC #57](https://leetcode.com/problems/insert-interval/)** *(Mastery)*
+
