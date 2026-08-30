@@ -3,143 +3,150 @@ Open Education in Computer Science from [Open Source Society University](https:/
 ---
 
 #### Prerequisites
+
 **Topics covered:** `high school geometry` `college algebra` `trigonometry` `precalculus`
 
-- [x] Algebra 1 (2022 → 10.02.23) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1BJkhLWKtQVTutCbBOL5Am8IlfLq9bDqoBrA2aGlQ7eo/edit?usp=sharing)  
-- [x] Geometry (2023 → 26.10.23) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1n7f1E6zxKXha6v5mLx7cQehJuKmo-on3UmyP_uOSCYI/edit?usp=sharing)  
-- [x] Algebra 2 (2024 → 15.01.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1ma1xHGy0dGXNuQbXPrLDidT_F8d6hQ4QrPBRRmm-hyA/edit?usp=sharing)  
-- [x] Trigonometry (2024 → 04.02.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1n7f1E6zxKXha6v5mLx7cQehJuKmo-on3UmyP_uOSCYI/edit?usp=sharing)  
-- [x] Precalculus (2024 → 08.04.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1PSfIDMT3UEdDhIJkCUgGjDmI9NO2-VB8JhcVCIdnaJ8/edit?usp=sharing)  
+- [x] Algebra 1 (2022 → 10.02.23) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1BJkhLWKtQVTutCbBOL5Am8IlfLq9bDqoBrA2aGlQ7eo/edit?usp=sharing)
+- [x] Geometry (2023 → 26.10.23) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1n7f1E6zxKXha6v5mLx7cQehJuKmo-on3UmyP_uOSCYI/edit?usp=sharing)
+- [x] Algebra 2 (2024 → 15.01.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1ma1xHGy0dGXNuQbXPrLDidT_F8d6hQ4QrPBRRmm-hyA/edit?usp=sharing)
+- [x] Trigonometry (2024 → 04.02.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1n7f1E6zxKXha6v5mLx7cQehJuKmo-on3UmyP_uOSCYI/edit?usp=sharing)
+- [x] Precalculus (2024 → 08.04.24) → [Proof](./prerequisites/) • [Notes](https://docs.google.com/document/d/1PSfIDMT3UEdDhIJkCUgGjDmI9NO2-VB8JhcVCIdnaJ8/edit?usp=sharing)
 
 #### Intro CS
 
 **Topics covered:** `simple programs` `basic abstractions` `data structures` `algorithms` `imperative programming`
 
 - [x] Introduction to Programming (04.03.24 → 17.03.24)  
-  → [Proof](./intro-cs/intro-to-programming/cs50p/) • [Notes](https://docs.google.com/document/d/1W2IWr0ZsR0zi2xMu8_otMD-uPK5WGmOiPZjDeM9zeJU/edit?usp=sharing)  
+      → [Proof](./intro-cs/intro-to-programming/cs50p/) • [Notes](https://docs.google.com/document/d/1W2IWr0ZsR0zi2xMu8_otMD-uPK5WGmOiPZjDeM9zeJU/edit?usp=sharing)
 - [x] Introduction to Computer Science (22.03.24 → 02.07.24)  
-  → [Proof](./intro-cs/intro-to-computer-science/MIT-6.0001/) • [Notes](https://docs.google.com/document/d/1SEqocEuG1JfpeHpxPkkRKuUvD8_yLBg1HBKsEq8jwOE/edit?usp=sharing)  
-
-
+      → [Proof](./intro-cs/intro-to-computer-science/MIT-6.0001/) • [Notes](https://docs.google.com/document/d/1SEqocEuG1JfpeHpxPkkRKuUvD8_yLBg1HBKsEq8jwOE/edit?usp=sharing)
 
 #### Core CS
 
 ##### Core programming
+
 **Topics covered:** `functional programming` `object-oriented design` `ML-family languages` `Lisp-family languages` `Ruby`
 
 - [x] Structure and Interpretation of Computer Programs (02.07.24 → 10.12.24)  
-  → [Proof](./core-cs/core-programming/sicp/) • [Projects](./core-cs/core-programming/sicp/projects) • [Notes](https://docs.google.com/document/d/1ge1JjM2ER7VkYoT3uk8Wp_-HZ2bAJwh-QjD7YnkYW6o/edit?usp=sharing)  
-
+      → [Proof](./core-cs/core-programming/sicp/) • [Projects](./core-cs/core-programming/sicp/projects) • [Notes](https://docs.google.com/document/d/1ge1JjM2ER7VkYoT3uk8Wp_-HZ2bAJwh-QjD7YnkYW6o/edit?usp=sharing)
 
 ##### Core theory
+
 **Topics covered:** `stacks` `queues` `linked lists` `hash tables` `trees`
 
 - [x] Data Structures (10.12.24 → 08.06.25)  
-  → [Proof](./core-cs/core-theory/data-structures/) • [Projects](./core-cs/core-theory/data-structures/projects) • [Notes](https://docs.google.com/document/d/1h--IlxzWrA8k8R8Ls-Ikoxhdb89BJmBbhq7kM195IwQ/edit?usp=sharing)  
+      → [Proof](./core-cs/core-theory/data-structures/) • [Projects](./core-cs/core-theory/data-structures/projects) • [Notes](https://docs.google.com/document/d/1h--IlxzWrA8k8R8Ls-Ikoxhdb89BJmBbhq7kM195IwQ/edit?usp=sharing)
 
 ##### Core math
+
 **Topics covered:** `discrete math` `O-notation` `discrete probability` `statistics`
 
-- [x] Calculus 1A (15.04.24 → 14.10.24) 
-  → [Proof](./core-cs/core-math/differential-calc/) • [Notes](https://docs.google.com/document/d/1FYjFgYpoVLQwJ2md586ooVq8QMzG37PVtqgQPQOuIDs/edit?usp=sharing)  
+- [x] Calculus 1A (15.04.24 → 14.10.24)
+      → [Proof](./core-cs/core-math/differential-calc/) • [Notes](https://docs.google.com/document/d/1FYjFgYpoVLQwJ2md586ooVq8QMzG37PVtqgQPQOuIDs/edit?usp=sharing)
 - [x] Calculus 1B and 1C (14.10.24 → 22.03.25)
-  → [Proof](./core-cs/core-math/integral-calc/) • [Notes](https://docs.google.com/document/d/1FYjFgYpoVLQwJ2md586ooVq8QMzG37PVtqgQPQOuIDs/edit?usp=sharing)  
-- [x] Math for CS (15.11.24 → 06.08.25) 
-  → [Proof](./core-cs/core-math/math-for-cs/) • [Notes](https://docs.google.com/document/d/11hfZRsWbpXcznnR1YBaEDd_9QlX1nCK0m2taCPZZg7g/edit?usp=sharing)  
+      → [Proof](./core-cs/core-math/integral-calc/) • [Notes](https://docs.google.com/document/d/1FYjFgYpoVLQwJ2md586ooVq8QMzG37PVtqgQPQOuIDs/edit?usp=sharing)
+- [x] Math for CS (15.11.24 → 06.08.25)
+      → [Proof](./core-cs/core-math/math-for-cs/) • [Notes](https://docs.google.com/document/d/11hfZRsWbpXcznnR1YBaEDd_9QlX1nCK0m2taCPZZg7g/edit?usp=sharing)
 
 ##### Core systems
+
 **Topics covered:** `bits` `bytes` `memory` `C`
 
-- [x] Introduction to Computer Systems (09.08.25 →  01.01.26)  
-  → [Proof](./core-cs/core-systems/csapp/) • [Labs](./core-cs/core-systems/csapp/labs) • [Notes](https://docs.google.com/document/d/18r7r6Z1z2QoiD8wXbQ21lLw4oSjcbSKKjRthHwBEvoo/edit?usp=sharing)  
+- [x] Introduction to Computer Systems (09.08.25 → 01.01.26)  
+      → [Proof](./core-cs/core-systems/csapp/) • [Labs](./core-cs/core-systems/csapp/labs) • [Notes](https://docs.google.com/document/d/18r7r6Z1z2QoiD8wXbQ21lLw4oSjcbSKKjRthHwBEvoo/edit?usp=sharing)
 
-- [ ] Computer Networking (09.06.26 →  25.08.26)  
-  → [Proof](./core-cs/core-systems/computer-networking/) • [Labs](./core-cs/core-systems/computer-networking/labs) • [Notes](https://docs.google.com/document/d/1xB9z3DY5bvSy7TjP6tRXHW1jWGMR69uKhE6MP88szHw/edit?usp=sharing)  
+- [ ] Computer Networking (09.06.26 → 25.08.26)  
+      → [Proof](./core-cs/core-systems/computer-networking/) • [Labs](./core-cs/core-systems/computer-networking/labs) • [Notes](https://docs.google.com/document/d/1xB9z3DY5bvSy7TjP6tRXHW1jWGMR69uKhE6MP88szHw/edit?usp=sharing)
 
 ##### Core applications
+
 **Topics covered:** `relational` `databases` `transaction` `processing` `data modeling` `neural networks` `supervised learning` `unsupervised learning` `OpenGL` `ray tracing and more`
 
-- [ ] Introduction to Databases (09.06.26 →  4.08.26)  
-  → [Proof](./core-cs/core-applications/introduction-to-databases) • [Labs](./core-cs/core-applications/introduction-to-databases/labs) • [Notes](https://docs.google.com/document/d/1fNXV4UBgeDe5hSM-gm4LizqwURkcD3Vpmz-ICCcXmGY/edit?usp=sharing)  
-
-
+- [ ] Introduction to Databases (09.06.26 → 4.08.26)  
+      → [Proof](./core-cs/core-applications/introduction-to-databases) • [Labs](./core-cs/core-applications/introduction-to-databases/labs) • [Notes](https://docs.google.com/document/d/1fNXV4UBgeDe5hSM-gm4LizqwURkcD3Vpmz-ICCcXmGY/edit?usp=sharing)
 
 ##### Core security
+
 **Topics covered:** `authentication` `transport security` `platform security` `software security`
 
-- [x] Foundations of Computer Security (03.09.25 →  03.12.25)  
-  → [Proof](./core-cs/core-security/foundations-of-computer-security/) • [Projects](./core-cs/core-security/foundations-of-computer-security/labs) • [Notes](https://docs.google.com/document/d/1pUK9NoM78XD8NCP2V_O2x0w1Oz9R2FfCtjFWNwVidJI/edit?usp=sharing)  
+- [x] Foundations of Computer Security (03.09.25 → 03.12.25)  
+      → [Proof](./core-cs/core-security/foundations-of-computer-security/) • [Projects](./core-cs/core-security/foundations-of-computer-security/labs) • [Notes](https://docs.google.com/document/d/1pUK9NoM78XD8NCP2V_O2x0w1Oz9R2FfCtjFWNwVidJI/edit?usp=sharing)
 
 ##### CS Tools
+
 **Topics covered:** `shell scripting` `vim` `version control`
 
 - [x] The Missing Semester of Your CS Education (22.06.24 → 15.11.24)  
-  → [Proof](./core-cs/core-tools/mit-missing) • [Notes](https://docs.google.com/document/d/1jrVr1e5MFEhYxtQ7pT5dFxz6ExrojlgzKy-8xUpES0c/edit?usp=sharing)  
+      → [Proof](./core-cs/core-tools/mit-missing) • [Notes](https://docs.google.com/document/d/1jrVr1e5MFEhYxtQ7pT5dFxz6ExrojlgzKy-8xUpES0c/edit?usp=sharing)
 
 ##### Core Ethics
+
 **Topics covered:** `Social Context` `Analytical Tools` `Professional Ethics` `Intellectual Property and more`
 
-- [x] Data Science Ethics (2.01.2026 →  2.02.2026 → actual 5.02.2026)  
-  → [Proof](./core-cs/core-ethics/data-science-ethics) • [Notes](https://docs.google.com/document/d/19Fh72EpO4XWeqX3iKay_NK5gp8yjfIqa6Y72pBrybNA/edit?usp=sharing)  
+- [x] Data Science Ethics (2.01.2026 → 2.02.2026 → actual 5.02.2026)  
+      → [Proof](./core-cs/core-ethics/data-science-ethics) • [Notes](https://docs.google.com/document/d/19Fh72EpO4XWeqX3iKay_NK5gp8yjfIqa6Y72pBrybNA/edit?usp=sharing)
 
-- [x] Intellectual Property Law and Policy (18.03.2026 → 15.05.2026,  18.04.2026 )  
-  → [Proof](./core-cs/core-ethics/intellectual-property-law-policy) • [Notes](https://docs.google.com/document/d/1Gv1VAYLuhyGvDYERad8as1H5feQDLuGvEK3WhBDjWM8/edit?usp=sharing) 
+- [x] Intellectual Property Law and Policy (18.03.2026 → 15.05.2026, 18.04.2026 )  
+      → [Proof](./core-cs/core-ethics/intellectual-property-law-policy) • [Notes](https://docs.google.com/document/d/1Gv1VAYLuhyGvDYERad8as1H5feQDLuGvEK3WhBDjWM8/edit?usp=sharing)
 
 #### Advanced CS
 
 ##### Advanced math
+
 **Topics covered:** `vectors` `matrices` `linear independence` `dimensions`
 
 - [x] Linear Algebra (14.10.24 → 27.02.25)  
-  → [Proof](./advanced-cs/advanced-math/linear-algebra/) • [Projects](./advanced-cs/advanced-math/linear-algebra/spinningCube) • [Notes](https://docs.google.com/document/d/1ieGaWKd6_c_jAStE7_Xhg6oUc5kr_CYZ34NqOsLDX_E/edit?usp=sharing)  
-- [x] Probability for CS (23.09.25 → 31.12.25,  31.12.25)  
-  → [Proof](./advanced-cs/advanced-math/probability-for-cs/) • [Notes (archive)](https://docs.google.com/document/d/1xdIrMa2W9hERx3B4T_JcIlJTP8JhwLjJM8Cf6XFpNbk/edit?usp=sharing) • [Labs](./advanced-cs/advanced-math/probability-for-cs/labs) • [Notes (new)](https://docs.google.com/document/d/1E_K2eB0Qf177yfnsHEAVWvyI8lY60rFPpEd3vEJJXzE/edit?usp=sharing)
-
+      → [Proof](./advanced-cs/advanced-math/linear-algebra/) • [Projects](./advanced-cs/advanced-math/linear-algebra/spinningCube) • [Notes](https://docs.google.com/document/d/1ieGaWKd6_c_jAStE7_Xhg6oUc5kr_CYZ34NqOsLDX_E/edit?usp=sharing)
+- [x] Probability for CS (23.09.25 → 31.12.25, 31.12.25)  
+      → [Proof](./advanced-cs/advanced-math/probability-for-cs/) • [Notes (archive)](https://docs.google.com/document/d/1xdIrMa2W9hERx3B4T_JcIlJTP8JhwLjJM8Cf6XFpNbk/edit?usp=sharing) • [Labs](./advanced-cs/advanced-math/probability-for-cs/labs) • [Notes (new)](https://docs.google.com/document/d/1E_K2eB0Qf177yfnsHEAVWvyI8lY60rFPpEd3vEJJXzE/edit?usp=sharing)
 
 ##### Advanced systems
-**Topics covered:** `types of scaling` `distributed computing` 
+
+**Topics covered:** `types of scaling` `distributed computing`
 
 - [x] System Design (10.06.26-30.08.26)  
-  → [Proof](./advanced-cs/advanced-systems/system-design/) <!-- • [Projects](./advanced-cs/advanced-math/linear-algebra/spinningCube) --> • [Notes](https://docs.google.com/document/d/1fBGRrv1rUnkQJDQZsLyyT2GLfy_EGw4vsrVbKrR8D4s/edit?usp=sharing)  
-
+      → [Proof](./advanced-cs/advanced-systems/system-design/) <!-- • [Projects](./advanced-cs/advanced-math/linear-algebra/spinningCube) --> • [Notes](https://docs.google.com/document/d/1fBGRrv1rUnkQJDQZsLyyT2GLfy_EGw4vsrVbKrR8D4s/edit?usp=sharing)
 
 #### Electives
 
 **Topics covered:** `vectors` `motion` `Newton's laws`
 
 - [x] Fundamentals of Physics I (21.01.25 → 30.05.25)  
-  → [Proof](./electives/fundamentals-of-physics-1) • [Notes](https://docs.google.com/document/d/1BGAQ1cP0Zwlo8SO5Iy_2JAIe07Z8h8OdzgHwNgVWnwA/edit?usp=sharing)  
-
-
+      → [Proof](./electives/fundamentals-of-physics-1) • [Notes](https://docs.google.com/document/d/1BGAQ1cP0Zwlo8SO5Iy_2JAIe07Z8h8OdzgHwNgVWnwA/edit?usp=sharing)
 
 #### Specialization
 
 **Topics covered:** `real-time systems` `gameplay programming` `unreal engine`
 
-- [ ] Real-Time Systems & Gameplay Programming (03.10.25 →  01.06.26)  
-  → [Project](https://github.com/edcedcedcedc/computer-science-specialization) • [Notes](https://docs.google.com/document/d/1MIjYhqsG5pFdOIyyN-r5OyKqoTTkxKNC_dEubC0alJo/edit?usp=sharing)  
+- [ ] Real-Time Systems & Gameplay Programming (03.10.25 → 01.06.26)  
+      → [Project](https://github.com/edcedcedcedc/computer-science-specialization) • [Notes](https://docs.google.com/document/d/1MIjYhqsG5pFdOIyyN-r5OyKqoTTkxKNC_dEubC0alJo/edit?usp=sharing)
 
 ---
 
 #### Log
-*(See `random/archive/log`)*
+
+_(See `random/archive/log`)_
 
 ---
 
-#### Ongoing 
+#### Ongoing
+
 - Real-Time Systems & Gameplay Programming
 - Computer Networking
 - Introduction to Databases
-- System Design
 
 ---
-#### Upcoming 
-- Computer Graphics 
+
+#### Upcoming
+
+- Computer Graphics
 - Introduction to Algorithms
 - Data Privacy Fundamentals
+
 ---
 
-#### Support 
+#### Support
+
 If you find this useful, you can buy me a coffee. <br>
 
 [![Buy Me a Coffee](https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png)](https://www.buymeacoffee.com/androranogajec)
