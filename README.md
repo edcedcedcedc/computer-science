@@ -37,6 +37,9 @@ Open Education in Computer Science from [Open Source Society University](https:/
 - [x] Data Structures (10.12.24 → 08.06.25)  
        → [Proof](./core-cs/core-theory/data-structures/) • [Projects](./core-cs/core-theory/data-structures/projects) • [Notes](https://docs.google.com/document/d/1h--IlxzWrA8k8R8Ls-Ikoxhdb89BJmBbhq7kM195IwQ/edit?usp=sharing)
 
+- [ ] Introduction to Algorithms (14.09.25 → 31.12.12)  
+       → [Proof](./core-cs/core-theory/introduction-to-algorithms/) • [Assignments](./core-cs/core-theory/introduction-to-algorithms/assignments) • [Notes](https://docs.google.com/document/d/1jTZQXumNcM0UFYB-Wsfuf6T7WoEa7w-SHLNmXCQHutc/edit?tab=t.0)
+
 ##### Core math
 
 **Topics covered:** `discrete math` `O-notation` `discrete probability` `statistics`
@@ -62,7 +65,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 **Topics covered:** `relational` `databases` `transaction` `processing` `data modeling` `neural networks` `supervised learning` `unsupervised learning` `OpenGL` `ray tracing and more`
 
-- [ ] Introduction to Databases (09.06.26 → 4.08.26)  
+- [ ] Introduction to Databases (09.06.26 → ????)  
        → [Proof](./core-cs/core-applications/introduction-to-databases) • [Labs](./core-cs/core-applications/introduction-to-databases/labs) • [Notes](https://docs.google.com/document/d/1fNXV4UBgeDe5hSM-gm4LizqwURkcD3Vpmz-ICCcXmGY/edit?usp=sharing)
 
 ##### Core security
@@ -118,7 +121,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 **Topics covered:** `real-time systems` `gameplay programming` `unreal engine`
 
-- [ ] Real-Time Systems & Gameplay Programming (03.10.25 → 01.06.26)  
+- [ ] Real-Time Systems & Gameplay Programming (03.10.25 → ????)  
        → [Project](https://github.com/edcedcedcedc/computer-science-specialization) • [Notes](https://docs.google.com/document/d/1MIjYhqsG5pFdOIyyN-r5OyKqoTTkxKNC_dEubC0alJo/edit?usp=sharing)
 
 ---
