@@ -1,5 +1,6 @@
 import os
 
+
 def getOpenFilename(default = None):
     """
     Prompts the user to pick a file name.  If the user doesn't enter a filename,
