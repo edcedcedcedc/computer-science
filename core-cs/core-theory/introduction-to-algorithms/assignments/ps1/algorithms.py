@@ -7,6 +7,7 @@ import trace
 
 def algorithm1(problem, trace = None):
     # if it's empty, we're done 
+    #O(1)
     if problem.numRow <= 0 or problem.numCol <= 0:
         return None
 
@@ -14,32 +15,38 @@ def algorithm1(problem, trace = None):
     mid = problem.numCol // 2
 
     # information about the two subproblems
+    #O(1)
     (subStartR, subNumR) = (0, problem.numRow)
     (subStartC1, subNumC1) = (0, mid)
     (subStartC2, subNumC2) = (mid + 1, problem.numCol - (mid + 1))
-
+    #O(n)
     subproblems = []
     subproblems.append((subStartR, subStartC1, subNumR, subNumC1))
     subproblems.append((subStartR, subStartC2, subNumR, subNumC2))
 
     # get a list of all locations in the dividing column
+    #O(n^2) O(n) ??
     divider = crossProduct(range(problem.numRow), [mid])
 
     # find the maximum in the dividing column
+    #O(1)
     bestLoc = problem.getMaximum(divider, trace)
 
     # see if the maximum value we found on the dividing line has a better
     # neighbor (which cannot be on the dividing line, because we know that
     # this location is the best on the dividing line)
+    #O(1)
     neighbor = problem.getBetterNeighbor(bestLoc, trace)
 
     # this is a peak, so return it
+    #O(1)
     if neighbor == bestLoc:
         if not trace is None: trace.foundPeak(bestLoc)
         return bestLoc
    
     # otherwise, figure out which subproblem contains the neighbor, and
     # recurse in that half
+    #O(log n)
     sub = problem.getSubproblemContaining(subproblems, neighbor)
     if not trace is None: trace.setProblemDimensions(sub)
     result = algorithm1(sub, trace)
