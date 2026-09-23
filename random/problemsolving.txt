@@ -1,8 +1,0 @@
-#understanding:
-#1)goal,what I know, what I dont know, 
-#2)observation/breakdown/induce
-#3)loops/statements/varibles
-#3.1)how to start/ how in the middle, how to end
-#strategy
-#implimentation
-#evaluation
