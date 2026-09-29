@@ -1,57 +1,67 @@
-#Foundations (Arrays, Hash Maps, Strings)
-
-#first duplicate value 
-""" 
-HWNDE
-
-what I have 
-a string
-
-what I want
-
-a string
-first occurence of same letter
-
-what I need 
-set()
-
-what is the edge case
-nothing zero
-no match 
-single item 
 
 
-what I do
-assign string to a variable 
-assign set to a variable 
-if single item or nothing or zero or no duplicates
-    return "1"
-create a loop iterate thru the string 
-if item not in set 
-add item to set 
-else 
-return the item 
-"""
-def first_dup(s):
-    my_set = set()
-    if not s.isalpha() or len(s) == 1:
-        return "1"
-    for char in s:
-        if char not in my_set:
-            my_set.add(char)
-        else:
-            return char
-    return "1"
-print(first_dup("abcc"))
 
-def first_dup_gpthelp(s):
-    seen = set()
-    if len(s) <= 1: # a string len 0 or 1 cannot have duplicates and excludes more subtle edge-cases 
-        return None # None instead of 1
-    for char in s:
-        if char not in seen: #better semantics on naming seen instead of my_set
-            seen.add(char)
-        else:
-            return char
+
+def two_sum(array, target):
+    for i in range(len(array)):
+        for j in range(len(array)):
+            if array[j]+array[i] == target:
+                return (i,j)
     return None
-print(first_dup("abcc"))
+
+# two sum 
+# O(n^2)
+# print(two_sum([2,11,15],9))
+
+def two_sum_faster(array, target):
+    seen = dict()
+    for index, value in enumerate(array):
+        complement = target - value
+        if complement in seen:
+            return (index, seen[complement])
+        seen[value] = index
+    return None
+
+#print(two_sum_faster([2,7,11,15],9))
+# two sum 
+# O(n)
+
+
+
+
+
+def palindrome(text):
+    left = 0
+    right = len(text) - 1
+    while left < right:
+        while left < right and not text[left].isalpha():
+            left += 1
+        while left < right and not text[right].isalpha():
+            right -= 1
+        if text[right].lower() != text[left].lower():
+            return False
+        left += 1
+        right -= 1
+    return True
+
+# palindrome 
+# O(n)
+#print(palindrome("A man, a plan, a canal: Panama"))
+
+
+
+
+def max_profit(sequence):
+    max_profit = 0
+    min_price = float('inf')
+    for i in range(len(sequence)):
+        if sequence[i] < min_price:
+            min_price = sequence[i]
+        else:
+            if sequence[i] - min_price > max_profit:
+                max_profit = sequence[i] - min_price
+    return max_profit
+
+#greedy running state// tracking dynamic state in a single pass
+#O(n)
+print(max_profit([7, 1, 5, 3, 6, 4]))
