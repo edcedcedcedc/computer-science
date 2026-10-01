@@ -104,3 +104,6 @@ def max_consecutive(array: int):
             curr_cons = 0
     return max_cons
 #O(n) greedy running state, dynamic state
+
+
+
