@@ -107,3 +107,17 @@ def max_consecutive(array: int):
 
 
 
+def search_target(a: int, t:int):
+    left = 0
+    right = len(a) - 1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if t == a[mid]:
+            return mid
+        elif t > a[mid]:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1
+
+#O(log n) binary search, with L + (R - L)/2

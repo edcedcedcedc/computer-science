@@ -15,3 +15,4 @@ two pointers
 greedy running state
 sliding window 
 linear search 
+binary search(new, I mean, its old but new in terms of my concious algorithmic mastery)
