@@ -199,3 +199,15 @@ def binary_search(a: list[int], t: int):
 
 
 
+# 03/10/2026
+
+#warm any random problem from day before from scratch 
+def reverse_string11(s: str):
+    l = list(s)
+    left = 0
+    right = len(l) - 1
+    while left < right:
+        l[left], l[right] = l[right], l[left]
+        right -= 1
+        left += 1
+    return "".join(l)

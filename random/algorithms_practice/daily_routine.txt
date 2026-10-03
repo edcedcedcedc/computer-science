@@ -12,7 +12,8 @@ My mastery:
 
 hash maps
 two pointers 
+two pointers(fast and slow)
 greedy running state
 sliding window 
 linear search 
-binary search(new, I mean, its old but new in terms of my concious algorithmic mastery)
+binary search 
