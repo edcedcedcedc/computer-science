@@ -14,6 +14,7 @@ hash maps
 two pointers 
 two pointers(fast and slow)
 greedy running state
-sliding window 
+sliding window
+variable size sliding window  
 linear search 
 binary search 
