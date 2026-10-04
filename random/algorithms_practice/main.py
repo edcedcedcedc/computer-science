@@ -27,6 +27,23 @@ def two_sum_faster(array, target):
 # O(n)
 
 
+def two_sum_sorted_array(a: list[int], t: int) -> tuple[int, int]:
+    left = 0
+    right = len(a) - 1
+    while left < right:
+        curr_t = a[left] + a[right]
+        if curr_t == t:
+            return (left + 1, right +1)
+        elif curr_t < t: 
+            left += 1
+        else:
+            right -= 1
+    return None 
+# two sum array sorted, // two pointers 
+# time complexity O(n) space complexity O(1)
+
+
+
 
 
 
@@ -120,4 +137,21 @@ def search_target(a: int, t:int):
             right = mid - 1
     return -1
 
+<<<<<<< HEAD
 #O(log n) binary search, with L + (R - L)/2
+=======
+#O(log n) binary search, with L + (R - L)/2
+
+
+
+def find_middle_value_using_two_pointers(l: list[int]):
+    slow_ptr = 0
+    fast_ptr = 0
+    while True:
+        if fast_ptr == len(l) - 1:
+            return l[slow_ptr]
+        elif fast_ptr + 1 == len(l) - 1:
+            return l[slow_ptr + 1]
+        slow_ptr += 1
+        fast_ptr += 2
+>>>>>>> origin/master

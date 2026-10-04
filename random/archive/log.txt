@@ -620,3 +620,15 @@ Sadly the database course that I am taking is now archived, I need to find a sub
 
 03/08/2026
 I came to the realization that I need to heavily grind algorithms without AI every day until next summer, because honestly, I feel devastated by where I'm at.
+
+
+03/10/2026
+
+Short summary of where am I
+-> Introduction to algorithms ps1 done lesson 3-4 
+-> Introduction to Database Systems ps1 c++ primer almost done, I have left around 4 tests 
+-> Daily Algorithms practice goes good, I master pattern: hash map, two pointers, binary search, linear search, dynamic state, sliding window;
+   I mainly do spaced repetition of the same problem with slight variations on specific patterns but first of I try to recornize the pattern 
+-> on 1st of october 2026 I a had mock interview test for junior swe position, I wasn't selected, perhaps they didn't like my solution approach to some algorithm,
+   it was too clumsy but correct, honestly I don't care, I plan to crush algorithms this year and make myself a zero to hero conciously, and I am dead serious.
+

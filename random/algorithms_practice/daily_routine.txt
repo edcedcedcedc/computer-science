@@ -12,7 +12,15 @@ My mastery:
 
 hash maps
 two pointers 
+two pointers(fast and slow)
 greedy running state
+<<<<<<< HEAD
 sliding window 
 linear search 
 binary search(new, I mean, its old but new in terms of my concious algorithmic mastery)
+=======
+sliding window
+variable size sliding window  
+linear search 
+binary search 
+>>>>>>> origin/master
