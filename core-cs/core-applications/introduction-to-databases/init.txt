@@ -3,6 +3,12 @@ This is left intentionally empty
 project #0 C++ Primer https://15445.courses.cs.cmu.edu/fall2025/project0/
 
 
-9/14/2026
+14/9/2026
 As you know I cannot disclose homework from this course, I'll post either text or
 screenshots of some sort to keep you informed!
+
+
+02/10/2026
+$ cd build
+$ make -j$(nproc) count_min_sketch_test
+$ ./test/count_min_sketch_test

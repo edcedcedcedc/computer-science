@@ -1,0 +1,1 @@
+select distinct division from divisions where active = 'Y' order by division;

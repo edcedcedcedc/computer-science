@@ -137,9 +137,6 @@ def search_target(a: int, t:int):
             right = mid - 1
     return -1
 
-<<<<<<< HEAD
-#O(log n) binary search, with L + (R - L)/2
-=======
 #O(log n) binary search, with L + (R - L)/2
 
 
@@ -154,4 +151,3 @@ def find_middle_value_using_two_pointers(l: list[int]):
             return l[slow_ptr + 1]
         slow_ptr += 1
         fast_ptr += 2
->>>>>>> origin/master
