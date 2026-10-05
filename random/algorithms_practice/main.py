@@ -1,14 +1,9 @@
-
-
-
-
 def two_sum(array, target):
     for i in range(len(array)):
         for j in range(len(array)):
             if array[j]+array[i] == target:
                 return (i,j)
     return None
-
 # two sum // hash map
 # O(n^2)
 # print(two_sum([2,11,15],9))
@@ -21,7 +16,6 @@ def two_sum_faster(array, target):
             return (index, seen[complement])
         seen[value] = index
     return None
-
 #print(two_sum_faster([2,7,11,15],9))
 # two sum 
 # O(n)
@@ -43,10 +37,6 @@ def two_sum_sorted_array(a: list[int], t: int) -> tuple[int, int]:
 # time complexity O(n) space complexity O(1)
 
 
-
-
-
-
 def palindrome(text):
     left = 0
     right = len(text) - 1
@@ -60,12 +50,9 @@ def palindrome(text):
         left += 1
         right -= 1
     return True
-
 # palindrome // two pointers 
 # O(n)
 #print(palindrome("A man, a plan, a canal: Panama"))
-
-
 
 
 def max_profit(sequence):
@@ -78,10 +65,9 @@ def max_profit(sequence):
             if sequence[i] - min_price > max_profit:
                 max_profit = sequence[i] - min_price
     return max_profit
-
 #greedy running state// tracking dynamic state in a single pass // sliding window
 #O(n)
-print(max_profit([7, 1, 5, 3, 6, 4]))
+
 
 
 
@@ -136,10 +122,15 @@ def search_target(a: int, t:int):
         else:
             right = mid - 1
     return -1
-
 #O(log n) binary search, with L + (R - L)/2
 
 
+
+def min_max_interval(l: list[int]) -> list[int]:
+    min_val_i = l.index(min(l))
+    max_val_i = l.index(max(l))
+    return l[min(min_val_i, max_val_i) + 1, max(min_val_i, max_val_i)]
+#O(n) linear search
 
 def find_middle_value_using_two_pointers(l: list[int]):
     slow_ptr = 0
@@ -151,3 +142,45 @@ def find_middle_value_using_two_pointers(l: list[int]):
             return l[slow_ptr + 1]
         slow_ptr += 1
         fast_ptr += 2
+#O(n) two pointers fast and slow 
+
+def longest_substring_without_repeating(s: str) -> str:
+    left_pointer = 0
+    right_pointer = 0
+    current_len = 0
+    max_len = 0
+    l = list(s)
+    map = dict()
+
+    while right_pointer <= len(l) - 1:
+            if l[right_pointer] in map:
+                if map[l[right_pointer]] >= left_pointer:
+                    left_pointer = map[l[right_pointer]] + 1              
+            current_len = right_pointer - left_pointer + 1
+            if current_len > max_len:
+                max_len = current_len
+            map[l[right_pointer]] = right_pointer     
+            right_pointer += 1
+            
+    return max_len
+#O(n) variable size sliding window / hash map
+
+
+def minimal_len_subarray_sum_05102026(l: list[int], t: int) -> int:
+    left = 0
+    right = 0
+    curr_sum = 0
+    curr_len = 0
+    min_len = float('inf')
+    while right <= len(l) - 1:
+        if right >= left:
+            curr_sum += l[right]
+            while curr_sum >= t:
+                curr_len = right - left + 1 
+                if curr_len < min_len:
+                    min_len = curr_len
+                curr_sum -= l[left]
+                left += 1
+        right += 1
+    return min_len if min_len != float('inf') else 0
+#O(n) sliding window // minimal len subarray whose sum is greater or equal to target

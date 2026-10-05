@@ -5,7 +5,7 @@ Warm-up (5–10 mins) — Same Problem: Re-code one problem you solved yesterday
 
 Review (10–15 mins) — Variation Problem: Solve a new, slightly different problem using a pattern you learned a few days ago. This tests whether you actually recognized the pattern or just memorized one specific question.
 
-New Mastery (20–30 mins) — New Pattern: Learn and build your first solution for a brand new pattern (like Binary Search or Fast & Slow Pointers).
+New Mastery (20–30 mins) — New Pattern: Learn and build your first solution for a brand new pattern 
 
 
 My mastery:
@@ -17,4 +17,4 @@ greedy running state
 sliding window
 variable size sliding window  
 linear search 
-binary search 
+binary search
