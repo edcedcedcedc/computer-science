@@ -66,3 +66,53 @@ class RangeSumQuery:
     def sum_range(self, i, j):
         return self.prefix[j] - self.prefix[i - 1]
         
+
+
+
+
+
+
+
+""" 
+WARM UP 10/07/2026
+"""
+
+class PrefixSum():
+    def __init__(self, arr):
+        self.arr = arr
+        self.prefix_arr = list()
+        self.prefix_arr.append(arr[0])
+        for i in range(1, len(arr)):
+            self.prefix_arr.append(self.prefix_arr[i - 1] + self.arr[i])
+
+   
+    def sum_interval(self,i: int, j: int) -> int:
+        if i == 0:
+            return self.prefix[j]
+        return self.prefix_arr[j] - self.prefix_arr[i - 1]
+
+
+
+
+""" 
+
+REVIEW // sliding window 
+"""
+
+def longest_substring_without_repeating_07_10_2026(s: str) -> int:
+    array = list(s)
+    hash_map = dict()
+    pointer_left = 0
+    max_len = 0
+    current_len = 0
+    for pointer_right in range(len(array)):
+        if array[pointer_right] in hash_map:
+            if hash_map[array[pointer_right]] >= pointer_left:
+                pointer_left = hash_map[array[pointer_right]] + 1
+                current_len = pointer_right - pointer_left + 1
+        if current_len > max_len: #this should be hear for all char unique case 
+            max_len = current_len     
+        hash_map[array[pointer_right]] = pointer_right
+
+    return max_len
+
