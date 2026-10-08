@@ -116,3 +116,69 @@ def longest_substring_without_repeating_07_10_2026(s: str) -> int:
 
     return max_len
 
+
+
+""" 
+
+WARM UP - monotonic stack 
+
+stack 
+output 
+input 
+
+if current value less than stack value append to stack
+if current value greater than stack value then update output and pop the stack
+
+
+ """
+def next_great_element_08102026(l: list[int]) -> list[int]:
+    output = -1 * len(l)
+    stack = list()
+    for i in range(len(l)):
+        while len(stack) > 0 and l[i] > l[stack[-1]]:
+            popped_i = stack.pop()
+            output[popped_i] = l[i]
+        stack.append(i)
+
+
+
+
+""" REVIEW prefix sum / hash map; number of times the any len subarray equals key
+
+I think I got the abstraction how I think on it, 
+
+the previous hash map pattern with complement got me thinking algebraically 
+and programmatically the same time,
+
+you assign the value but at the same time you approve the equality
+so when we say prefix[j] - prefix[i - 1] = k and prefix[i - 1] = prefix[j] - k 
+
+then in program when I do, if prefix_l[j] - k in map and 
+after that map[prefix_l[j] = map.get(prefix_l[j], 0) + 1 
+
+I literally state the math behind it that prefix[i-1] = prefix[j] - k 
+and this thinking reminded me the hash map basic pattern 
+and the mathematical part of it 
+
+
+"""
+
+def times_subarray_sum_equal_k(l: list[int], k: int) -> int:
+    map = dict()
+    map[0] = 1
+    total_counts = 0
+    prefix_l = list()
+    prefix_l.append[l[0]]
+    
+    for i in range(1, len(l)):
+        prefix_l.append(prefix_l[i - 1] + l[i])
+
+    for j in range(len(l)): 
+        if prefix_l[j] - k in map:
+            total_counts += map[prefix_l[j] - k]
+        map[prefix_l[j]] = map.get(prefix_l[j], 0) + 1
+    
+    return total_counts
+
+
+                
