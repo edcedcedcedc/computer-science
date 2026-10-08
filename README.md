@@ -65,7 +65,7 @@ Open Education in Computer Science from [Open Source Society University](https:/
 
 **Topics covered:** `relational` `databases` `transaction` `processing` `data modeling` `neural networks` `supervised learning` `unsupervised learning` `OpenGL` `ray tracing and more`
 
-- [ ] Introduction to Databases (09.06.26 → ????)  
+- [ ] Database Systems (09.06.26 → ????)  
        → [Proof](./core-cs/core-applications/introduction-to-databases) • [Labs](./core-cs/core-applications/introduction-to-databases/labs) • [Notes](https://docs.google.com/document/d/1fNXV4UBgeDe5hSM-gm4LizqwURkcD3Vpmz-ICCcXmGY/edit?usp=sharing)
 
 ##### Core security
@@ -135,7 +135,7 @@ _(See `random/archive/log`)_
 #### Ongoing
 
 - Real-Time Systems & Gameplay Programming
-- Introduction to Databases
+- Database Systems
 - Introduction to Algorithms
 
 ---
@@ -143,6 +143,8 @@ _(See `random/archive/log`)_
 #### Upcoming
 
 - Computer Graphics
+- Compilers
+- Algorithms Design and Analysis (not sure on this yet)
 - Data Privacy Fundamentals
 
 ---
