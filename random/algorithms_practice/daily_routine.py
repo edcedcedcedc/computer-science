@@ -181,4 +181,70 @@ def times_subarray_sum_equal_k(l: list[int], k: int) -> int:
     return total_counts
 
 
-                
+
+
+
+""" WARM UP  09/10/2026"""
+def total_sum_equal_k_count(array: list[int], k: int) -> int:
+    map = {0: 1}
+    prefix_sum = [array[0]]
+    for i in range(1,len(array)):
+        prefix_sum.append(prefix_sum[i - 1] + array[i])
+    count = 0
+    for i in range(len(array)):
+        c = prefix_sum[i] - k
+        if c in map:
+            count += map[c]
+        map[prefix_sum[i]] += map.get(prefix_sum[i], 0) + 1
+    return count
+
+
+""" REVIEW  """
+
+"""
+What happens to the elements currently sitting inside the monotonic 
+stack when you encounter a number larger than them? 
+
+
+my answer:
+you pop the indexes of the stack and insert them 
+into resulting array that before was all full with -1s"""
+
+
+
+def next_smaller_element(l: list[int]) -> int:
+    result = [-1] * len(l)
+    stack = list()
+    for i in range(len(l)):
+        while len(stack) > 0 and l[i] < l[stack[-1]]:
+            popped_idx = stack.pop()
+            result[popped_idx] = l[i]
+        stack.append(i)
+    return result
+
+
+
+""" MASTERY CHALLENGE  """
+
+#O(n^2)
+def reverse_string_(s:str) -> str:
+    l = list(s) 
+    def helper(i: int):
+        if i == len(l) - 1:
+            return l[i]
+        else:
+            return helper(i + 1) + l[i]
+    print(helper(0))
+
+#O(n)
+def reverse_string__(s:str) -> str:
+    l = list(s)
+    acc = list()                                  
+    def helper(i: int):
+        if i == len(l):
+            return 
+        helper(i + 1)
+        acc.append(l[i])
+    helper(0)
+    return "".join(acc)
+print(reverse_string__("abc"))

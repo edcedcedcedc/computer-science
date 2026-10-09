@@ -264,3 +264,27 @@ def times_subarray_sum_equal_k(l: list[int], k: int) -> int:
     
     return total_counts   
             
+
+
+
+#recursion O(n^2) string concatenation
+def reverse_string_(s:str) -> str:
+    l = list(s) 
+    def helper(i: int):
+        if i == len(l) - 1:
+            return l[i]
+        else:
+            return helper(i + 1) + l[i]
+    print(helper(0))
+
+#recursion O(n) list mutation 
+def reverse_string__(s:str) -> str:
+    l = list(s)
+    acc = list()                                  
+    def helper(i: int):
+        if i == len(l):
+            return 
+        helper(i + 1)
+        acc.append(l[i])
+    helper(0)
+    return "".join(acc)
