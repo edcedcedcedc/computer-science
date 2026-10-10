@@ -248,3 +248,47 @@ def reverse_string__(s:str) -> str:
     helper(0)
     return "".join(acc)
 print(reverse_string__("abc"))
+
+
+
+""" GLOBAL REVIEW """
+
+
+#prefix sum // hash map // subarray seeker 
+def subarray_seeker_k(l:list[int], k: int) -> int:
+    map = {0: 1}
+    prefix_sum = [l[0]]
+    total = 0
+    for i in range(1,len(l)):
+        prefix_sum.append(prefix_sum[i - 1] + l[i])
+    for i in range(len(prefix_sum)):
+        c = prefix_sum[i] - k
+        if c in map:
+            total += map[c]
+        map[prefix_sum[i]] = map.get(prefix_sum[i],0) + 1
+    return total 
+
+
+#monotonic stack(increasing) // temperature rise 
+def temperature_rise(l: list[int]) -> list[int]:
+    stack = list()
+    output = [0] * len(l)
+    for i in range(len(l)):
+        while len(stack) > 0 and l[i] > l[stack[-1]]:
+            popped_idx = stack.pop()
+            output[popped_idx] = i - popped_idx
+        stack.append(i)
+    return output
+
+
+# hash map 
+def the_duplicate_window(l: list[int], k: int) -> int:
+    d = dict()
+    for i, v in enumerate(l):
+        if v in d and i - d[v]  <= k:
+            return True 
+        d[v] = i
+    return False
+
+
+
